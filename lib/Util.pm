@@ -65,13 +65,26 @@ sub pause_handler {
 
 
 sub mouse_target_square {
-	my( $event, $square ) =  @_;
+	my( $object, $x, $y ) =  @_;
 
-	return $event->motion_x > $square->{ x }
-		&& $event->motion_x < $square->{ x } + $square->{ w  }
-		&& $event->motion_y > $square->{ y }
-		&& $event->motion_y < $square->{ y } + $square->{ h }
+	return $x > $object->{ x }
+		&& $x < $object->{ x } + $object->{ w }
+		&& $y > $object->{ y }
+		&& $y < $object->{ y } + $object->{ h }
 }	
+
+
+
+sub resize_field {
+	my( $rect, $x, $y ) =  @_;
+
+	return $x > $rect->{ x } + $rect->{ w } - 15
+		&& $x < $rect->{ x } + $rect->{ w }
+		&& $y > $rect->{ y } + $rect->{ h } - 10
+		&& $y < $rect->{ y } + $rect->{ h }
+
+}
+
 
 
 1;

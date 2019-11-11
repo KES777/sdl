@@ -3,8 +3,8 @@ package Rect;
 use Color;
 
 my $y_offset_n =  0;
-my $x_offset =  30;
-my $y_offset =  30;
+my $x_offset   =  30;
+my $y_offset   =  30;
 sub new {
 	if( ref $_[1] eq 'Schema::Result::Rect' ) {
 		my( $rect, $db_rect ) =  @_;
@@ -73,7 +73,7 @@ sub draw {
 	],[ 
 		255,255,255,255
 	]);
-
+	#back_light
 	$screen->draw_rect([
 		$rect->{ x }+1,
 		$rect->{ y }+1,
@@ -82,6 +82,19 @@ sub draw {
 	],[ 
 		$rect->{ c }->get()
 	]);
+
+	#size_button
+	if( !$rect->{ selection } ) {
+
+		$screen->draw_rect([
+			$rect->{ x } + $rect->{ w } -15,
+			$rect->{ y } + $rect->{ h } -10,
+			15,
+			10,
+		],[ 
+			33, 200, 150, 255
+		]);
+	}
 
 
 	if( $rect->{ children } ) {
@@ -101,9 +114,9 @@ sub draw {
 
 
 sub is_over {
-	my( $rect, $e ) =  @_;
+	my( $rect, $x, $y ) =  @_;
 
-	return Util::mouse_target_square( $e, $rect );
+	return Util::mouse_target_square( $rect, $x, $y );
 }
 
 
@@ -181,6 +194,70 @@ sub move_to {
 
 	$rect->{ x } =  $x - $rect->{ dx } //0;
 	$rect->{ y } =  $y - $rect->{ dy } //0;
+
+	if( $rect->{ x } < 0 ) {
+		$rect->{ x } = 0;
+	}
+	if( $rect->{ y } < 0 ) {
+		$rect->{ y } = 0;
+	}
 }
+
+
+
+sub load_children {
+	my( $rect ) = @_;
+
+	# for my $parent( @$parents ){
+		my @child = Util::db()->resultset( 'Rect' )->search({
+			parent_id => $rect->{ id }
+		});
+
+		# my $obj =  Rect->new( $parent );
+
+		$obj->{ children } =  [ map{ Rect->new( $_ ) } @child->all ];
+		# push @$rect, $obj;
+
+		for my $x ( $obj->{ children }->@* ){
+			$z->load_children;
+		}
+	# }
+}
+
+
+
+
+sub resize_on {
+	my( $rect ) =  @_;
+
+	$rect->{ resize } =  1;
+	$rect->{ old_c  } =  $rect->{ c };
+	$rect->{ c      } =  Color->new( 0, 200, 0 );
+}
+
+
+
+sub resize_to {
+	my( $rect, $x, $y ) =  @_;
+
+	$rect->{ w } = $x - $rect->{ x };
+	if( $x - $rect->{ x } < 50 ) {
+		$rect->{ w } = 50;
+	}
+	$rect->{ h } = $y - $rect->{ y };
+	if( $y - $rect->{ y } < 30 ) {
+		$rect->{ h } = 30;
+	}
+}
+
+
+
+sub resize_off {
+	my( $rect ) = @_;
+
+	$rect->{ c } =  delete $rect->{ old_c };
+	delete $rect->@{qw/ resize /};
+}
+
 
 1;

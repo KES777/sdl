@@ -20,12 +20,17 @@ my $app = SDLx::App->new( width => $app_w, height => $app_h, resizeable => 1);
 
 
 {
-	my $btn  =  Rect->new( 0, 0, 50, 30 );
+	my $btn     =  Rect->new( 0, 0, 50, 30 );
+	my $btn_del = Rect->new( 250, 0, 50, 30 );
+	$btn_del->{ c }->{ r } = 255;
+	$btn_del->{ c }->{ g } = 0;
+	$btn_del->{ c }->{ b } = 0;
+	$btn_del->{ selection } = 1;
 	my $sel;	
 	my @rect =  ();
 
 	$app->add_show_handler ( sub{ #show
-		show( @_, $btn, $sel, @rect ) 
+		show( @_, $btn, $sel, @rect, $btn_del ) 
 	} );
 
 	read_from_db( \@rect );
@@ -39,17 +44,28 @@ my $app = SDLx::App->new( width => $app_w, height => $app_h, resizeable => 1);
 
 
 	## Rect grouping
-	$app->add_event_handler( sub{ 
-		if( my $res =  sel_start ( @_, $sel, \@rect ) ) {
+	$app->add_event_handler( sub{ #sel_start
+		if( my $res =  sel_start ( @_, $sel, \@rect, $btn, $btn_del ) ) {
 			$sel =  $res;
 		}
 	} );
 	$app->add_event_handler( sub{ sel_resize( @_, $sel, \@rect ) } );
-	$app->add_event_handler( sub{ 
+	$app->add_event_handler( sub{ #sel_finish
 		if( my $res =  sel_finish( @_, $sel, \@rect ) ) {
 			$sel =  undef;
 		}
 	} );
+
+
+	$app->add_event_handler( sub{ resize_start ( @_, \@rect ) } );
+	$app->add_event_handler( sub{ resize_rect  ( @_, \@rect ) } );
+	$app->add_event_handler( sub{ resize_finish( @_, \@rect ) } );
+
+
+
+	$app->add_event_handler( sub{ del_start ( @_, $btn_del ) } );
+	$app->add_event_handler( sub{ del_rect  ( @_, $btn_del ) } );
+	$app->add_event_handler( sub{ del_finish( @_, $btn_del, $btn, \@rect ) } );
 
 
 }
@@ -64,17 +80,15 @@ exit();
 sub read_from_db {	
 	my( $rect ) =  @_;
 
-	my @rect =  Util::db()->resultset( 'Rect' )->search({
+	my @rect_f =  Util::db()->resultset( 'Rect' )->search({
 		parent_id => undef
 	})->all;
 
-	for my $r ( @rect ) {
-		# push @$rect, Rect->new( 
-		# 	$r->x, $r->y, $r->w, $r->h, 
-		# 	Color->new( $r->r, $r->g, $r->b, $r->a )
-		# );
-		push @$rect, Rect->new( $r );
-	}
+	# for my $r ( @rect_f ) {
+	#	$r =  Rect->new( $r );
+	#	$r->load_children;
+	## 	$r->Rect::load_children( $rect );
+	# }
 }
 
 
@@ -85,7 +99,7 @@ sub show {
 
     for my $object ( @objects ){
     	$object   or next;   	
-    	# DB::x   if $DB::moving;
+
 		$object->draw( $app );
 	}
 
@@ -97,10 +111,12 @@ sub show {
 sub new_rect {
 	my( $event, $app, $button, $squares ) = @_;
 
-	$event->type == SDL_MOUSEBUTTONDOWN  &&  $button->is_over( $event )
+	$event->type == SDL_MOUSEBUTTONDOWN 
+	&&  $button->is_over( $event->motion_x, $event->motion_y )
 		or return;
 
 	my $rect =  Rect->new->store;
+
 	push @$squares, $rect;
 }
 
@@ -114,8 +130,11 @@ sub move_start {
 		or return;
 
 	for my $square ( @$squares ){
-		$square->is_over( $event )   or next;
-		# $square->is_over( $event->motion_x, $event->motion_y )   or next;
+		if( $square->Util::resize_field( $event->motion_x, $event->motion_y ) ) {
+			return;
+		}
+		 $square->is_over( $event->motion_x, $event->motion_y )  or next;
+
 
 		$square->moving_on( $event->motion_x, $event->motion_y );
 	}
@@ -132,7 +151,6 @@ sub move_rect {
 	for my $square ( @$squares ){
 		$square->{ moving }   or next;		
 
-		# DB::x   if !$DB::moving2;
 		$square->draw_black( $app );
 		$square->move_to( $event->motion_x,  $event->motion_y );
 	}
@@ -141,7 +159,7 @@ sub move_rect {
 
 
 sub move_finish {
-	my ($event, $app, $squares ) = @_;
+	my( $event, $app, $squares ) = @_;
 
 	$event->type == SDL_MOUSEBUTTONUP
 		or return;
@@ -156,26 +174,30 @@ sub move_finish {
 
 
 
-
-
 sub sel_start {
-	my( $event, $app, $sel, $squares ) = @_;
+	my( $event, $app, $sel, $squares, $btn, $btn_del ) = @_;
 
 	!$sel  &&  $event->type == SDL_MOUSEBUTTONDOWN
 		or return;
 
 	for my $square ( @$squares ){
-		$square->is_over( $event )   or next;
+		$square->is_over( $event->motion_x, $event->motion_y )   or next;
 
 		return;
 	}
 
+	if( $btn->is_over( $event->motion_x, $event->motion_y ) ) { 
+		return;
+	}
+	if( $btn_del->is_over( $event->motion_x, $event->motion_y ) ) { 
+		return;
+	}
 
 	my $r =  Selection->new( 
 		$event->motion_x, $event->motion_y, 0, 0,
-		Color->new( 234, 23, 78 )
+		Color->new( 0, 0, 0 )
 	);
-
+	$r->{ selection } = 1;
 
 	return $r;
 }
@@ -220,6 +242,7 @@ sub sel_finish {
 	$squares->@* =  @alone;
 
 	my $rect =  Rect->new( $sel->{ x }, $sel->{ y } )->store;
+
 	my $w =   0;	
 	my $h =  10;
 	for my $s ( @grouped ) {
@@ -241,3 +264,100 @@ sub sel_finish {
 }	
 
 
+
+sub resize_start {
+	my( $event, $app, $squares ) =  @_;
+
+	$event->type == SDL_MOUSEBUTTONDOWN 
+		or return;
+
+	for my $square ( @$squares ){
+		$square->Util::resize_field( $event->motion_x, $event->motion_y )   or next;
+
+		$square->resize_on();
+	}
+}
+
+
+
+sub resize_rect {
+	my( $event, $app, $squares ) =  @_;
+
+	$event->type == SDL_MOUSEMOTION
+	or return;
+
+	for my $square ( @$squares ){
+		$square->{ resize }   or next;		
+		$square->draw_black( $app );
+		$square->resize_to( $event->motion_x,  $event->motion_y );
+	}
+}
+
+
+
+sub resize_finish {
+	my( $event, $app, $squares ) =  @_;
+
+	$event->type == SDL_MOUSEBUTTONUP
+		or return;
+
+	for my $square ( @$squares ){
+		$square->{ resize }   or next;
+
+		$square->resize_off;
+		$square->store;
+	}
+}
+
+
+
+sub del_start {
+	my( $event, $app, $btn_d ) =  @_;
+	
+
+	$event->type == SDL_MOUSEBUTTONDOWN 
+		or return;
+
+		$btn_d->is_over( $event->motion_x, $event->motion_y )  or next;
+
+		$btn_d->moving_on( $event->motion_x, $event->motion_y );
+}
+
+
+
+sub del_rect {
+	my( $event, $app, $btn_d ) =  @_;
+
+	$event->type == SDL_MOUSEMOTION
+		or return;
+
+	$btn_d->{ moving }   or next;		
+
+	$btn_d->draw_black( $app );
+	$btn_d->move_to( $event->motion_x,  $event->motion_y );
+}
+
+
+
+sub del_finish {
+	my( $event, $app, $btn_d, $btn, $rect ) = @_;
+
+	$event->type == SDL_MOUSEBUTTONUP
+		or return;
+
+	$btn_d->draw_black( $app );
+	$btn_d->{ moving }   or next;
+
+	$btn_d->moving_off;
+	$btn_d->{ x } = 250;
+	$btn_d->{ y } = 0;
+
+	if( $btn->is_over( $btn_d->{ x }, $btn_d->{ y } ) ) {#trabl с переменными кнопки
+		for my $square( @$rect ) {
+			$square->draw_black( $app );
+		}
+
+		@$rect = ();
+		Util::db()->resultset( 'Rect' )->delete;
+	}
+}
