@@ -73,7 +73,7 @@ sub draw {
 	],[ 
 		255,255,255,255
 	]);
-	#back_light
+	#circuit
 	$screen->draw_rect([
 		$rect->{ x }+1,
 		$rect->{ y }+1,
@@ -99,14 +99,14 @@ sub draw {
 
 	if( $rect->{ children } ) {
 		my $h =  10;
-		for my $c ( $rect->{ children }->@* ) {
-			$c->{ x }      =  $rect->{ x } + 10;
-			$c->{ y }      =  $rect->{ y } + $h;
-			$c->{ c }{ r } =  $rect->{ c }{ r } + 80;
+		for my $s ( $rect->{ children }->@* ) {
+			$s->{ x }      =  $rect->{ x } + 10;
+			$s->{ y }      =  $rect->{ y } + $h;
+			$s->{ c }{ r } =  $rect->{ c }{ r } + 80;
 
-			$h +=  $c->{ h } +10;
+			$h +=  $s->{ h } +10;
 
-			$c->draw( $screen );
+			$s->draw( $screen );
 		}
 	}
 }
@@ -159,11 +159,9 @@ sub store {
 sub parent {
 	my( $rect, $id ) =  @_;
 
-	my $row =  Util::db()->resultset( 'Rect' )->search({
+	Util::db()->resultset( 'Rect' )->search({
 		id => $rect->{ id },
-	})->first;
-
-	$row->update({ parent_id => $id });
+	})->first->update({ parent_id => $id });
 }
 
 
@@ -190,7 +188,7 @@ sub moving_off {
 
 
 sub move_to {
-	my( $rect, $x, $y ) =  @_;
+	my( $rect, $x, $y, $app_w, $app_h ) =  @_;
 
 	$rect->{ x } =  $x - $rect->{ dx } //0;
 	$rect->{ y } =  $y - $rect->{ dy } //0;
@@ -201,6 +199,12 @@ sub move_to {
 	if( $rect->{ y } < 0 ) {
 		$rect->{ y } = 0;
 	}
+	if( $rect->{ x } > $app_w - $rect->{ w } ) {
+		$rect->{ x } = $app_w - $rect->{ w }
+	}
+	if( $rect->{ y } > $app_h - $rect->{ h } ) {
+		$rect->{ y } = $app_h - $rect->{ h }
+	}
 }
 
 
@@ -208,23 +212,41 @@ sub move_to {
 sub load_children {
 	my( $rect ) = @_;
 
-	# for my $parent( @$parents ){
-		my @child = Util::db()->resultset( 'Rect' )->search({
-			parent_id => $rect->{ id }
-		});
+	my $child =  Util::db()->resultset( 'Rect' )->search({
+		parent_id => $rect->{ id }
+	});
 
-		# my $obj =  Rect->new( $parent );
+	$rect->{ children } =  [ map{ Rect->new( $_ ) } $child->all ];
 
-		$obj->{ children } =  [ map{ Rect->new( $_ ) } @child->all ];
-		# push @$rect, $obj;
+	# my @arr =  map sub{ Rect->new( $_ ) }, $child->all;
+	# $rect->{ children } =  \@arr;
 
-		for my $x ( $obj->{ children }->@* ){
-			$z->load_children;
-		}
-	# }
+	# my $xxx =  [ 1, 2, 3 ]; # my @xxx =  ( 1, 2, 3 ); my $xxx =  \@xxx;
+
+
+	for my $x ( $rect->{ children }->@* ) {
+		$x->load_children;
+	}
 }
 
 
+
+# sub map {
+# 	my( $sub, @array ) =  @_;
+
+# 	my @res;
+# 	for my $item ( @array ) {
+# 		push @res, $sub->( $item );
+# 	}
+
+# 	return @res;
+# }
+
+# sub{
+# 	my( $_ ) =  @_;
+
+# 	return Rect->new( $_ );
+# }	
 
 
 sub resize_on {
@@ -258,6 +280,36 @@ sub resize_off {
 	$rect->{ c } =  delete $rect->{ old_c };
 	delete $rect->@{qw/ resize /};
 }
+
+
+
+sub btn_d_come_back {
+	my( $rect, $app ) = @_;
+
+	$rect->draw_black( $app );
+	$rect->moving_off;
+	$rect->{ x } = 250;
+	$rect->{ y } = 0;
+}
+
+
+
+sub child_delete {
+	my( $square ) = @_;
+
+	Util::db()->resultset( 'Rect' )->search({
+		id => $square->{ id } 
+	})->delete;
+
+	if( $square->{ children }->@* ) {
+
+		for my $child ( $square->{ children }->@* ) {
+			$child->child_delete;
+		}
+	}
+}
+
+
 
 
 1;

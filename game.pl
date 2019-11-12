@@ -20,7 +20,7 @@ my $app = SDLx::App->new( width => $app_w, height => $app_h, resizeable => 1);
 
 
 {
-	my $btn     =  Rect->new( 0, 0, 50, 30 );
+	my $btn     = Rect->new( 0, 0, 50, 30 );
 	my $btn_del = Rect->new( 250, 0, 50, 30 );
 	$btn_del->{ c }->{ r } = 255;
 	$btn_del->{ c }->{ g } = 0;
@@ -65,7 +65,8 @@ my $app = SDLx::App->new( width => $app_w, height => $app_h, resizeable => 1);
 
 	$app->add_event_handler( sub{ del_start ( @_, $btn_del ) } );
 	$app->add_event_handler( sub{ del_rect  ( @_, $btn_del ) } );
-	$app->add_event_handler( sub{ del_finish( @_, $btn_del, $btn, \@rect ) } );
+	$app->add_event_handler( sub{ del_all( @_, $btn_del, $btn, \@rect ) } );
+	$app->add_event_handler( sub{ del_first( @_, $btn_del, \@rect ) } );
 
 
 }
@@ -80,15 +81,16 @@ exit();
 sub read_from_db {	
 	my( $rect ) =  @_;
 
+	@$rect = ();
 	my @rect_f =  Util::db()->resultset( 'Rect' )->search({
 		parent_id => undef
 	})->all;
 
-	# for my $r ( @rect_f ) {
-	#	$r =  Rect->new( $r );
-	#	$r->load_children;
-	## 	$r->Rect::load_children( $rect );
-	# }
+	for my $r ( @rect_f ) {
+		$r =  Rect->new( $r );
+		$r->load_children;
+		push @$rect, $r;
+	}
 }
 
 
@@ -133,9 +135,8 @@ sub move_start {
 		if( $square->Util::resize_field( $event->motion_x, $event->motion_y ) ) {
 			return;
 		}
-		 $square->is_over( $event->motion_x, $event->motion_y )  or next;
 
-
+		$square->is_over( $event->motion_x, $event->motion_y )  or next;
 		$square->moving_on( $event->motion_x, $event->motion_y );
 	}
 }
@@ -152,7 +153,8 @@ sub move_rect {
 		$square->{ moving }   or next;		
 
 		$square->draw_black( $app );
-		$square->move_to( $event->motion_x,  $event->motion_y );
+
+		$square->move_to( $event->motion_x,  $event->motion_y, $app_w, $app_h );
 	}
 }
 
@@ -224,17 +226,14 @@ sub sel_finish {
 	$sel  &&  $event->type == SDL_MOUSEBUTTONUP
 		or return;
 
-
 	$sel->draw_black( $app );
-
 
 	my @alone;
 	my @grouped;
 	for my $square ( @$squares ) {
 		$square->is_inside( $sel->@{qw/ x y w h /} )?
 			push @grouped, $square :
-			push @alone, $square
-		;
+			push @alone, $square;
 	}
 
 	@grouped   or return 1;
@@ -328,31 +327,28 @@ sub del_start {
 sub del_rect {
 	my( $event, $app, $btn_d ) =  @_;
 
-	$event->type == SDL_MOUSEMOTION
+	$btn_d->{ moving }  &&  $event->type == SDL_MOUSEMOTION
 		or return;
 
-	$btn_d->{ moving }   or next;		
-
 	$btn_d->draw_black( $app );
-	$btn_d->move_to( $event->motion_x,  $event->motion_y );
+	$btn_d->move_to( $event->motion_x,  $event->motion_y, $app_w, $app_h );
 }
 
 
 
-sub del_finish {
+sub del_all {
 	my( $event, $app, $btn_d, $btn, $rect ) = @_;
 
-	$event->type == SDL_MOUSEBUTTONUP
+	$btn_d->{ moving } && $event->type == SDL_MOUSEBUTTONUP
 		or return;
 
-	$btn_d->draw_black( $app );
-	$btn_d->{ moving }   or next;
+	for my $square( @$rect ){
+		if( $square->is_over( $btn_d->{ x }, $btn_d->{ y } )) {
+				return;
+		}
+	}
 
-	$btn_d->moving_off;
-	$btn_d->{ x } = 250;
-	$btn_d->{ y } = 0;
-
-	if( $btn->is_over( $btn_d->{ x }, $btn_d->{ y } ) ) {#trabl с переменными кнопки
+	if( $btn->is_over( $btn_d->{ x }, $btn_d->{ y } ) ){
 		for my $square( @$rect ) {
 			$square->draw_black( $app );
 		}
@@ -360,4 +356,66 @@ sub del_finish {
 		@$rect = ();
 		Util::db()->resultset( 'Rect' )->delete;
 	}
+
+	$btn_d->btn_d_come_back( $app );
+}
+
+
+
+sub del_first {
+	my( $event, $app, $btn_d, $rect ) = @_;
+
+	$btn_d->{ moving } && $event->type == SDL_MOUSEBUTTONUP
+		or return;
+
+	for my $square( @$rect ){
+		$square->is_over( $btn_d->{ x }, $btn_d->{ y } )   or next;
+	
+		$square->child_delete( $app );
+		$square->draw_black( $app );
+	}
+
+	read_from_db( $rect );
+
+	$btn_d->btn_d_come_back( $app );
+}
+
+
+__END__
+
+sub fusion {
+	my( $rect ) = @_;
+
+	my $move;
+	my @still;
+
+	for my $square ( @$squares ){
+		$square->{ moving } ?
+		push $move, $square:
+		push @still, $square;
+	}
+
+	for my $square ( @still ){
+		$square->is_over( $move->{ x }, $move->{ y } ) or return;
+
+		$move->{ parent } = $square->{ id };
+		$move->drow_black( $app );
+
+		my $n = 0;
+		#$square->read_children;
+
+	}
+		read_from_db( $rect );
+}
+
+
+
+sub read_children {
+	my( $square ) = @_;
+
+	$square->{ children } or return;
+
+	for my $s( $square->{ children }->@* ) {
+		
+		$s->read_children;
 }

@@ -67,10 +67,10 @@ sub pause_handler {
 sub mouse_target_square {
 	my( $object, $x, $y ) =  @_;
 
-	return $x > $object->{ x }
-		&& $x < $object->{ x } + $object->{ w }
-		&& $y > $object->{ y }
-		&& $y < $object->{ y } + $object->{ h }
+	return $x >= $object->{ x }
+		&& $x <= $object->{ x } + $object->{ w }
+		&& $y >= $object->{ y }
+		&& $y <= $object->{ y } + $object->{ h }
 }	
 
 
