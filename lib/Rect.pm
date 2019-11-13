@@ -195,13 +195,13 @@ sub parent {
 
 
 sub moving_on {
-	my( $rect, $x, $y ) =  @_;
+	my( $rect, $tp_x, $tp_y ) =  @_;
 
 	$rect->{ moving } =  1;
 	$rect->{ old_c  } =  $rect->{ c };
 	$rect->{ c      } =  Color->new( 0, 0, 200 );
-	$rect->{ dx } =  $x - $rect->{ x };
-	$rect->{ dy } =  $y - $rect->{ y };
+	$rect->{ dx } =  $tp_x - $rect->{ x };
+	$rect->{ dy } =  $tp_y - $rect->{ y };
 }
 
 
