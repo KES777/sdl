@@ -299,6 +299,20 @@ sub resize_to {
 	if( $y - $rect->{ y } < 30 ) {
 		$rect->{ h } = 30;
 	}
+
+	$rect->{ children } or return;
+
+	my $h = 10;
+	for $square( $rect->{ children }->@* ) {
+		$h += $square->{ h } + 10;
+
+		if ( $rect->{ w } < $square->{ w } + 20 ) {
+			$rect->{ w } = $square->{ w } + 20;
+		}
+	}
+
+	$rect->{ h } < $h or return;
+	$rect->{ h } = $h;
 }
 
 
