@@ -190,8 +190,13 @@ sub move_finish {
 	for my $square ( @$squares ){
 		$square->{ moving }   or next;
 
-		$square->moving_off;
-		$square->store;
+		if( $square->can_drop ) {
+			$square->drop;
+			$square->store;
+		}
+		else {
+			$square->moving_cancel( $app );
+		}
 	}
 }
 

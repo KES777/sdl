@@ -197,11 +197,17 @@ sub parent {
 sub moving_on {
 	my( $rect, $tp_x, $tp_y ) =  @_;
 
-	$rect->{ moving } =  1;
-	$rect->{ old_c  } =  $rect->{ c };
-	$rect->{ c      } =  Color->new( 0, 0, 200 );
+	$rect->{ moving  } =  1;
+
+	$rect->{ start_x } =  $rect->{ x };
+	$rect->{ start_y } =  $rect->{ y };
+
+	$rect->{ start_c } =  $rect->{ c };
+	$rect->{ c       } =  Color->new( 0, 0, 200 );
+
 	$rect->{ dx } =  $tp_x - $rect->{ x };
 	$rect->{ dy } =  $tp_y - $rect->{ y };
+
 }
 
 
@@ -209,8 +215,34 @@ sub moving_on {
 sub moving_off {
 	my( $rect ) =  @_;
 
-	$rect->{ c } =  delete $rect->{ old_c };
-	delete $rect->@{qw/ moving dx dy /};
+	$rect->{ c } =  delete $rect->{ start_c };
+	delete $rect->@{qw/ moving dx dy start_x start_y /};
+}
+
+
+
+sub can_drop {
+	1;
+}
+
+
+
+sub drop {
+	my( $rect ) =  @_;
+	$rect->moving_off;
+}
+
+
+
+sub moving_cancel {
+	my( $rect, $app ) =  @_;
+
+	$rect->draw_black( $app );
+
+	$rect->{ x } =  $rect->{ start_x };
+	$rect->{ y } =  $rect->{ start_y };
+
+	$rect->moving_off;
 }
 
 
