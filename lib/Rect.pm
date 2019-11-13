@@ -311,7 +311,9 @@ sub resize_to {
 		}
 	}
 
-	$rect->{ h } < $h or return;
+	$rect->{ h } < $h
+		or return;
+		
 	$rect->{ h } = $h;
 }
 
