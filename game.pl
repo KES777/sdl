@@ -4,6 +4,7 @@ use warnings;
 
 use Schema;
 use Selection;
+use AppRect;
 use Rect;
 use Util;
 
@@ -20,18 +21,22 @@ my $app = SDLx::App->new( width => $app_w, height => $app_h, resizeable => 1);
 
 
 {
-	my $btn     = Rect->new( 0, 0, 50, 30 );
-	my $btn_del = Rect->new( 250, 0, 50, 30 );
+	# my $app_rect =  AppRect->new( $app );
+	my $btn      =  Rect->new( 0, 0, 50, 30 );
+	my $btn_del  =  Rect->new( 250, 0, 50, 30 );
 	$btn_del->{ c }->{ r } = 255;
 	$btn_del->{ c }->{ g } = 0;
 	$btn_del->{ c }->{ b } = 0;
 	$btn_del->{ selection } = 1;
+
 	my $sel;	
 	my @rect =  ();
+	# push $app_rect->{ children }->@*, $btn, $btn_del, $sel, @rect;
 
 	$app->add_show_handler ( sub{ #show
 		show( @_, $btn, $sel, @rect, $btn_del ) 
 	} );
+	# $app->add_show_handler( sub{ $app_rect->draw } );
 
 	read_from_db( \@rect );
 
@@ -64,9 +69,11 @@ my $app = SDLx::App->new( width => $app_w, height => $app_h, resizeable => 1);
 
 
 	$app->add_event_handler( sub{ del_start ( @_, $btn_del ) } );
-	$app->add_event_handler( sub{ del_rect  ( @_, $btn_del ) } );
+	$app->add_event_handler( sub{ del_move  ( @_, $btn_del ) } );
 	$app->add_event_handler( sub{ del_all( @_, $btn_del, $btn, \@rect ) } );
 	$app->add_event_handler( sub{ del_first( @_, $btn_del, \@rect ) } );
+
+	$app->add_event_handler( sub{ is_over( @_, \@rect ) } );
 
 
 }
@@ -76,6 +83,20 @@ $app->add_event_handler( \&Util::pause_handler );
 $app->run();
 exit();
 
+
+sub is_over {
+	my( $e, $app, $rect ) =  @_;
+
+	$e->type == SDL_MOUSEMOTION
+		or return;
+
+	for my $r ( @$rect ) {
+		my $over =  $r->is_over( $e->motion_x, $e->motion_y )
+			or next;
+
+		print $over->{ id }, "\n";
+	}
+}	
 
 
 sub read_from_db {	
@@ -245,6 +266,10 @@ sub sel_finish {
 	my $w =   0;	
 	my $h =  10;
 	for my $s ( @grouped ) {
+		$s->move_to( 10, $h );
+		$s->{ c }{ r } =  $rect->{ c }{ r } + 80;
+		$s->store;
+
 		$h +=  $s->{ h } +10;
 		$w  =  $s->{ w } > $w ? $s->{ w } : $w;
 
@@ -256,7 +281,6 @@ sub sel_finish {
 	$rect->store;
 
 	$rect->{ children } =  \@grouped;
-
 	push @$squares, $rect;
 
 	return 1;
@@ -315,16 +339,16 @@ sub del_start {
 	
 
 	$event->type == SDL_MOUSEBUTTONDOWN 
+	&&  $btn_d->is_over( $event->motion_x, $event->motion_y )
 		or return;
 
-		$btn_d->is_over( $event->motion_x, $event->motion_y )  or next;
 
-		$btn_d->moving_on( $event->motion_x, $event->motion_y );
+	$btn_d->moving_on( $event->motion_x, $event->motion_y );
 }
 
 
 
-sub del_rect {
+sub del_move {
 	my( $event, $app, $btn_d ) =  @_;
 
 	$btn_d->{ moving }  &&  $event->type == SDL_MOUSEMOTION

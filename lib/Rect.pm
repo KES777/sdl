@@ -50,11 +50,18 @@ sub new {
 
 
 sub draw_black {
-	my( $rect, $screen ) = @_;
+	my( $rect, $screen, $x, $y ) = @_;
+
+	$x //=  0;
+	$y //=  0;
+
+	$x += $rect->{ x };
+	$y += $rect->{ y };
+
 
 	$screen->draw_rect([
-		$rect->{ x },
-		$rect->{ y },
+		$x,
+		$y,
 		$rect->{ w },
 		$rect->{ h },
 	],[ 0, 0, 0, 0 ]);
@@ -63,11 +70,16 @@ sub draw_black {
 
 
 sub draw {
-	my( $rect, $screen ) = @_;
+	my( $rect, $screen, $x, $y ) = @_;
+	$x //=  0;
+	$y //=  0;
+
+	$x += $rect->{ x };
+	$y += $rect->{ y };
 
 	$screen->draw_rect([
-		$rect->{ x },
-		$rect->{ y },
+		$x,
+		$y,
 		$rect->{ w },
 		$rect->{ h },
 	],[ 
@@ -75,8 +87,8 @@ sub draw {
 	]);
 	#circuit
 	$screen->draw_rect([
-		$rect->{ x }+1,
-		$rect->{ y }+1,
+		$x +1,
+		$y +1,
 		$rect->{ w }-2,
 		$rect->{ h }-2,
 	],[ 
@@ -87,8 +99,8 @@ sub draw {
 	if( !$rect->{ selection } ) {
 
 		$screen->draw_rect([
-			$rect->{ x } + $rect->{ w } -15,
-			$rect->{ y } + $rect->{ h } -10,
+			$x + $rect->{ w } -15,
+			$y + $rect->{ h } -10,
 			15,
 			10,
 		],[ 
@@ -98,15 +110,15 @@ sub draw {
 
 
 	if( $rect->{ children } ) {
-		my $h =  10;
+		# my $h =  10;
 		for my $s ( $rect->{ children }->@* ) {
-			$s->{ x }      =  $rect->{ x } + 10;
-			$s->{ y }      =  $rect->{ y } + $h;
-			$s->{ c }{ r } =  $rect->{ c }{ r } + 80;
+		# 	$s->{ x }      =  $rect->{ x } + 10;
+		# 	$s->{ y }      =  $rect->{ y } + $h;
+		# 	$s->{ c }{ r } =  $rect->{ c }{ r } + 80;
 
-			$h +=  $s->{ h } +10;
+		# 	$h +=  $s->{ h } +10;
 
-			$s->draw( $screen );
+			$s->draw( $screen, $x, $y );
 		}
 	}
 }
@@ -116,7 +128,19 @@ sub draw {
 sub is_over {
 	my( $rect, $x, $y ) =  @_;
 
-	return Util::mouse_target_square( $rect, $x, $y );
+	my $bool =  Util::mouse_target_square( $rect, $x, $y );
+	if( $bool ) {
+		# print "Over ", $rect->{ id }, "\n";
+		for my $r ( $rect->{ children }->@* ) {
+			if( my $over =  $r->is_over( $x, $y ) ) {
+				return $over;
+			}
+		}
+
+		return $rect;
+	}
+
+	return;
 }
 
 
@@ -149,6 +173,10 @@ sub store {
 		});
 
 		$rect->{ id } =  $row->id;
+	}
+
+	for my $r ( $rect->{ children }->@* ) {
+		$r->store;
 	}
 
 	return $rect;
@@ -199,12 +227,13 @@ sub move_to {
 	if( $rect->{ y } < 0 ) {
 		$rect->{ y } = 0;
 	}
-	if( $rect->{ x } > $app_w - $rect->{ w } ) {
-		$rect->{ x } = $app_w - $rect->{ w }
+	if( $app_w  &&  $rect->{ x } > $app_w - $rect->{ w } ) {
+		$rect->{ x } = $app_w - $rect->{ w };
 	}
-	if( $rect->{ y } > $app_h - $rect->{ h } ) {
-		$rect->{ y } = $app_h - $rect->{ h }
+	if( $app_h  &&  $rect->{ y } > $app_h - $rect->{ h } ) {
+		$rect->{ y } = $app_h - $rect->{ h };
 	}
+
 }
 
 
