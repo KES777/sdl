@@ -41,7 +41,6 @@ sub new {
 		w      => $w // 50,
 		h      => $h // 30,
 		c      => $c // Color->new,
-		parent_id => 0,
 	);
 
 	return bless \%rect, $rect;
@@ -190,6 +189,8 @@ sub parent {
 	Util::db()->resultset( 'Rect' )->search({
 		id => $rect->{ id },
 	})->first->update({ parent_id => $id });
+
+	$rect->{ parent_id } =  $id;
 }
 
 
