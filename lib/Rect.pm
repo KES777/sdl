@@ -131,7 +131,7 @@ sub is_over {
 	if( $bool ) {
 		# print "Over ", $rect->{ id }, "\n";
 		for my $r ( $rect->{ children }->@* ) {
-			if( my $over =  $r->is_over( $x, $y ) ) {
+			if( my $over =  $r->is_over( $x - $rect->{ x }, $y - $rect->{ y } ) ) {
 				return $over;
 			}
 		}
