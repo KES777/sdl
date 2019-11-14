@@ -275,6 +275,31 @@ sub drop {
 
 	my @children =   $group->{ children }->@*;
 
+	Rect::to_group( $group, @children );
+
+	# my $w =   0;	
+	# my $h =  10;
+	# for my $s ( @children ) {
+	# 	$s->move_to( 10, $h );
+	# 	$s->{ c }{ r } =  $group->{ c }{ r } + 80;
+	# 	$s->store;
+
+	# 	$h +=  $s->{ h } +10;
+	# 	$w  =  $s->{ w } > $w ? $s->{ w } : $w;
+	# }
+
+	# $group->{ w } =  $w + 20;
+	# $group->{ h } =  $h;	
+	# $group->store;
+
+	return 1;
+}
+
+
+
+sub to_group {
+	my( $group, @children ) =  @_;
+
 	my $w =   0;	
 	my $h =  10;
 	for my $s ( @children ) {
@@ -289,8 +314,6 @@ sub drop {
 	$group->{ w } =  $w + 20;
 	$group->{ h } =  $h;	
 	$group->store;
-
-	return 1;
 }
 
 

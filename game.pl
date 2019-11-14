@@ -281,22 +281,24 @@ sub sel_finish {
 
 	my $rect =  Rect->new( $sel->{ x }, $sel->{ y } )->store;
 
-	my $w =   0;	
-	my $h =  10;
-	for my $s ( @grouped ) {
-		$s->move_to( 10, $h );
-		$s->{ c }{ r } =  $rect->{ c }{ r } + 80;
-		$s->store;
+	Rect::to_group( $rect, @grouped );
 
-		$h +=  $s->{ h } +10;
-		$w  =  $s->{ w } > $w ? $s->{ w } : $w;
+	# my $w =   0;	
+	# my $h =  10;
+	# for my $s ( @grouped ) {
+	# 	$s->move_to( 10, $h );
+	# 	$s->{ c }{ r } =  $rect->{ c }{ r } + 80;
+	# 	$s->store;
 
-		$s->parent( $rect->{ id } );
-	}
+	# 	$h +=  $s->{ h } +10;
+	# 	$w  =  $s->{ w } > $w ? $s->{ w } : $w;
 
-	$rect->{ w } =  $w + 20;
-	$rect->{ h } =  $h;	
-	$rect->store;
+	# 	$s->parent( $rect->{ id } );
+	# }
+
+	# $rect->{ w } =  $w + 20;
+	# $rect->{ h } =  $h;	
+	# $rect->store;
 
 	$rect->{ children } =  \@grouped;
 	push @$squares, $rect;
