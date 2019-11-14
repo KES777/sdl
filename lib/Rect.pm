@@ -20,7 +20,7 @@ sub new {
 
 	my( $rect, $x, $y, $w, $h, $c ) =  @_;
 
-	$x //=  ($x_offset += 10);
+	$x //=  ($x_offset += 30);
 	$y //=  $y_offset_n * 5  + ($y_offset +=  5);
 
 	if( $x_offset > 600 ) {
@@ -218,19 +218,79 @@ sub moving_off {
 
 	$rect->{ c } =  delete $rect->{ start_c };
 	delete $rect->@{qw/ moving dx dy start_x start_y /};
+
+	#for $btn_del
+	if( $rect->{ c }->{ r } == 255 ) {
+		return;
+	}
+	
+	$rect->store;
 }
 
 
 
 sub can_drop {
-	1;
+	my( $rect, $squares, $drop_x, $drop_y ) =  @_;
+
+	my( $group, $child );
+	for my $s ( @$squares ) {
+		$s != $rect   or next;
+		my $curr =  $s->is_over( $drop_x, $drop_y )   or next;
+
+		$group =  $s;
+		$child =  $curr;
+		# last;
+	}
+
+	$group   or return;
+
+	return $group, $child;
+}
+
+
+
+sub can_group {
+	my( $group, $square ) = @_;
+
+	if( $group->{ w } < $square->{ w }
+		|| $group->{ h } < $square->{ h } ) {
+		return;
+	}
+	return $group;
 }
 
 
 
 sub drop {
-	my( $rect ) =  @_;
+	my( $rect, $group, $child, $squares, $drop_x, $drop_y ) =  @_;
+
+	$rect->parent( $group->{ id } );
+	# $rect->{ x } =  $drop_x - $group->{ x } - $rect->{ dx };
+	# $rect->{ y } =  $drop_y - $group->{ y } - $rect->{ dy }; 
 	$rect->moving_off;
+	# $rect->store;	
+
+	push $group->{ children }->@*, $rect;
+	@$squares =  grep{ $_ != $rect } @$squares;
+
+	my @children =   $group->{ children }->@*;
+
+	my $w =   0;	
+	my $h =  10;
+	for my $s ( @children ) {
+		$s->move_to( 10, $h );
+		$s->{ c }{ r } =  $group->{ c }{ r } + 80;
+		$s->store;
+
+		$h +=  $s->{ h } +10;
+		$w  =  $s->{ w } > $w ? $s->{ w } : $w;
+	}
+
+	$group->{ w } =  $w + 20;
+	$group->{ h } =  $h;	
+	$group->store;
+
+	return 1;
 }
 
 
@@ -344,10 +404,10 @@ sub resize_to {
 		}
 	}
 
-	$rect->{ h } < $h
-		or return;
+	$rect->{ h } < $h ?
+		$rect->{ h } = $h:
+			return;
 		
-	$rect->{ h } = $h;
 }
 
 

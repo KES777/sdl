@@ -29,12 +29,13 @@ my $app = SDLx::App->new( width => $app_w, height => $app_h, resizeable => 1);
 	$btn_del->{ c }->{ b } = 0;
 	$btn_del->{ selection } = 1;
 
+	my @first;
 	my $sel;	
 	my @rect =  ();
 	# push $app_rect->{ children }->@*, $btn, $btn_del, $sel, @rect;
 
 	$app->add_show_handler ( sub{ #show
-		show( @_, $btn, $sel, @rect, $btn_del ) 
+		show( @_, $btn, $sel, @rect, $btn_del, @first ) 
 	} );
 	# $app->add_show_handler( sub{ $app_rect->draw } );
 
@@ -43,9 +44,9 @@ my $app = SDLx::App->new( width => $app_w, height => $app_h, resizeable => 1);
 	$app->add_event_handler( sub{ new_rect( @_, $btn, \@rect ) } );
 
 	## Rect moving
-	$app->add_event_handler( sub{ move_start ( @_, \@rect ) } );
+	$app->add_event_handler( sub{ move_start ( @_, \@rect, \@first ) } );
 	$app->add_event_handler( sub{ move_rect  ( @_, \@rect ) } );
-	$app->add_event_handler( sub{ move_finish( @_, \@rect ) } );
+	$app->add_event_handler( sub{ move_finish( @_, \@rect, \@first ) } );
 
 
 	## Rect grouping
@@ -147,7 +148,7 @@ sub new_rect {
 
 ## Rect dragging
 sub move_start {
-	my( $event, $app, $squares ) =  @_;
+	my( $event, $app, $squares, $first ) =  @_;
 
 	$event->type == SDL_MOUSEBUTTONDOWN 
 		or return;
@@ -159,6 +160,7 @@ sub move_start {
 
 		$square->is_over( $event->motion_x, $event->motion_y )  or next;
 		$square->moving_on( $event->motion_x, $event->motion_y );
+		push @$first, $square;
 	}
 }
 
@@ -182,20 +184,31 @@ sub move_rect {
 
 
 sub move_finish {
-	my( $event, $app, $squares ) = @_;
+	my( $event, $app, $squares, $first ) = @_;
 
 	$event->type == SDL_MOUSEBUTTONUP
 		or return;
 
+	@$first =  ();
 	for my $square ( @$squares ){
 		$square->{ moving }   or next;
 
-		if( $square->can_drop ) {
-			$square->drop;
-			$square->store;
+		if( my( $g, $c ) =  $square->can_drop( $squares, $event->motion_x, $event->motion_y ) ) {
+			if( my $can =  $g->can_group( $square )) {
+				$g->draw_black( $app );
+				$square->drop( $g, $c, $squares, $event->motion_x, $event->motion_y );
+
+				$square->store;
+			}
+
+			else {
+				$square->moving_cancel( $app );
+				$square->store;
+			}
 		}
+
 		else {
-			$square->moving_cancel( $app );
+			$square->moving_off;
 		}
 	}
 }
@@ -410,41 +423,4 @@ sub del_first {
 }
 
 
-__END__
 
-sub fusion {
-	my( $rect ) = @_;
-
-	my $move;
-	my @still;
-
-	for my $square ( @$squares ){
-		$square->{ moving } ?
-		push $move, $square:
-		push @still, $square;
-	}
-
-	for my $square ( @still ){
-		$square->is_over( $move->{ x }, $move->{ y } ) or return;
-
-		$move->{ parent } = $square->{ id };
-		$move->drow_black( $app );
-
-		my $n = 0;
-		#$square->read_children;
-
-	}
-		read_from_db( $rect );
-}
-
-
-
-sub read_children {
-	my( $square ) = @_;
-
-	$square->{ children } or return;
-
-	for my $s( $square->{ children }->@* ) {
-		
-		$s->read_children;
-}
