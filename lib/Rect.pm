@@ -252,11 +252,19 @@ sub can_drop {
 sub can_group {
 	my( $group, $square ) = @_;
 
-	if( $group->{ w } < $square->{ w }
-		|| $group->{ h } < $square->{ h } ) {
-		return;
+	if( $group->{ x } < $square->{ x }
+		&&  $group->{ y } < $square->{ y }
+		&&  $group->{ x } + $group->{ w } > $square->{ x } + $square->{ w }
+		&&  $group->{ y } + $group->{ h } > $square->{ y } + $square->{ h } ) {
+
+		return $group;
 	}
-	return $group;
+	
+	# if( $group->{ w } < $square->{ w }
+	# 	|| $group->{ h } < $square->{ h } ) {
+	# 	return;
+	# }
+	# return $group;
 }
 
 
@@ -275,22 +283,7 @@ sub drop {
 
 	my @children =   $group->{ children }->@*;
 
-	Rect::to_group( $group, @children );
-
-	# my $w =   0;	
-	# my $h =  10;
-	# for my $s ( @children ) {
-	# 	$s->move_to( 10, $h );
-	# 	$s->{ c }{ r } =  $group->{ c }{ r } + 80;
-	# 	$s->store;
-
-	# 	$h +=  $s->{ h } +10;
-	# 	$w  =  $s->{ w } > $w ? $s->{ w } : $w;
-	# }
-
-	# $group->{ w } =  $w + 20;
-	# $group->{ h } =  $h;	
-	# $group->store;
+	to_group( $group, @children );
 
 	return 1;
 }
