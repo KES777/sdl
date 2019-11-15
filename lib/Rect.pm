@@ -302,6 +302,8 @@ sub to_group {
 
 		$h +=  $s->{ h } +10;
 		$w  =  $s->{ w } > $w ? $s->{ w } : $w;
+
+		$s->parent( $group->{ id } );
 	}
 
 	$group->{ w } =  $w + 20;
