@@ -1,10 +1,11 @@
 package Rect;
 
 use Color;
+use Scalar::Util qw(weaken);
 
 my $y_offset_n =  0;
-my $x_offset   =  30;
-my $y_offset   =  30;
+my $x_offset   =  50;
+my $y_offset   =  50;
 sub new {
 	if( ref $_[1] eq 'Schema::Result::Rect' ) {
 		my( $rect, $db_rect ) =  @_;
@@ -21,11 +22,11 @@ sub new {
 	my( $rect, $x, $y, $w, $h, $c ) =  @_;
 
 	$x //=  ($x_offset += 30);
-	$y //=  $y_offset_n * 5  + ($y_offset +=  5);
+	$y //=  $y_offset_n * 5  + ($y_offset +=  10);
 
 	if( $x_offset > 600 ) {
-		$x_offset =  30;
-		$y_offset =  30;
+		$x_offset =  40;
+		$y_offset =  50;
 		$y_offset_n++;  
 	}
 
@@ -195,6 +196,16 @@ sub parent {
 
 
 
+sub save_prev {
+	my( $rect ) =  @_;
+# DB::x;
+	for my $child( $rect->{ children }->@* ) {
+		$child->{ parent } =  weaken $rect;
+	}
+}
+
+
+
 sub moving_on {
 	my( $rect, $tp_x, $tp_y ) =  @_;
 
@@ -273,12 +284,11 @@ sub drop {
 	my( $rect, $group, $child, $squares, $drop_x, $drop_y ) =  @_;
 
 	$rect->parent( $group->{ id } );
-	# $rect->{ x } =  $drop_x - $group->{ x } - $rect->{ dx };
-	# $rect->{ y } =  $drop_y - $group->{ y } - $rect->{ dy }; 
 	$rect->moving_off;
-	# $rect->store;	
+
 
 	push $group->{ children }->@*, $rect;
+	$group->save_prev;#load_parent####################
 	@$squares =  grep{ $_ != $rect } @$squares;
 
 	my @children =   $group->{ children }->@*;
@@ -304,6 +314,8 @@ sub to_group {
 		$w  =  $s->{ w } > $w ? $s->{ w } : $w;
 
 		$s->parent( $group->{ id } );
+
+		$s->{ parent } =  weaken $group;#load_parent
 	}
 
 	$group->{ w } =  $w + 20;
@@ -357,14 +369,8 @@ sub load_children {
 	});
 
 	$rect->{ children } =  [ map{ Rect->new( $_ ) } $child->all ];
-
-	# my @arr =  map sub{ Rect->new( $_ ) }, $child->all;
-	# $rect->{ children } =  \@arr;
-
-	# my $xxx =  [ 1, 2, 3 ]; # my @xxx =  ( 1, 2, 3 ); my $xxx =  \@xxx;
-
-
 	for my $x ( $rect->{ children }->@* ) {
+		$x->{ parent } =  weaken $rect;
 		$x->load_children;
 	}
 }
@@ -450,7 +456,7 @@ sub btn_d_come_back {
 
 
 
-sub child_delete {
+sub child_destroy {
 	my( $square ) = @_;
 
 	Util::db()->resultset( 'Rect' )->search({
@@ -460,7 +466,7 @@ sub child_delete {
 	if( $square->{ children }->@* ) {
 
 		for my $child ( $square->{ children }->@* ) {
-			$child->child_delete;
+			$child->child_destroy;
 		}
 	}
 }

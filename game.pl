@@ -29,6 +29,7 @@ my $app = SDLx::App->new( width => $app_w, height => $app_h, resizeable => 1);
 	$btn_del->{ c }->{ b } = 0;
 	$btn_del->{ selection } = 1;
 
+	my @flag_1;
 	my @first;
 	my $sel;	
 	my @rect =  ();
@@ -44,9 +45,12 @@ my $app = SDLx::App->new( width => $app_w, height => $app_h, resizeable => 1);
 	$app->add_event_handler( sub{ new_rect( @_, $btn, \@rect ) } );
 
 	## Rect moving
-	$app->add_event_handler( sub{ move_start ( @_, \@rect, \@first ) } );
+	$app->add_event_handler( sub{ move_start ( @_, \@rect, \@first, \@flag_1 ) } );
 	$app->add_event_handler( sub{ move_rect  ( @_, \@rect ) } );
 	$app->add_event_handler( sub{ move_finish( @_, \@rect, \@first ) } );
+
+	$app->add_event_handler( sub{ drag_start ( @_, \@rect, \@first, \@flag_1 ) } );
+	$app->add_event_handler( sub{ drag_s ( @_, \@rect, \@first, \@flag_1 ) } );
 
 
 	## Rect grouping
@@ -148,7 +152,11 @@ sub new_rect {
 
 ## Rect dragging
 sub move_start {
-	my( $event, $app, $squares, $first ) =  @_;
+	my( $event, $app, $squares, $first, $flag_1 ) =  @_;
+# DB::x;
+	if( @$flag_1 ) {
+		return;
+	}
 
 	$event->type == SDL_MOUSEBUTTONDOWN 
 		or return;
@@ -161,6 +169,47 @@ sub move_start {
 		$square->is_over( $event->motion_x, $event->motion_y )  or next;
 		$square->moving_on( $event->motion_x, $event->motion_y );
 		push @$first, $square;
+	}
+}
+
+
+
+sub drag_start {
+	my( $event, $app, $squares, $first, $flag_1 ) =  @_;
+
+	$event->type == SDL_KEYDOWN
+	# &&  $event->key_sym == SDLK_d
+		or return;
+
+	push @$flag_1, $squares;
+}
+
+
+sub drag_s{
+	my( $event, $app, $squares, $first, $flag_1 ) =  @_;
+
+	$event->type == SDL_MOUSEBUTTONDOWN  &&  @$flag_1
+		or return;
+	
+	for my $square ( @$squares ){
+		my $child =  $square->is_over( $event->motion_x, $event->motion_y )
+		   or next;
+
+		$child->moving_on( $event->motion_x, $event->motion_y );
+												
+		my $parent_id =  $child->{ parent_id };#нет { parent_id }
+		my $id =  $child->{ id };
+
+		# my $parent =  $child->{ parent };
+		# my $children =  $parent->{ children };
+		# for my $one( @$parent->{ children }->@* ) {
+		# 	if( $one->{ id } !=  $id ) {
+		# 		push @$parent->{ children }->@*, $one;
+		# 	}
+		# }
+		$child->store;
+		
+		push @$squares, $child;
 	}
 }
 
@@ -283,25 +332,10 @@ sub sel_finish {
 
 	Rect::to_group( $rect, @grouped );
 
-	# my $w =   0;	
-	# my $h =  10;
-	# for my $s ( @grouped ) {
-	# 	$s->move_to( 10, $h );
-	# 	$s->{ c }{ r } =  $rect->{ c }{ r } + 80;
-	# 	$s->store;
-
-	# 	$h +=  $s->{ h } +10;
-	# 	$w  =  $s->{ w } > $w ? $s->{ w } : $w;
-
-	# 	$s->parent( $rect->{ id } );
-	# }
-
-	# $rect->{ w } =  $w + 20;
-	# $rect->{ h } =  $h;	
-	# $rect->store;
-
 	$rect->{ children } =  \@grouped;
 	push @$squares, $rect;
+
+	$rect->save_prev;#load parent###########
 
 	return 1;
 }	
@@ -415,7 +449,7 @@ sub del_first {
 	for my $square( @$rect ){
 		$square->is_over( $btn_d->{ x }, $btn_d->{ y } )   or next;
 	
-		$square->child_delete( $app );
+		$square->child_destroy( $app );
 		$square->draw_black( $app );
 	}
 
