@@ -29,6 +29,7 @@ my $app = SDLx::App->new( width => $app_w, height => $app_h, resizeable => 1);
 	$btn_del->{ c }->{ b } = 0;
 	$btn_del->{ selection } = 1;
 
+	my @flag_2;
 	my @flag_1;
 	my @first;
 	my $sel;	
@@ -47,10 +48,11 @@ my $app = SDLx::App->new( width => $app_w, height => $app_h, resizeable => 1);
 	## Rect moving
 	$app->add_event_handler( sub{ move_start ( @_, \@rect, \@first, \@flag_1 ) } );
 	$app->add_event_handler( sub{ move_rect  ( @_, \@rect ) } );
-	$app->add_event_handler( sub{ move_finish( @_, \@rect, \@first ) } );
+	$app->add_event_handler( sub{ drop_rect( @_, \@rect, \@first, \@flag_1 ) } );
 
+	$app->add_event_handler( sub{ drag_flag ( @_, \@rect, \@flag_1 ) } );
 	$app->add_event_handler( sub{ drag_start ( @_, \@rect, \@first, \@flag_1 ) } );
-	$app->add_event_handler( sub{ drag_s ( @_, \@rect, \@first, \@flag_1 ) } );
+
 
 
 	## Rect grouping
@@ -153,7 +155,7 @@ sub new_rect {
 ## Rect dragging
 sub move_start {
 	my( $event, $app, $squares, $first, $flag_1 ) =  @_;
-# DB::x;
+
 	if( @$flag_1 ) {
 		return;
 	}
@@ -174,44 +176,76 @@ sub move_start {
 
 
 
-sub drag_start {
-	my( $event, $app, $squares, $first, $flag_1 ) =  @_;
+sub drag_flag {
+	my( $event, $app, $squares, $flag_1 ) =  @_;
 
 	$event->type == SDL_KEYDOWN
-	# &&  $event->key_sym == SDLK_d
+	&&  $event->key_sym == SDLK_d
 		or return;
 
 	push @$flag_1, $squares;
 }
 
 
-sub drag_s{
+sub drag_start{
 	my( $event, $app, $squares, $first, $flag_1 ) =  @_;
 
-	$event->type == SDL_MOUSEBUTTONDOWN  &&  @$flag_1
+	@$flag_1  &&  $event->type == SDL_MOUSEBUTTONDOWN 
 		or return;
 	
 	for my $square ( @$squares ){
 		my $child =  $square->is_over( $event->motion_x, $event->motion_y )
 		   or next;
-
-		$child->moving_on( $event->motion_x, $event->motion_y );
-												
-		my $parent_id =  $child->{ parent_id };#нет { parent_id }
-		my $id =  $child->{ id };
-
-		# my $parent =  $child->{ parent };
-		# my $children =  $parent->{ children };
-		# for my $one( @$parent->{ children }->@* ) {
-		# 	if( $one->{ id } !=  $id ) {
-		# 		push @$parent->{ children }->@*, $one;
-		# 	}
-		# }
+		$child->detach;
+		$child->{ parent_id } =  undef;
 		$child->store;
+
+		$child->{ x } = $child->{ x } + $child->{ parent }->{ x };
+		$child->{ y } = $child->{ y } + $child->{ parent }->{ y };
 		
+		$child->moving_on( $event->motion_x, $event->motion_y );
+
 		push @$squares, $child;
+			return;
 	}
 }
+
+
+
+
+sub drop_rect {
+	my( $event, $app, $squares, $first, $flag_1 ) = @_;
+
+	$event->type == SDL_MOUSEBUTTONUP
+		or return;
+
+	@$flag_1 =  ();
+	@$first  =  ();
+	for my $square ( @$squares ){
+		$square->{ moving }   or next;
+
+		if( my $g  =  $square->can_drop( $squares, $event->motion_x, $event->motion_y ) ) {
+				# DB::x;
+			if( my $can =  $g->can_group( $square )) {
+				$g->draw_black( $app );
+				$square->drop( $g, $squares, $event->motion_x, $event->motion_y );
+
+				$square->store;
+			}
+
+			else {
+				$square->moving_cancel( $app );
+				$square->store;
+			}
+		}
+
+		else {
+			$square->moving_off;
+		}
+	}
+}
+
+
 
 
 
@@ -232,35 +266,36 @@ sub move_rect {
 
 
 
-sub move_finish {
-	my( $event, $app, $squares, $first ) = @_;
+# sub move_finish {
+# 	my( $event, $app, $squares, $first, $flag_1 ) = @_;
 
-	$event->type == SDL_MOUSEBUTTONUP
-		or return;
+# 	$event->type == SDL_MOUSEBUTTONUP
+# 		or return;
 
-	@$first =  ();
-	for my $square ( @$squares ){
-		$square->{ moving }   or next;
+# 	@$flag_1 =  ();
+# 	@$first  =  ();
+# 	for my $square ( @$squares ){
+# 		$square->{ moving }   or next;
 
-		if( my( $g, $c ) =  $square->can_drop( $squares, $event->motion_x, $event->motion_y ) ) {
-			if( my $can =  $g->can_group( $square )) {
-				$g->draw_black( $app );
-				$square->drop( $g, $c, $squares, $event->motion_x, $event->motion_y );
+# 		if( my( $g, $c ) =  $square->can_drop( $squares, $event->motion_x, $event->motion_y ) ) {
+# 			if( my $can =  $g->can_group( $square )) {
+# 				$g->draw_black( $app );
+# 				$square->drop( $g, $c, $squares, $event->motion_x, $event->motion_y );
 
-				$square->store;
-			}
+# 				$square->store;
+# 			}
 
-			else {
-				$square->moving_cancel( $app );
-				$square->store;
-			}
-		}
+# 			else {
+# 				$square->moving_cancel( $app );
+# 				$square->store;
+# 			}
+# 		}
 
-		else {
-			$square->moving_off;
-		}
-	}
-}
+# 		else {
+# 			$square->moving_off;
+# 		}
+# 	}
+# }
 
 
 

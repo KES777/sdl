@@ -162,7 +162,7 @@ sub store {
 			id => $rect->{ id },
 		})->first;
 		$row->update({
-			$rect->%{qw/ x y w h /},
+			$rect->%{qw/ x y w h parent_id /},
 			$rect->{ c }->geth,
 		});
 	}
@@ -198,9 +198,10 @@ sub parent {
 
 sub save_prev {
 	my( $rect ) =  @_;
-# DB::x;
 	for my $child( $rect->{ children }->@* ) {
-		$child->{ parent } =  weaken $rect;
+		$child->{ parent } =   $rect;
+		weaken $child->{ parent };
+
 	}
 }
 
@@ -219,7 +220,8 @@ sub moving_on {
 
 	$rect->{ dx } =  $tp_x - $rect->{ x };
 	$rect->{ dy } =  $tp_y - $rect->{ y };
-
+# DB::x; 
+my $x = 433;
 }
 
 
@@ -251,11 +253,12 @@ sub can_drop {
 		$group =  $s;
 		$child =  $curr;
 		# last;
+		return $curr;
 	}
 
-	$group   or return;
+# 	$group   or return;
 
-	return $group, $child;
+# 	return $group, $child;
 }
 
 
@@ -270,22 +273,16 @@ sub can_group {
 
 		return $group;
 	}
-	
-	# if( $group->{ w } < $square->{ w }
-	# 	|| $group->{ h } < $square->{ h } ) {
-	# 	return;
-	# }
-	# return $group;
+	return 1; 
 }
 
 
 
 sub drop {
-	my( $rect, $group, $child, $squares, $drop_x, $drop_y ) =  @_;
+	my( $rect, $group, $squares, $drop_x, $drop_y ) =  @_;
 
 	$rect->parent( $group->{ id } );
 	$rect->moving_off;
-
 
 	push $group->{ children }->@*, $rect;
 	$group->save_prev;#load_parent####################
@@ -315,7 +312,10 @@ sub to_group {
 
 		$s->parent( $group->{ id } );
 
-		$s->{ parent } =  weaken $group;#load_parent
+		$s->{ parent } =  $group;#load_parent
+		weaken $s->{ parent };
+# DB::x;
+	# my $x = 443;
 	}
 
 	$group->{ w } =  $w + 20;
@@ -473,5 +473,12 @@ sub child_destroy {
 
 
 
+sub detach {
+	my( $rect ) =  @_;
+
+	my $parent =  $rect->{ parent };
+	my $children =  $parent->{ children };
+	@$children =  grep{ $_ != $rect } @$children;
+}
 
 1;
