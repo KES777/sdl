@@ -370,7 +370,8 @@ sub load_children {
 
 	$rect->{ children } =  [ map{ Rect->new( $_ ) } $child->all ];
 	for my $x ( $rect->{ children }->@* ) {
-		$x->{ parent } =  weaken $rect;
+		$x->{ parent } =  $rect;
+		weaken $x->{ parent };
 		$x->load_children;
 	}
 }
