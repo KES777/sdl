@@ -292,7 +292,22 @@ sub drop {
 
 	to_group( $group, @children );
 
+	regroup( $group->{ parent } );
+
 	return 1;
+}
+
+
+
+sub regroup {
+	my( $parent ) =  @_;
+
+	my @children =  $parent->{ children }->@*;
+	to_group( $parent, @children );
+	
+	if( $parent->{ parent } ) {
+		regroup( $parent->{ parent } );
+	}
 }
 
 
