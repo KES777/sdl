@@ -482,4 +482,21 @@ sub detach {
 	@$children =  grep{ $_ != $rect } @$children;
 }
 
+
+
+sub parent_coord {
+	my( $rect, $x, $y ) =  @_;
+
+	if( $rect->{ parent } ) {
+		$x +=  $rect->{ parent }->{ x };
+		$y +=  $rect->{ parent }->{ y };
+
+		( $x, $y ) =  $rect->{ parent }->parent_coord( $x, $y );
+	}
+
+	return ( $x, $y );
+}
+
+
+
 1;

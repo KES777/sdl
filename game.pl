@@ -114,6 +114,8 @@ sub read_from_db {
 		parent_id => undef
 	})->all;
 
+	# DB::x;
+
 	for my $r ( @rect_f ) {
 		$r =  Rect->new( $r );
 		$r->load_children;
@@ -200,8 +202,10 @@ sub drag_start{
 		$child->{ parent_id } =  undef;
 		$child->store;
 
-		$child->{ x } = $child->{ x } + $child->{ parent }->{ x };
-		$child->{ y } = $child->{ y } + $child->{ parent }->{ y };
+		# DB::x;
+		my( $x, $y ) =  $child->parent_coord( $child->{ x }, $child->{ y } );
+		$child->{ x } =  $x;
+		$child->{ y } =  $y;
 		
 		$child->moving_on( $event->motion_x, $event->motion_y );
 
@@ -214,6 +218,7 @@ sub drag_start{
 
 
 sub drop_rect {
+
 	my( $event, $app, $squares, $first, $flag_1 ) = @_;
 
 	$event->type == SDL_MOUSEBUTTONUP
@@ -225,7 +230,7 @@ sub drop_rect {
 		$square->{ moving }   or next;
 
 		if( my $g  =  $square->can_drop( $squares, $event->motion_x, $event->motion_y ) ) {
-				# DB::x;
+		
 			if( my $can =  $g->can_group( $square )) {
 				$g->draw_black( $app );
 				$square->drop( $g, $squares, $event->motion_x, $event->motion_y );
@@ -482,15 +487,16 @@ sub del_first {
 		or return;
 
 	for my $square( @$rect ){
-		$square->is_over( $btn_d->{ x }, $btn_d->{ y } )   or next;
-	
-		$square->child_destroy( $app );
+		# $square->is_over( $btn_d->{ x }, $btn_d->{ y } )   or next;
+		Util::mouse_target_square( $square, $btn_d->{ x }, $btn_d->{ y } ) or next;
+		$square->child_destroy;
 		$square->draw_black( $app );
 	}
 
 	read_from_db( $rect );
 
 	$btn_d->btn_d_come_back( $app );
+	# DB::x; 1;
 }
 
 
