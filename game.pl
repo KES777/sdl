@@ -170,7 +170,7 @@ sub move_start {
 			return;
 		}
 
-		$square->is_over( $event->motion_x, $event->motion_y )  or next;
+		$square->Util::mouse_target_square( $event->motion_x, $event->motion_y )  or next;
 		$square->moving_on( $event->motion_x, $event->motion_y );
 		push @$first, $square;
 	}
@@ -202,7 +202,6 @@ sub drag_start{
 		$child->{ parent_id } =  undef;
 		$child->store;
 
-		# DB::x;
 		my( $x, $y ) =  $child->parent_coord( $child->{ x }, $child->{ y } );
 		$child->{ x } =  $x;
 		$child->{ y } =  $y;
@@ -268,39 +267,6 @@ sub move_rect {
 		$square->move_to( $event->motion_x,  $event->motion_y, $app_w, $app_h );
 	}
 }
-
-
-
-# sub move_finish {
-# 	my( $event, $app, $squares, $first, $flag_1 ) = @_;
-
-# 	$event->type == SDL_MOUSEBUTTONUP
-# 		or return;
-
-# 	@$flag_1 =  ();
-# 	@$first  =  ();
-# 	for my $square ( @$squares ){
-# 		$square->{ moving }   or next;
-
-# 		if( my( $g, $c ) =  $square->can_drop( $squares, $event->motion_x, $event->motion_y ) ) {
-# 			if( my $can =  $g->can_group( $square )) {
-# 				$g->draw_black( $app );
-# 				$square->drop( $g, $c, $squares, $event->motion_x, $event->motion_y );
-
-# 				$square->store;
-# 			}
-
-# 			else {
-# 				$square->moving_cancel( $app );
-# 				$square->store;
-# 			}
-# 		}
-
-# 		else {
-# 			$square->moving_off;
-# 		}
-# 	}
-# }
 
 
 
@@ -461,12 +427,12 @@ sub del_all {
 		or return;
 
 	for my $square( @$rect ){
-		if( $square->is_over( $btn_d->{ x }, $btn_d->{ y } )) {
+		if( Util::mouse_target_square( $square, $btn_d->{ x }, $btn_d->{ y } ) ) {
 				return;
 		}
 	}
 
-	if( $btn->is_over( $btn_d->{ x }, $btn_d->{ y } ) ){
+	if( Util::mouse_target_square( $btn, $btn_d->{ x }, $btn_d->{ y } ) ){
 		for my $square( @$rect ) {
 			$square->draw_black( $app );
 		}
@@ -485,15 +451,17 @@ sub del_first {
 
 	$btn_d->{ moving } && $event->type == SDL_MOUSEBUTTONUP
 		or return;
-
+	my $x;
 	for my $square( @$rect ){
 		# $square->is_over( $btn_d->{ x }, $btn_d->{ y } )   or next;
 		Util::mouse_target_square( $square, $btn_d->{ x }, $btn_d->{ y } ) or next;
+		$x =  $square;
 		$square->child_destroy;
 		$square->draw_black( $app );
 	}
 
-	read_from_db( $rect );
+	# read_from_db( $rect );
+	@$rect =  grep{ $_ != $x } @$rect;
 
 	$btn_d->btn_d_come_back( $app );
 	# DB::x; 1;

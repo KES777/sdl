@@ -162,7 +162,7 @@ sub store {
 			id => $rect->{ id },
 		})->first;
 		$row->update({
-			$rect->%{qw/ x y w h parent_id /},
+			$rect->%{qw/ x y w h parent_id/},######%{qw/ x y w h parent_id/}
 			$rect->{ c }->geth,
 		});
 	}
@@ -371,6 +371,7 @@ sub load_children {
 	$rect->{ children } =  [ map{ Rect->new( $_ ) } $child->all ];
 	for my $x ( $rect->{ children }->@* ) {
 		$x->{ parent } =  $rect;
+		$x->{ parent_id } =  $rect->{ id };############parent_id
 		weaken $x->{ parent };
 		$x->load_children;
 	}
