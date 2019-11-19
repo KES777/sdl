@@ -225,18 +225,24 @@ sub drop_rect {
 
 	@$flag_1 =  ();
 	@$first  =  ();
+# DB::x;
+	for my $rect( @$squares ) {
+		if( $rect->Util::mouse_target_square( $event->motion_x, $event->motion_y ) ) {
+			$rect->draw_black( $app );
+		} 
+	}
+
 	for my $square ( @$squares ){
 		$square->{ moving }   or next;
 
 		if( my $g  =  $square->can_drop( $squares, $event->motion_x, $event->motion_y ) ) {
-		
+			
 			if( my $can =  $g->can_group( $square )) {
-				$g->draw_black( $app );
+				# $g->draw_black( $app );
 				$square->drop( $g, $squares, $event->motion_x, $event->motion_y );
 
 				$square->store;
 			}
-
 			else {
 				$square->moving_cancel( $app );
 				$square->store;
