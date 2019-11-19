@@ -336,7 +336,14 @@ sub to_group {
 	}
 
 	$group->{ w } =  $w + 20;
+	if( $group->{ w } < 50 ) {
+		$group->{ w } =  50;
+	}
+
 	$group->{ h } =  $h;
+	if( $group->{ h } < 30 ) {
+		$group->{ h } =  30;
+	}
 
 	$group->store;
 }

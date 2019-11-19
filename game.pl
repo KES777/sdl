@@ -194,11 +194,18 @@ sub drag_start{
 
 	@$flag_1  &&  $event->type == SDL_MOUSEBUTTONDOWN 
 		or return;
-	
+
+	for my $rect( @$squares ) {
+		if( $rect->Util::mouse_target_square( $event->motion_x, $event->motion_y ) ) {
+			$rect->draw_black( $app );
+		} 
+	}
+		
 	for my $square ( @$squares ){
 		my $child =  $square->is_over( $event->motion_x, $event->motion_y )
 		   or next;
 		$child->detach;
+		$child->{ parent }->regroup;
 		$child->{ parent_id } =  undef;
 		$child->store;
 
@@ -225,7 +232,7 @@ sub drop_rect {
 
 	@$flag_1 =  ();
 	@$first  =  ();
-# DB::x;
+
 	for my $rect( @$squares ) {
 		if( $rect->Util::mouse_target_square( $event->motion_x, $event->motion_y ) ) {
 			$rect->draw_black( $app );
