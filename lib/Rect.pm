@@ -30,12 +30,6 @@ sub new {
 		$y_offset_n++;  
 	}
 
-	# if( !defined $x ) {
-	# 	$x_offset =  $x_offset + 10;
-	# 	$x =  $x_offset;
-	# }
-
-
 	my %rect = (
 		x      => $x,
 		y      => $y,
@@ -125,12 +119,23 @@ sub draw {
 
 
 
+sub draw_black_group {
+	my( $squares, $app, $x, $y ) = @_;
+
+	for my $rect( @$squares ) {
+		if( $rect->Util::mouse_target_square( $x, $y ) ) {
+			$rect->draw_black( $app );
+		} 
+	}
+}
+
+
+
 sub is_over {
 	my( $rect, $x, $y ) =  @_;
 
 	my $bool =  Util::mouse_target_square( $rect, $x, $y );
 	if( $bool ) {
-		# print "Over ", $rect->{ id }, "\n";
 		for my $r ( $rect->{ children }->@* ) {
 			if( my $over =  $r->is_over( $x - $rect->{ x }, $y - $rect->{ y } ) ) {
 				return $over;
@@ -162,7 +167,7 @@ sub store {
 			id => $rect->{ id },
 		})->first;
 		$row->update({
-			$rect->%{qw/ x y w h parent_id/},######%{qw/ x y w h parent_id/}
+			$rect->%{qw/ x y w h parent_id/},
 			$rect->{ c }->geth,
 		});
 	}
@@ -201,7 +206,6 @@ sub save_prev {
 	for my $child( $rect->{ children }->@* ) {
 		$child->{ parent } =   $rect;
 		weaken $child->{ parent };
-
 	}
 }
 
@@ -220,8 +224,6 @@ sub moving_on {
 
 	$rect->{ dx } =  $tp_x - $rect->{ x };
 	$rect->{ dy } =  $tp_y - $rect->{ y };
-# DB::x; 
-my $x = 433;
 }
 
 
@@ -315,12 +317,10 @@ sub regroup {
 
 sub to_group {
 	my( $group, @children ) =  @_;
-
-	# DB::x;
-	# my $x = 443;
-
+	
 	my $w =   0;	
 	my $h =  10;
+
 	for my $s ( @children ) {
 		$s->move_to( 10, $h );
 		$s->{ c }{ r } =  $group->{ c }{ r } + 80;
@@ -402,24 +402,6 @@ sub load_children {
 	}
 }
 
-
-
-# sub map {
-# 	my( $sub, @array ) =  @_;
-
-# 	my @res;
-# 	for my $item ( @array ) {
-# 		push @res, $sub->( $item );
-# 	}
-
-# 	return @res;
-# }
-
-# sub{
-# 	my( $_ ) =  @_;
-
-# 	return Rect->new( $_ );
-# }	
 
 
 sub resize_on {

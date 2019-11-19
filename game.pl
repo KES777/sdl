@@ -7,6 +7,7 @@ use Selection;
 use AppRect;
 use Rect;
 use Util;
+use Btn_del;
 
 use DDP;
 use SDL;
@@ -23,13 +24,11 @@ my $app = SDLx::App->new( width => $app_w, height => $app_h, resizeable => 1);
 {
 	# my $app_rect =  AppRect->new( $app );
 	my $btn      =  Rect->new( 0, 0, 50, 30 );
-	my $btn_del  =  Rect->new( 250, 0, 50, 30 );
-	$btn_del->{ c }->{ r } = 255;
-	$btn_del->{ c }->{ g } = 0;
-	$btn_del->{ c }->{ b } = 0;
-	$btn_del->{ selection } = 1;
+	my $btn_del  =  Btn_del->new;
+	# $btn_del->{ c }->{ r } = 255;
+	# $btn_del->{ c }->{ g } = 0;
+	# $btn_del->{ c }->{ b } = 0;
 
-	my @flag_2;
 	my @flag_1;
 	my @first;
 	my $sel;	
@@ -114,8 +113,6 @@ sub read_from_db {
 		parent_id => undef
 	})->all;
 
-	# DB::x;
-
 	for my $r ( @rect_f ) {
 		$r =  Rect->new( $r );
 		$r->load_children;
@@ -154,7 +151,6 @@ sub new_rect {
 
 
 
-## Rect dragging
 sub move_start {
 	my( $event, $app, $squares, $first, $flag_1 ) =  @_;
 
@@ -195,11 +191,7 @@ sub drag_start{
 	@$flag_1  &&  $event->type == SDL_MOUSEBUTTONDOWN 
 		or return;
 
-	for my $rect( @$squares ) {
-		if( $rect->Util::mouse_target_square( $event->motion_x, $event->motion_y ) ) {
-			$rect->draw_black( $app );
-		} 
-	}
+	Rect::draw_black_group( $squares, $app, $event->motion_x, $event->motion_y  );
 		
 	for my $square ( @$squares ){
 		my $child =  $square->is_over( $event->motion_x, $event->motion_y )
@@ -222,7 +214,6 @@ sub drag_start{
 
 
 
-
 sub drop_rect {
 
 	my( $event, $app, $squares, $first, $flag_1 ) = @_;
@@ -233,19 +224,13 @@ sub drop_rect {
 	@$flag_1 =  ();
 	@$first  =  ();
 
-	for my $rect( @$squares ) {
-		if( $rect->Util::mouse_target_square( $event->motion_x, $event->motion_y ) ) {
-			$rect->draw_black( $app );
-		} 
-	}
-
 	for my $square ( @$squares ){
 		$square->{ moving }   or next;
 
 		if( my $g  =  $square->can_drop( $squares, $event->motion_x, $event->motion_y ) ) {
 			
 			if( my $can =  $g->can_group( $square )) {
-				# $g->draw_black( $app );
+
 				$square->drop( $g, $squares, $event->motion_x, $event->motion_y );
 
 				$square->store;
@@ -261,8 +246,6 @@ sub drop_rect {
 		}
 	}
 }
-
-
 
 
 
@@ -318,7 +301,6 @@ sub sel_resize {
 
 	$sel  &&  $event->type == SDL_MOUSEMOTION
 		or return;
-
 
 	$sel->draw_black( $app );
 	$sel->resize( $event->motion_x, $event->motion_y );
@@ -415,7 +397,6 @@ sub del_start {
 	&&  $btn_d->is_over( $event->motion_x, $event->motion_y )
 		or return;
 
-
 	$btn_d->moving_on( $event->motion_x, $event->motion_y );
 }
 
@@ -477,7 +458,6 @@ sub del_first {
 	@$rect =  grep{ $_ != $x } @$rect;
 
 	$btn_d->btn_d_come_back( $app );
-	# DB::x; 1;
 }
 
 
