@@ -137,7 +137,7 @@ sub is_over {
 	my $bool =  Util::mouse_target_square( $rect, $x, $y );
 	if( $bool ) {
 		for my $r ( $rect->{ children }->@* ) {
-			if( my $over =  $r->is_over( $x - $rect->{ x }, $y - $rect->{ y } ) ) {
+			if( my $over = $r->is_over( $x - $rect->{ x }, $y - $rect->{ y } ) ) {
 				return $over;
 			}
 		}
@@ -153,8 +153,8 @@ sub is_over {
 sub is_inside {
 	my( $rect, $x, $y, $w, $h ) =  @_;
 
-	return $rect->{ x } > $x  &&  $rect->{ x } < $x + $w
-		&& $rect->{ y } > $y  &&  $rect->{ y } < $y + $h;
+	return $rect->{ x } > $x  &&  $rect->{ x } + $rect->{ w } < $x + $w
+		&& $rect->{ y } > $y  &&  $rect->{ y } + $rect->{ h } < $y + $h;
 }
 
 
@@ -301,9 +301,13 @@ sub drop {
 }
 
 
-
+my $cnt =  0;
 sub regroup {
 	my( $parent ) =  @_;
+
+	$cnt++;
+
+	DB::x   if $cnt > 30;
 
 	my @children =  $parent->{ children }->@*;
 	to_group( $parent, @children );
@@ -311,6 +315,8 @@ sub regroup {
 	if( $parent->{ parent } ) {
 		regroup( $parent->{ parent } );
 	}
+
+	$cnt--;
 }
 
 
