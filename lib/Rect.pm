@@ -289,10 +289,11 @@ sub drop {
 	@$squares =  grep{ $_ != $rect } @$squares;
 
 	my @children =   $group->{ children }->@*;
-
 	to_group( $group, @children );
 
-	regroup( $group->{ parent } );
+	if( $group->{ parent } ) {
+		regroup( $group->{ parent } );
+	}
 
 	return 1;
 }
@@ -315,6 +316,9 @@ sub regroup {
 sub to_group {
 	my( $group, @children ) =  @_;
 
+	# DB::x;
+	# my $x = 443;
+
 	my $w =   0;	
 	my $h =  10;
 	for my $s ( @children ) {
@@ -329,12 +333,11 @@ sub to_group {
 
 		$s->{ parent } =  $group;#load_parent
 		weaken $s->{ parent };
-# DB::x;
-	# my $x = 443;
 	}
 
 	$group->{ w } =  $w + 20;
-	$group->{ h } =  $h;	
+	$group->{ h } =  $h;
+
 	$group->store;
 }
 
