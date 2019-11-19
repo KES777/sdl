@@ -38,4 +38,33 @@ sub resize {
 	}
 }
 
+
+sub draw {
+	my( $rect, $screen, $x, $y ) = @_;
+	$x //=  0;
+	$y //=  0;
+
+	$x += $rect->{ x };
+	$y += $rect->{ y };
+
+	$screen->draw_rect([
+		$x,
+		$y,
+		$rect->{ w },
+		$rect->{ h },
+	],[ 
+		255,255,255,255
+	]);
+
+	#circuit
+	$screen->draw_rect([
+		$x +1,
+		$y +1,
+		$rect->{ w }-2,
+		$rect->{ h }-2,
+	],[ 
+		$rect->{ c }->get()
+	]);
+}	
+
 1;

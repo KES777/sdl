@@ -90,17 +90,14 @@ sub draw {
 	]);
 
 	#size_button
-	if( !$rect->{ selection } ) {
-
-		$screen->draw_rect([
-			$x + $rect->{ w } -15,
-			$y + $rect->{ h } -10,
-			15,
-			10,
-		],[ 
-			33, 200, 150, 255
-		]);
-	}
+	$screen->draw_rect([
+		$x + $rect->{ w } -15,
+		$y + $rect->{ h } -10,
+		15,
+		10,
+	],[ 
+		33, 200, 150, 255
+	]);
 
 
 	if( $rect->{ children } ) {

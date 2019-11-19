@@ -20,66 +20,63 @@ my $app_w = 700; #размер экрана;
 my $app_h = 700; #размер экрана;
 my $app = SDLx::App->new( width => $app_w, height => $app_h, resizeable => 1);
 
+my $app_rect =  AppRect->new( $app_w, $app_h );
 
 {
 	# my $app_rect =  AppRect->new( $app );
-	my $btn      =  Rect->new( 0, 0, 50, 30 );
-	my $btn_del  =  Btn_del->new;
-	# $btn_del->{ c }->{ r } = 255;
-	# $btn_del->{ c }->{ g } = 0;
-	# $btn_del->{ c }->{ b } = 0;
+	# my $btn      =  Rect->new( 0, 0, 50, 30 );
+	# my $btn_del  =  Btn_del->new;
 
 	my @flag_1;
 	my @first;
-	my $sel;	
 	my @rect =  ();
 	# push $app_rect->{ children }->@*, $btn, $btn_del, $sel, @rect;
 
-	$app->add_show_handler ( sub{ #show
-		show( @_, $btn, $sel, @rect, $btn_del, @first ) 
-	} );
-	# $app->add_show_handler( sub{ $app_rect->draw } );
+	# $app->add_show_handler ( sub{ #show
+	# 	show( @_, $btn, $sel, @rect, $btn_del, @first ) 
+	# } );
+	$app->add_show_handler( sub{ $app_rect->draw } );
 
-	read_from_db( \@rect );
+	# read_from_db( \@rect );
 
-	$app->add_event_handler( sub{ new_rect( @_, $btn, \@rect ) } );
+	# $app->add_event_handler( sub{ new_rect( @_, $btn, \@rect ) } );
 
-	## Rect moving
-	$app->add_event_handler( sub{ move_start ( @_, \@rect, \@first, \@flag_1 ) } );
-	$app->add_event_handler( sub{ move_rect  ( @_, \@rect ) } );
-	$app->add_event_handler( sub{ drop_rect( @_, \@rect, \@first, \@flag_1 ) } );
+	# ## Rect moving
+	# $app->add_event_handler( sub{ move_start ( @_, \@rect, \@first, \@flag_1 ) } );
+	# $app->add_event_handler( sub{ move_rect  ( @_, \@rect ) } );
+	# $app->add_event_handler( sub{ drop_rect( @_, \@rect, \@first, \@flag_1 ) } );
 
-	$app->add_event_handler( sub{ drag_flag ( @_, \@rect, \@flag_1 ) } );
-	$app->add_event_handler( sub{ drag_start ( @_, \@rect, \@first, \@flag_1 ) } );
-
-
-
-	## Rect grouping
-	$app->add_event_handler( sub{ #sel_start
-		if( my $res =  sel_start ( @_, $sel, \@rect, $btn, $btn_del ) ) {
-			$sel =  $res;
-		}
-	} );
-	$app->add_event_handler( sub{ sel_resize( @_, $sel, \@rect ) } );
-	$app->add_event_handler( sub{ #sel_finish
-		if( my $res =  sel_finish( @_, $sel, \@rect ) ) {
-			$sel =  undef;
-		}
-	} );
-
-
-	$app->add_event_handler( sub{ resize_start ( @_, \@rect ) } );
-	$app->add_event_handler( sub{ resize_rect  ( @_, \@rect ) } );
-	$app->add_event_handler( sub{ resize_finish( @_, \@rect ) } );
+	# $app->add_event_handler( sub{ drag_flag ( @_, \@rect, \@flag_1 ) } );
+	# $app->add_event_handler( sub{ drag_start ( @_, \@rect, \@first, \@flag_1 ) } );
 
 
 
-	$app->add_event_handler( sub{ del_start ( @_, $btn_del ) } );
-	$app->add_event_handler( sub{ del_move  ( @_, $btn_del ) } );
-	$app->add_event_handler( sub{ del_all( @_, $btn_del, $btn, \@rect ) } );
-	$app->add_event_handler( sub{ del_first( @_, $btn_del, \@rect ) } );
+	# ## Rect grouping
+	# $app->add_event_handler( sub{ #sel_start
+	# 	if( my $res =  sel_start ( @_, $sel, \@rect, $btn, $btn_del ) ) {
+	# 		$sel =  $res;
+	# 	}
+	# } );
+	# $app->add_event_handler( sub{ sel_resize( @_, $sel, \@rect ) } );
+	# $app->add_event_handler( sub{ #sel_finish
+	# 	if( my $res =  sel_finish( @_, $sel, \@rect ) ) {
+	# 		$sel =  undef;
+	# 	}
+	# } );
 
-	$app->add_event_handler( sub{ is_over( @_, \@rect ) } );
+
+	# $app->add_event_handler( sub{ resize_start ( @_, \@rect ) } );
+	# $app->add_event_handler( sub{ resize_rect  ( @_, \@rect ) } );
+	# $app->add_event_handler( sub{ resize_finish( @_, \@rect ) } );
+
+
+
+	# $app->add_event_handler( sub{ del_start ( @_, $btn_del ) } );
+	# $app->add_event_handler( sub{ del_move  ( @_, $btn_del ) } );
+	# $app->add_event_handler( sub{ del_all( @_, $btn_del, $btn, \@rect ) } );
+	# $app->add_event_handler( sub{ del_first( @_, $btn_del, \@rect ) } );
+
+	# $app->add_event_handler( sub{ is_over( @_, \@rect ) } );
 
 
 }
@@ -88,6 +85,7 @@ $app->add_event_handler( \&Util::pause_handler );
 
 $app->run();
 exit();
+
 
 
 sub is_over {
@@ -103,6 +101,7 @@ sub is_over {
 		print $over->{ id }, "\n";
 	}
 }	
+
 
 
 sub read_from_db {	
@@ -122,15 +121,16 @@ sub read_from_db {
 
 
 
-
 sub show {
     my( $delta, $app, @objects ) = @_;
 
-    for my $object ( @objects ){
-    	$object   or next;   	
+    $app_rect->draw();
 
-		$object->draw( $app );
-	}
+ #    for my $object ( @objects ){
+ #    	$object   or next;   	
+
+	# 	$object->draw( $app );
+	# }
 
     $app->update;
 }
@@ -267,31 +267,40 @@ sub move_rect {
 
 
 sub sel_start {
-	my( $event, $app, $sel, $squares, $btn, $btn_del ) = @_;
+	my( $event, $app, $app_rect ) = @_;
 
-	!$sel  &&  $event->type == SDL_MOUSEBUTTONDOWN
+	!$app_rect->{ sel }  &&  $event->type == SDL_MOUSEBUTTONDOWN
 		or return;
 
-	for my $square ( @$squares ){
-		$square->is_over( $event->motion_x, $event->motion_y )   or next;
+	AppRect::can_select( $app_rect, $event->motion_x, $event->motion_y )
+		or return;
 
-		return;
-	}
+	AppRect::new_selecting_field( $app_rect, $event->motion_x, $event->motion_y )
+		or return;
 
-	if( $btn->is_over( $event->motion_x, $event->motion_y ) ) { 
-		return;
-	}
-	if( $btn_del->is_over( $event->motion_x, $event->motion_y ) ) { 
-		return;
-	}
 
-	my $r =  Selection->new( 
-		$event->motion_x, $event->motion_y, 0, 0,
-		Color->new( 0, 0, 0 )
-	);
-	$r->{ selection } = 1;
+	return 1;##?
 
-	return $r;
+	# for my $square ( @$squares ){
+	# 	$square->is_over( $event->motion_x, $event->motion_y )   or next;
+
+	# 	return;
+	# }
+
+	# if( $btn->is_over( $event->motion_x, $event->motion_y ) ) { 
+	# 	return;
+	# }
+	# if( $btn_del->is_over( $event->motion_x, $event->motion_y ) ) { 
+	# 	return;
+	# }
+
+	# my $r =  Selection->new( 
+	# 	$event->motion_x, $event->motion_y, 0, 0,
+	# 	Color->new( 0, 0, 0 )
+	# );
+	# $r->{ selection } = 1;
+
+	# return $r;
 }
 
 
