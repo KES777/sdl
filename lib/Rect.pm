@@ -191,7 +191,7 @@ sub store {
 			$rect->{ c }->geth,
 		});
 	}
-	else {
+	elsif( $rect->{ parent } ) {
 		my $row =  Util::db()->resultset( 'Rect' )->create({
 			$rect->%{qw/ x y w h /},
 			$rect->{ c }->geth,
@@ -421,9 +421,10 @@ sub load_children {
 
 	$rect->{ children } =  [ map{ Rect->new( $_ ) } $child->all ];
 	for my $x ( $rect->{ children }->@* ) {
-		$x->{ parent } =  $rect;
 		$x->{ parent_id } =  $rect->{ id };############parent_id
+		$x->{ parent } =  $rect;
 		weaken $x->{ parent };
+
 		$x->load_children;
 	}
 }
