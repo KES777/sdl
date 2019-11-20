@@ -80,7 +80,7 @@ sub _on_move {
 
 	$e->type == SDL_MOUSEMOTION   or return;
 
-	print "MOVE\n";
+	print "MOVE  ", $e->motion_x, "  ", $e->motion_y, "\n";
 }
 
 
@@ -89,7 +89,7 @@ sub _on_down {
 	my( $e, $app, $app_rect ) =  @_;
 
 	$e->type == SDL_MOUSEBUTTONDOWN   or return;
-	print "DOWN\n";
+	print "DOWN  ", $e->button_x, "  ", $e->button_y, "\n";
 }
 
 
