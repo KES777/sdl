@@ -35,7 +35,7 @@ my $app_rect =  AppRect->new( $app_w, $app_h );
 	# $app->add_show_handler ( sub{ #show
 	# 	show( @_, $btn, $sel, @rect, $btn_del, @first ) 
 	# } );
-	$app->add_show_handler( sub{ $app_rect->draw } );
+	# $app->add_show_handler( sub{ $app_rect->draw } );
 
 	# read_from_db( \@rect );
 

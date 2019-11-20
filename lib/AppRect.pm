@@ -27,6 +27,7 @@ sub new {
 	$app_rect->{ btn_del } =  Btn_del->new;
 
 
+	$app->add_show_handler ( sub{ $app_rect->draw } );
 	$app->add_event_handler( sub{ _is_over   ( @_, $app_rect ) } );
 
 	$app->add_event_handler( sub{ _observer( @_, $app_rect ) } );
@@ -141,20 +142,6 @@ sub new_selecting_field {
 
 sub draw {
 	my( $app_rect ) =  @_;
-
-	#size_button
-	if( !$rect->{ selection } ) {
-
-		$app_rect->{ app }->draw_rect([
-			$app_rect->{ x } + $rect->{ w } -15,
-			$app_rect->{ y } + $rect->{ h } -10,
-			15,
-			10,
-		],[ 
-			33, 200, 150, 255
-		]);
-	}
-
 
 	if( $app_rect->{ children } ) {
 		for my $s ( $app_rect->{ children }->@* ) {
