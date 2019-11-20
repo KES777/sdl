@@ -160,6 +160,8 @@ sub is_over {
 			target => $rect,
 			x      => $x,
 			y      => $y,
+			dx      => $x - $rect->{ x },
+			dy      => $y - $rect->{ y },
 		}
 	}
 
