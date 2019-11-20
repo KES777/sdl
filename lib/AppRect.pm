@@ -42,6 +42,8 @@ sub new {
 	$app_rect->{ btn_del }{ parent } =  $app_rect;
 	weaken $app_rect->{ btn_del }{ parent };
 
+	# $APP->add_event_handler( sub{ _on_down( @_, $app_rect ) } );
+	# $APP->add_event_handler( sub{ _on_move( @_, $app_rect ) } );
 
 	$APP->add_show_handler ( sub{ $app_rect->draw } );
 	$APP->add_event_handler( sub{ _is_over   ( @_, $app_rect ) } );
@@ -49,6 +51,25 @@ sub new {
 	$APP->add_event_handler( sub{ _observer( @_, $app_rect ) } );
 
 	return $app_rect;
+}
+
+
+
+sub _on_move {
+	my( $e, $app, $app_rect ) =  @_;
+
+	$e->type == SDL_MOUSEMOTION   or return;
+
+	print "MOVE\n";
+}
+
+
+
+sub _on_down {
+	my( $e, $app, $app_rect ) =  @_;
+
+	$e->type == SDL_MOUSEBUTTONDOWN   or return;
+	print "DOWN\n";
 }
 
 
