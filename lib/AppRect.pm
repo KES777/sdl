@@ -6,6 +6,7 @@ use warnings;
 
 use SDLx::App;
 use SDL::Event;
+use Scalar::Util qw(weaken);
 
 
 use Rect;
@@ -33,8 +34,13 @@ sub new {
 		resizeable =>  1,
 	);
 
-	$app_rect->{ btn     } =  Btn->new( 0, 0, 50, 30 );
+	$app_rect->{ btn } =  Btn->new( 0, 0, 50, 30 );
+	$app_rect->{ btn }{ parent } =  $app_rect;
+	weaken $app_rect->{ btn }{ parent };
+
 	$app_rect->{ btn_del } =  Btn_del->new;
+	$app_rect->{ btn_del }{ parent } =  $app_rect;
+	weaken $app_rect->{ btn_del }{ parent };
 
 
 	$APP->add_show_handler ( sub{ $app_rect->draw } );
