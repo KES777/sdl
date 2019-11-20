@@ -1,7 +1,14 @@
 package Rect;
 
-use Color;
+
 use Scalar::Util qw(weaken);
+use Color;
+use Shape;
+
+
+use base 'Shape';
+
+
 
 my $y_offset_n =  0;
 my $x_offset   =  50;
