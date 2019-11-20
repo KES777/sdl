@@ -22,7 +22,11 @@ sub new {
 
 	my $app_rect =  $rect->SUPER::new( 0, 0, $app_w, $app_h );
 
-	$app_rect->{ app } =  $app // SDLx::App->new( width => $app_w, height => $app_h, resizeable => 1);
+	my $app =  $app_rect->{ app } =  SDLx::App->new(
+		width      =>  $app_w,
+		height     =>  $app_h,
+		resizeable =>  1,
+	);
 
 	$app_rect->{ btn     } =  Btn->new( 0, 0, 50, 30 );
 	$app_rect->{ btn_del } =  Btn_del->new;

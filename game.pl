@@ -18,11 +18,11 @@ use SDLx::Text;
 
 my $app_w = 700; #размер экрана;
 my $app_h = 700; #размер экрана;
-my $app = SDLx::App->new( width => $app_w, height => $app_h, resizeable => 1);
+# my $app = SDLx::App->new( width => $app_w, height => $app_h, resizeable => 1);
 
-my $app_rect =  AppRect->new( $app_w, $app_h );
 
 {
+	my $app_rect =  AppRect->new( $app_w, $app_h );
 	# my $app_rect =  AppRect->new( $app );
 	# my $btn      =  Rect->new( 0, 0, 50, 30 );
 	# my $btn_del  =  Btn_del->new;
@@ -78,12 +78,14 @@ my $app_rect =  AppRect->new( $app_w, $app_h );
 
 	# $app->add_event_handler( sub{ is_over( @_, \@rect ) } );
 
+	$app_rect->{ app }->add_event_handler( \&Util::pause_handler );
 
+	$app_rect->{ app }->run();
 }
-$app->add_event_handler( \&Util::pause_handler );
+# $app->add_event_handler( \&Util::pause_handler );
 
 
-$app->run();
+# $app->run();
 exit();
 
 
