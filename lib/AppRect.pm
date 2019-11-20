@@ -42,6 +42,9 @@ sub new {
 	$app_rect->{ btn_del }{ parent } =  $app_rect;
 	weaken $app_rect->{ btn_del }{ parent };
 
+	$app_rect->{ children } =  [];
+	_read_from_db( $app_rect->{ children } );
+
 	# $APP->add_event_handler( sub{ _on_down( @_, $app_rect ) } );
 	# $APP->add_event_handler( sub{ _on_move( @_, $app_rect ) } );
 
@@ -51,6 +54,23 @@ sub new {
 	$APP->add_event_handler( sub{ _observer( @_, $app_rect ) } );
 
 	return $app_rect;
+}
+
+
+
+sub _read_from_db {
+	my( $rect ) =  @_;
+
+	@$rect = ();
+	my @rect_f =  Util::db()->resultset( 'Rect' )->search({
+		parent_id => undef
+	})->all;
+
+	for my $r ( @rect_f ) {
+		$r =  Rect->new( $r );
+		$r->load_children;
+		push @$rect, $r;
+	}
 }
 
 
