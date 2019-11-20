@@ -139,11 +139,19 @@ sub is_over {
 	if( $bool ) {
 		for my $r ( $rect->{ children }->@* ) {
 			if( my $over = $r->is_over( $x - $rect->{ x }, $y - $rect->{ y } ) ) {
-				return $over;
+				return {
+					target => $over,
+					x      => $x - $rect->{ x },
+					y      => $y - $rect->{ y },
+				};
 			}
 		}
 
-		return $rect;
+		return {
+			target => $rect,
+			x      => $x,
+			y      => $y,
+		}
 	}
 
 	return;
