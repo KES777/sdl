@@ -10,6 +10,7 @@ use SDL::Event;
 
 use Rect;
 use Btn_del;
+use Btn;
 
 
 use base 'Rect';
@@ -23,7 +24,7 @@ sub new {
 
 	$app_rect->{ app } =  $app // SDLx::App->new( width => $app_w, height => $app_h, resizeable => 1);
 
-	$app_rect->{ btn     } =  Rect->new( 0, 0, 50, 30 );
+	$app_rect->{ btn     } =  Btn->new( 0, 0, 50, 30 );
 	$app_rect->{ btn_del } =  Btn_del->new;
 
 
