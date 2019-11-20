@@ -14,7 +14,7 @@ use SDL;
 use SDLx::App;
 use SDL::Event;
 use SDLx::Text;
-   
+
 
 my $app_w = 700; #размер экрана;
 my $app_h = 700; #размер экрана;
@@ -33,13 +33,13 @@ my $app_h = 700; #размер экрана;
 	# push $app_rect->{ children }->@*, $btn, $btn_del, $sel, @rect;
 
 	# $app->add_show_handler ( sub{ #show
-	# 	show( @_, $btn, $sel, @rect, $btn_del, @first ) 
+	# 	show( @_, $btn, $sel, @rect, $btn_del, @first )
 	# } );
 	# $app->add_show_handler( sub{ $app_rect->draw } );
 
-	# read_from_db( \@rect );
+	# # read_from_db( \@rect );
 
-	# $app->add_event_handler( sub{ new_rect( @_, $btn, \@rect ) } );
+	# $app->add_event_handler( sub{ new_rect( @_, $app_rect ) } );
 
 	# ## Rect moving
 	# $app->add_event_handler( sub{ move_start ( @_, \@rect, \@first, \@flag_1 ) } );
@@ -96,17 +96,20 @@ sub is_over {
 	$e->type == SDL_MOUSEMOTION
 		or return;
 
+	my $over;
 	for my $r ( @$rect ) {
-		my $over =  $r->is_over( $e->motion_x, $e->motion_y )
+		$over =  $r->is_over( $e->motion_x, $e->motion_y )
 			or next;
 
-		print $over->{ id }, "\n";
+		last;
 	}
-}	
+
+	$over->on_over( 0, 0 );
+}
 
 
 
-sub read_from_db {	
+sub read_from_db {
 	my( $rect ) =  @_;
 
 	@$rect = ();
@@ -123,32 +126,17 @@ sub read_from_db {
 
 
 
-sub show {
-    my( $delta, $app, @objects ) = @_;
-
-    $app_rect->draw();
-
- #    for my $object ( @objects ){
- #    	$object   or next;   	
-
-	# 	$object->draw( $app );
-	# }
-
-    $app->update;
-}
-
-
 
 sub new_rect {
-	my( $event, $app, $button, $squares ) = @_;
+	my( $event, $app, $app_rect) = @_;
 
-	$event->type == SDL_MOUSEBUTTONDOWN 
-	&&  $button->is_over( $event->motion_x, $event->motion_y )
+	$event->type == SDL_MOUSEBUTTONDOWN
+	&&  $app_rect->{ btn }->is_over( $event->motion_x, $event->motion_y )
 		or return;
 
 	my $rect =  Rect->new->store;
 
-	push @$squares, $rect;
+	push $app_rect->{ children }->@*, $rect;
 }
 
 
@@ -160,7 +148,7 @@ sub move_start {
 		return;
 	}
 
-	$event->type == SDL_MOUSEBUTTONDOWN 
+	$event->type == SDL_MOUSEBUTTONDOWN
 		or return;
 
 	for my $square ( @$squares ){
@@ -190,11 +178,11 @@ sub drag_flag {
 sub drag_start{
 	my( $event, $app, $squares, $first, $flag_1 ) =  @_;
 
-	@$flag_1  &&  $event->type == SDL_MOUSEBUTTONDOWN 
+	@$flag_1  &&  $event->type == SDL_MOUSEBUTTONDOWN
 		or return;
 
 	Rect::draw_black_group( $squares, $app, $event->motion_x, $event->motion_y  );
-		
+
 	for my $square ( @$squares ){
 		my $child =  $square->is_over( $event->motion_x, $event->motion_y )
 		   or next;
@@ -206,7 +194,7 @@ sub drag_start{
 		my( $x, $y ) =  $child->parent_coord( $child->{ x }, $child->{ y } );
 		$child->{ x } =  $x;
 		$child->{ y } =  $y;
-		
+
 		$child->moving_on( $event->motion_x, $event->motion_y );
 
 		push @$squares, $child;
@@ -230,7 +218,7 @@ sub drop_rect {
 		$square->{ moving }   or next;
 
 		if( my $g  =  $square->can_drop( $squares, $event->motion_x, $event->motion_y ) ) {
-			
+
 			if( my $can =  $g->can_group( $square )) {
 
 				$square->drop( $g, $squares, $event->motion_x, $event->motion_y );
@@ -258,7 +246,7 @@ sub move_rect {
 		or return;
 
 	for my $square ( @$squares ){
-		$square->{ moving }   or next;		
+		$square->{ moving }   or next;
 
 		$square->draw_black( $app );
 
@@ -289,14 +277,14 @@ sub sel_start {
 	# 	return;
 	# }
 
-	# if( $btn->is_over( $event->motion_x, $event->motion_y ) ) { 
+	# if( $btn->is_over( $event->motion_x, $event->motion_y ) ) {
 	# 	return;
 	# }
-	# if( $btn_del->is_over( $event->motion_x, $event->motion_y ) ) { 
+	# if( $btn_del->is_over( $event->motion_x, $event->motion_y ) ) {
 	# 	return;
 	# }
 
-	# my $r =  Selection->new( 
+	# my $r =  Selection->new(
 	# 	$event->motion_x, $event->motion_y, 0, 0,
 	# 	Color->new( 0, 0, 0 )
 	# );
@@ -316,7 +304,7 @@ sub sel_resize {
 	$sel->draw_black( $app );
 	$sel->resize( $event->motion_x, $event->motion_y );
 	$sel->draw( $app );
-}	
+}
 
 
 
@@ -350,14 +338,14 @@ sub sel_finish {
 	$rect->save_prev;#load parent###########
 
 	return 1;
-}	
+}
 
 
 
 sub resize_start {
 	my( $event, $app, $squares ) =  @_;
 
-	$event->type == SDL_MOUSEBUTTONDOWN 
+	$event->type == SDL_MOUSEBUTTONDOWN
 		or return;
 
 	for my $square ( @$squares ){
@@ -376,7 +364,7 @@ sub resize_rect {
 	or return;
 
 	for my $square ( @$squares ){
-		$square->{ resize }   or next;		
+		$square->{ resize }   or next;
 		$square->draw_black( $app );
 		$square->resize_to( $event->motion_x,  $event->motion_y );
 	}
@@ -402,9 +390,9 @@ sub resize_finish {
 
 sub del_start {
 	my( $event, $app, $btn_d ) =  @_;
-	
 
-	$event->type == SDL_MOUSEBUTTONDOWN 
+
+	$event->type == SDL_MOUSEBUTTONDOWN
 	&&  $btn_d->is_over( $event->motion_x, $event->motion_y )
 		or return;
 

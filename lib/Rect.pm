@@ -1,5 +1,8 @@
 package Rect;
 
+# use strict;
+# use warnings;
+
 
 use Scalar::Util qw(weaken);
 use AppRect;
@@ -148,6 +151,7 @@ sub is_over {
 	if( $bool ) {
 		for my $r ( $rect->{ children }->@* ) {
 			if( my $over = $r->is_over( $x - $rect->{ x }, $y - $rect->{ y } ) ) {
+				# DB::x;
 				return {
 					target => $over,
 					x      => $x - $rect->{ x },
@@ -234,7 +238,7 @@ sub save_prev {
 sub moving_on {
 	my( $rect, $tp_x, $tp_y ) =  @_;
 
-	$rect->{ moving  } =  1;
+	# $rect->{ moving  } =  1;
 
 	$rect->{ start_x } =  $rect->{ x };
 	$rect->{ start_y } =  $rect->{ y };
@@ -342,12 +346,12 @@ sub regroup {
 
 
 sub to_group {
-	my( $group, @children ) =  @_;
+	my( $group, $children ) =  @_;
 
 	my $w =   0;
 	my $h =  10;
 
-	for my $s ( @children ) {
+	for my $s ( @$children ) {
 		$s->move_to( 10, $h );
 		$s->{ c }{ r } =  $group->{ c }{ r } + 80;
 		$s->store;
@@ -370,8 +374,6 @@ sub to_group {
 	if( $group->{ h } < 30 ) {
 		$group->{ h } =  30;
 	}
-
-	$group->store;
 }
 
 

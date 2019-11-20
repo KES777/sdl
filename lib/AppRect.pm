@@ -49,18 +49,22 @@ sub new {
 	# $APP->add_event_handler( sub{ _on_move( @_, $app_rect ) } );
 
 	$APP->add_show_handler ( sub{ $app_rect->draw } );
-	$APP->add_event_handler( sub{ _is_over   ( @_, $app_rect ) } );
+
+
+
+	$APP->add_event_handler( sub{ _on_mouse_move( @_, $app_rect ) } );
+	$APP->add_event_handler( sub{ _is_mousedown ( @_, $app_rect ) } );
+	$APP->add_event_handler( sub{ _is_mouseup   ( @_, $app_rect ) } );
 
 	$APP->add_event_handler( sub{ _observer( @_, $app_rect ) } );
 
 	return $app_rect;
 }
 
-
+# zzzz
 
 sub _read_from_db {
 }
-
 
 
 sub _on_move {
@@ -125,30 +129,130 @@ sub _observer {
 }
 
 
+sub _is_mousedown {
+	my( $e, $app, $app_rect ) =  @_;
+
+	$e->type == SDL_MOUSEBUTTONDOWN
+		or return;
+
+
+	##
+	if( my $h =  $app_rect->{ is_over } ) {
+		$h->{ target }->on_press( $h, $e );
+
+		if( my $move =  $h->{ target }->is_moveable( $h, $e ) ) {
+			$app_rect->{ is_moveable } =  $move;
+		}
+	}
+
+	##
+	if( !$app_rect->{ is_over }  &&  !$app_rect->{ is_selection } ) {
+		$app_rect->{ is_selection } =  Selection->new(
+			$e->motion_x, $e->motion_y, 0, 0,
+			Color->new( 0, 0, 0 )
+		);
+	}
+}
+
+
+
+sub _is_group {
+	my( $app_rect, $h, $e ) =  @_;
+
+	my @alone;
+	my @grouped;
+	for my $shape ( $app_rect->{ children }->@* ) {
+		$shape->is_inside( $h->@{qw/ x y w h /} )?
+			push @grouped, $shape :
+			push @alone, $shape;
+	}
+
+	@grouped   or return;
+
+	return {
+		target  =>  $app_rect,
+		grouped =>  \@grouped,
+		alone   =>  \@alone,
+	};
+}
+
+
+
+sub _is_mouseup {
+	my( $e, $app, $app_rect ) =  @_;
+
+	$e->type == SDL_MOUSEBUTTONUP
+		or return;
+
+
+	##
+	if( my $h =  $app_rect->{ is_moveable } ) {
+		if( my $drop =  $h->{ target }->is_drop( $h, $e ) ) {
+			$app_rect->{ is_dropable } =  $drop;
+		}
+
+		$h->{ target }->on_release( $h, $e );
+		delete $app_rect->{ is_moveable };
+	}
+
+	##
+	if( my $h =  $app_rect->{ is_selection } ) {
+		if( my $group =  $app_rect->_is_group( $h, $e ) ) {
+			$group->{ target }->on_group( $h, $e, $group );
+		}
+
+		$h->draw_black;
+		delete $app_rect->{ is_selection };
+	}
+}
+
+
 
 sub _is_over {
+	my( $app_rect, $x, $y ) =  @_;
+
+	my $over;
+	my @interface =  ( $app_rect->{ btn }, $app_rect->{ btn_del } );
+	for my $shape ( $app_rect->{ children }->@*, @interface ) {
+		$over =  $shape->is_over( $x, $y )
+			or next;
+
+		$over->{ parent } =  $shape;
+		last;
+	}
+
+	return $over;
+}
+
+
+
+sub _on_mouse_move {
 	my( $e, $app, $app_rect ) =  @_;
 
 	$e->type == SDL_MOUSEMOTION
 		or return;
 
-	my $over;
-	my @interface =  ( $app_rect->{ btn }, $app_rect->{ btn_del } );
-	for my $shape ( $app_rect->{ children }->@*, @interface ) {
-		$over =  $shape->is_over( $e->motion_x, $e->motion_y )
-			or next;
 
-		last;
+	## Actualize data
+	$app_rect->{ is_over } =  _is_over( $app_rect, $e->motion_x, $e->motion_y );
+
+	##
+	if( my $h =  $app_rect->{ is_over } ) {
+		$h->{ target }->on_over( $h, $e );
 	}
 
-	$over   or return;
+	##
+	if( my $h =  $app_rect->{ is_moveable } ) {
+		$h->{ target }->on_move( $h, $e );
+	}
 
-	$over->on_over( $e );
+	##
+	if( my $h =  $app_rect->{ is_selection } ) {
+		$h->on_resize( $h, $e );
+	}
 
-	# if( $app_rect->{ event_state }{ mbl } ) {
-	# 	$over->moving_on( $event->motion_x, $event->motion_y );
-	# }
-}	
+
+}
 
 
 
@@ -162,11 +266,11 @@ sub can_select {
 			return;
 	}
 
-	if( $app_rect->{ btn }->is_over( $event->motion_x, $event->motion_y ) ) { 
+	if( $app_rect->{ btn }->is_over( $event->motion_x, $event->motion_y ) ) {
 		return;
 	}
 
-	if( $app_rect->{ btn_del }->is_over( $event->motion_x, $event->motion_y ) ) { 
+	if( $app_rect->{ btn_del }->is_over( $event->motion_x, $event->motion_y ) ) {
 		return;
 	}
 

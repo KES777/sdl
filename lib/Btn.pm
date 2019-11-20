@@ -13,6 +13,24 @@ sub new {
 
 
 
+# sub new_object {
+# 	my( $object ) =  @_;
+# }
+
+
+
+
+sub object_do {
+	my( $object, $app_rect ) =  @_;
+
+	my $new =  Rect->new->store;
+
+	push $app_rect->{ children }->@*, $new;
+}
+
+
+
+
 sub draw {
 	my( $app_rect, $app, $x, $y ) =  @_;
 
@@ -41,5 +59,25 @@ sub draw {
 	]);
 }
 
+
+
+sub on_over {
+
+}
+
+
+
+sub is_moveable {
+
+}
+
+
+
+sub on_press {
+	my( $btn, $h, $e ) =  @_;
+
+	my $rect =  Rect->new->store;
+	push $btn->{ parent }->{ children }->@*, $rect;
+}
 
 1;

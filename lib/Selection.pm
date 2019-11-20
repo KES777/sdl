@@ -1,6 +1,11 @@
 package Selection;
 
+use AppRect;
+
+
 use base 'Rect';
+
+
 
 sub new {
 	my $sel =  shift;
@@ -41,6 +46,9 @@ sub resize {
 
 sub draw {
 	my( $rect, $screen, $x, $y ) = @_;
+
+	$screen //=  AppRect::SCREEN();
+
 	$x //=  0;
 	$y //=  0;
 
@@ -52,7 +60,7 @@ sub draw {
 		$y,
 		$rect->{ w },
 		$rect->{ h },
-	],[ 
+	],[
 		255,255,255,255
 	]);
 
@@ -62,9 +70,21 @@ sub draw {
 		$y +1,
 		$rect->{ w }-2,
 		$rect->{ h }-2,
-	],[ 
+	],[
 		$rect->{ c }->get()
 	]);
-}	
+}
+
+
+
+sub on_resize {
+	my( $sel, $h, $e ) =  @_;
+
+	$h->draw_black;
+	$h->resize( $e->motion_x, $e->motion_y );
+	$h->draw;
+}
+
+
 
 1;
