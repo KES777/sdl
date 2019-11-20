@@ -18,7 +18,7 @@ sub new {
 	if( ref $_[1] eq 'Schema::Result::Rect' ) {
 		my( $rect, $db_rect ) =  @_;
 
-		$rect =  $rect->new( 
+		$rect =  $rect->new(
 			$db_rect->x, $db_rect->y, $db_rect->w, $db_rect->h,
 			Color->new( $db_rect->r, $db_rect->g, $db_rect->b, $db_rect->a ),
 		);
@@ -35,7 +35,7 @@ sub new {
 	if( $x_offset > 600 ) {
 		$x_offset =  40;
 		$y_offset =  50;
-		$y_offset_n++;  
+		$y_offset_n++;
 	}
 
 	my %rect = (
@@ -89,7 +89,7 @@ sub draw {
 		$y,
 		$rect->{ w },
 		$rect->{ h },
-	],[ 
+	],[
 		255,255,255,255
 	]);
 	#circuit
@@ -98,7 +98,7 @@ sub draw {
 		$y +1,
 		$rect->{ w }-2,
 		$rect->{ h }-2,
-	],[ 
+	],[
 		$rect->{ c }->get()
 	]);
 
@@ -108,7 +108,7 @@ sub draw {
 		$y + $rect->{ h } -10,
 		15,
 		10,
-	],[ 
+	],[
 		33, 200, 150, 255
 	]);
 
@@ -135,7 +135,7 @@ sub draw_black_group {
 	for my $rect( @$squares ) {
 		if( $rect->Util::mouse_target_square( $x, $y ) ) {
 			$rect->draw_black( $app );
-		} 
+		}
 	}
 }
 
@@ -258,7 +258,7 @@ sub moving_off {
 	if( $rect->{ c }->{ r } == 255 ) {
 		return;
 	}
-	
+
 	$rect->store;
 }
 
@@ -295,7 +295,7 @@ sub can_group {
 
 		return $group;
 	}
-	return 1; 
+	return 1;
 }
 
 
@@ -331,7 +331,7 @@ sub regroup {
 
 	my @children =  $parent->{ children }->@*;
 	to_group( $parent, @children );
-	
+
 	if( $parent->{ parent } ) {
 		regroup( $parent->{ parent } );
 	}
@@ -343,8 +343,8 @@ sub regroup {
 
 sub to_group {
 	my( $group, @children ) =  @_;
-	
-	my $w =   0;	
+
+	my $w =   0;
 	my $h =  10;
 
 	for my $s ( @children ) {
@@ -467,7 +467,7 @@ sub resize_to {
 	$rect->{ h } < $h ?
 		$rect->{ h } = $h:
 			return;
-		
+
 }
 
 
@@ -496,7 +496,7 @@ sub child_destroy {
 	my( $square ) = @_;
 
 	Util::db()->resultset( 'Rect' )->search({
-		id => $square->{ id } 
+		id => $square->{ id }
 	})->delete;
 
 	if( $square->{ children }->@* ) {
