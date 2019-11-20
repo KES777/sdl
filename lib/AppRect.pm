@@ -1,10 +1,20 @@
 package AppRect;
 
+use strict;
+use warnings;
+
+
 use SDLx::App;
-use Btn_del;
+use SDL::Event;
+
 
 use Rect;
+use Btn_del;
+
+
 use base 'Rect';
+
+
 
 sub new {
 	my( $rect, $app_w, $app_h ) =  @_;
@@ -16,9 +26,56 @@ sub new {
 	$app_rect->{ btn     } =  Rect->new( 0, 0, 50, 30 );
 	$app_rect->{ btn_del } =  Btn_del->new;
 
+
+
+	$app->add_event_handler( sub{ _observer( @_, $app_rect ) } );
+
 	return $app_rect;
 }
 
+
+
+my $event_types =  {
+	SDL_MOUSEBUTTONDOWN() => sub {
+	},
+	SDL_MOUSEMOTION()     => sub {
+		my( $app_rect ) =  @_;
+
+		$app_rect->{ event_state }
+	},
+};
+my $mouse_btn =  {
+	SDL_BUTTON_LEFT()   =>  'mbl',
+	SDL_BUTTON_MIDDLE() =>  'mbm',
+	SDL_BUTTON_RIGHT()  =>  'mbr',
+};
+sub _observer {
+	my( $e, $app, $app_rect ) =  @_;
+
+	# $event_types->{ $e->type }->( $app_rect );
+
+
+	if( $e->type == SDL_MOUSEMOTION ) {
+		$app_rect->{ event_state }{ x } =  $e->motion_x;
+		$app_rect->{ event_state }{ y } =  $e->motion_y;
+	}
+
+	if( $e->type == SDL_MOUSEBUTTONDOWN ) {
+		$app_rect->{ event_state }{ $mouse_btn->{ $e->button_button } } =  1;
+	}
+
+	if( $e->type == SDL_MOUSEBUTTONUP ) {
+		$app_rect->{ event_state }{ $mouse_btn->{ $e->button_button } } =  0;
+	}
+
+	if( $e->type == SDL_KEYDOWN ) {
+		$app_rect->{ event_state }{ $e->key_sym } =  1;
+	}
+
+	if( $e->type == SDL_KEYUP ) {
+		$app_rect->{ event_state }{ $e->key_sym } =  0;
+	}
+}
 
 
 sub can_select {
