@@ -17,12 +17,17 @@ use base 'Rect';
 
 
 
+my $APP;
+sub SCREEN { return $APP }
+
+
+
 sub new {
 	my( $rect, $app_w, $app_h ) =  @_;
 
 	my $app_rect =  $rect->SUPER::new( 0, 0, $app_w, $app_h );
 
-	my $app =  $app_rect->{ app } =  SDLx::App->new(
+	$APP =  $app_rect->{ app } =  SDLx::App->new(
 		width      =>  $app_w,
 		height     =>  $app_h,
 		resizeable =>  1,
@@ -32,10 +37,10 @@ sub new {
 	$app_rect->{ btn_del } =  Btn_del->new;
 
 
-	$app->add_show_handler ( sub{ $app_rect->draw } );
-	$app->add_event_handler( sub{ _is_over   ( @_, $app_rect ) } );
+	$APP->add_show_handler ( sub{ $app_rect->draw } );
+	$APP->add_event_handler( sub{ _is_over   ( @_, $app_rect ) } );
 
-	$app->add_event_handler( sub{ _observer( @_, $app_rect ) } );
+	$APP->add_event_handler( sub{ _observer( @_, $app_rect ) } );
 
 	return $app_rect;
 }

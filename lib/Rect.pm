@@ -2,6 +2,7 @@ package Rect;
 
 
 use Scalar::Util qw(weaken);
+use AppRect;
 use Color;
 use Shape;
 
@@ -53,6 +54,7 @@ sub new {
 sub draw_black {
 	my( $rect, $screen, $x, $y ) = @_;
 
+	$screen //=  AppRect::SCREEN();
 	$x //=  0;
 	$y //=  0;
 
