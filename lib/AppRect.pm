@@ -27,6 +27,7 @@ sub new {
 	$app_rect->{ btn_del } =  Btn_del->new;
 
 
+	$app->add_event_handler( sub{ _is_over   ( @_, $app_rect ) } );
 
 	$app->add_event_handler( sub{ _observer( @_, $app_rect ) } );
 
@@ -76,6 +77,34 @@ sub _observer {
 		$app_rect->{ event_state }{ $e->key_sym } =  0;
 	}
 }
+
+
+
+sub _is_over {
+	my( $e, $app, $app_rect ) =  @_;
+
+	$e->type == SDL_MOUSEMOTION
+		or return;
+
+	my $over;
+	my @interface =  ( $app_rect->{ btn }, $app_rect->{ btn_del } );
+	for my $shape ( $app_rect->{ children }->@*, @interface ) {
+		$over =  $shape->is_over( $e->motion_x, $e->motion_y )
+			or next;
+
+		last;
+	}
+
+	$over   or return;
+
+	$over->on_over( $e );
+
+	# if( $app_rect->{ event_state }{ mbl } ) {
+	# 	$over->moving_on( $event->motion_x, $event->motion_y );
+	# }
+}	
+
+
 
 
 sub can_select {

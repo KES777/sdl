@@ -63,6 +63,10 @@ sub draw_black {
 
 
 
+sub on_over {}
+
+
+
 sub draw {
 	my( $rect, $screen, $x, $y ) = @_;
 	$x //=  0;
