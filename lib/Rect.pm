@@ -151,22 +151,17 @@ sub is_over {
 	if( $bool ) {
 		for my $r ( $rect->{ children }->@* ) {
 			if( my $over = $r->is_over( $x - $rect->{ x }, $y - $rect->{ y } ) ) {
-				# DB::x;
-				return {
-					target => $over,
-					x      => $x - $rect->{ x },
-					y      => $y - $rect->{ y },
-				};
+				return $over;
 			}
 		}
 
 		return {
-			target => $rect,
-			x      => $x,
-			y      => $y,
+			target 	=> $rect,
+			x      	=> $x,
+			y      	=> $y,
 			dx      => $x - $rect->{ x },
 			dy      => $y - $rect->{ y },
-		}
+		};
 	}
 
 	return;
