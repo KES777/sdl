@@ -75,12 +75,10 @@ sub draw_black {
 
 
 
-sub on_over {}
-
-
-
 sub draw {
 	my( $rect, $screen, $x, $y ) = @_;
+
+	$screen //=  AppRect::SCREEN();
 	$x //=  0;
 	$y //=  0;
 

@@ -3,6 +3,7 @@ package Shape;
 use strict;
 use warnings;
 
+use Scalar::Util qw(weaken);
 
 use Rect;
 
@@ -45,6 +46,9 @@ sub on_group {
 	my( $shape, $h, $e, $group_info ) =  @_;
 
 	my $rect =  Rect->new( $h->{ x }, $h->{ y } );
+	$rect->{ parent } = $shape;
+	weaken $rect->{ parent };
+	$rect->store;
 	$rect->to_group( $group_info->{ grouped } );
 	$rect->{ children } =  $group_info->{ grouped };
 	$rect->save_prev;  ## Change parent to new one

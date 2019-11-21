@@ -251,6 +251,11 @@ sub _on_mouse_move {
 		$h->on_resize( $h, $e );
 	}
 
+	# ##
+	if( my $h =  $app_rect->{ btn_del } ) {
+		$h->on_btn_del( $app_rect );
+	}
+
 
 }
 

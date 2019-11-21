@@ -1,7 +1,15 @@
 package Btn;
 
+use strict;
+use warnings;
+
+
+use Scalar::Util qw(weaken);
+
+
 use Rect;
 use base 'Rect';
+
 
 sub new {
 	my( $btn ) =  @_;
@@ -13,21 +21,15 @@ sub new {
 
 
 
-# sub new_object {
-# 	my( $object ) =  @_;
-# }
+sub on_press {
+	my( $btn, $h, $e ) =  @_;
 
-
-
-
-sub object_do {
-	my( $object, $app_rect ) =  @_;
-
-	my $new =  Rect->new->store;
-
-	push $app_rect->{ children }->@*, $new;
+	my $rect =  Rect->new;
+	$rect->{ parent } =  $btn->{ parent };
+	weaken $rect->{ parent };
+	$rect->store;
+	push $btn->{ parent }->{ children }->@*, $rect;
 }
-
 
 
 
