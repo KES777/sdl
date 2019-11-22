@@ -9,21 +9,30 @@ use Rect;
 
 
 sub is_moveable {
-	my( $rect, $event_obj ) =  @_;
+	my( $shape, $event_obj ) =  @_;
 
-	$rect->moving_on( $event_obj->{ x }, $event_obj->{ y } );
+	$shape->moving_on( $event_obj->{ x }, $event_obj->{ y } );
 	return $event_obj;
 }
 
 
 
+sub on_over {
+	my( $shape, $h, $app_rect ) =  @_;
+	$app_rect->{ first } =  $shape;
+}
+
+
+
 sub on_move {
-	my( $shape, $h, $e ) =  @_;
+	my( $shape, $h, $e, $app_rect ) =  @_;
 
 	my $p =  $shape->{ parent };
 
 	$shape->draw_black;
 	$shape->move_to( $e->motion_x,  $e->motion_y, $p->{ w }, $p->{ h } );
+
+	$app_rect->{ first } =  $shape;
 }
 
 
