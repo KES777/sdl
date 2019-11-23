@@ -297,6 +297,11 @@ sub can_group {
 
 
 
+sub is_drop {}
+
+
+
+
 sub drop {
 	my( $rect, $group, $squares, $drop_x, $drop_y ) =  @_;
 

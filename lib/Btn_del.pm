@@ -63,7 +63,7 @@ sub moving_off {
 			$shape->draw_black;
 		}
 
-		if( $x) {
+		if( $x ) {
 			$x->child_destroy;
 		}
 
@@ -75,11 +75,12 @@ sub moving_off {
 
 ##revers
 sub is_drop {
-	my( $shape ) =  @_;
+	my( $btn_del ) =  @_;
 
-	$shape->draw_black;
-	$shape->{ x } =  250;
-	$shape->{ y } =  0;
+	$btn_del->SUPER::moving_off;
+	$btn_del->draw_black;
+	$btn_del->{ x } =  250;
+	$btn_del->{ y } =  0;
 }
 
 

@@ -71,7 +71,10 @@ sub on_group {
 
 
 
-sub is_drop {
+sub is_drop_shape {
+	my( $shape, $h, $e ) =  @_;
+
+	$shape->is_drop( $h, $e );
 }
 
 
