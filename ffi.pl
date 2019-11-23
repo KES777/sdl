@@ -13,12 +13,10 @@ my $ffi = FFI::Platypus->new( api => 1 );
 $ffi->find_lib( lib => 'SDL2' );
 
 
+use SDL2::SDL;
+SDL2::SDL::attach( $ffi );
 
-$ffi->attach( SDL_Init          => [ 'uint32' ] => 'int'    );
-$ffi->attach( SDL_InitSubSystem => [ 'uint32' ] => 'int'    );
-$ffi->attach( SDL_QuitSubSystem => [ 'uint32' ] => 'void'   );
-$ffi->attach( SDL_WasInit       => [ 'uint32' ] => 'uint32' );
-$ffi->attach( SDL_Quit          => [ 'void'   ] => 'void'   );
+
 
 # SDL_INIT_VIDEO    0x00000020;   #Инициализирует видеоподсистему.
 if( SDL_Init( 0x00000020 ) < 0 ) {
