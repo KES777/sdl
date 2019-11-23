@@ -96,9 +96,19 @@ sub is_over_rf {
 
 sub resize_shape {
 	my( $shape, $x, $y, $app_rect ) =  @_;
-# DB::x;
+
+	$shape->draw_black;
 	$shape->resize_to( $x, $y );
 }
+
+
+
+sub off_resize_shape {
+	my( $shape, $app_rect ) =  @_;
+
+	$shape->off_resize( $app_rect );
+}
+
 
 
 1;

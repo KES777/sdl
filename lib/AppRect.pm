@@ -159,6 +159,13 @@ sub _is_mousedown {
 
 
 	##
+	if( my $h =  $app_rect->{ is_over_rf } ) {
+		$app_rect->{ on_resize } =  $app_rect->{ is_over_rf };
+			return;
+	}
+
+
+	##
 	if( my $h =  $app_rect->{ is_over } ) {
 		$h->{ target }->on_press( $h, $e );
 
@@ -185,14 +192,21 @@ sub _is_mouseup {
 		or return;
 
 	##
+	delete $app_rect->{ first };
+
+	##
+	if( my $h =  $app_rect->{ on_resize } ) {
+		$h->off_resize_shape( $app_rect );
+	}
+
+	##
 	if( my $h =  $app_rect->{ is_moveable } ) {
-		if( my $drop =  $h->{ target }->is_drop( $h, $e ) ) {
+		if( my $drop =  $h->{ target }->is_drop_shape( $h, $e ) ) {
 			$app_rect->{ is_dropable } =  $drop;
 		}
 
 		$h->{ target }->on_release( $h, $e, $app_rect );
 		delete $app_rect->{ is_moveable };
-		delete $app_rect->{ first };
 	}
 
 	##
@@ -220,6 +234,17 @@ sub _on_mouse_move {
 
 	$e->type == SDL_MOUSEMOTION
 		or return;
+
+
+	if( $app_rect->{ is_over_rf } =
+		_is_over_rf( $app_rect, $e->motion_x, $e->motion_y ) ) {
+			return;
+	}
+
+	if( my $h =  $app_rect->{ on_resize } ){
+		$h->resize_shape( $e->motion_x, $e->motion_y, $app_rect );
+	}
+
 
 	## Actualize data
 	$app_rect->{ is_over } =  _is_over( $app_rect, $e->motion_x, $e->motion_y );
@@ -261,6 +286,23 @@ sub _is_over {
 
 	return $over;
 }
+
+
+
+sub _is_over_rf {
+	my( $app_rect, $x, $y ) =  @_;
+# DB::x;
+	my $object;
+	for my $shape ( $app_rect->{ children }->@* ) {
+		$shape->is_over_rf( $x, $y )
+			or next;
+		$object =  $shape;
+	}
+
+	return $object;
+
+}
+
 
 
 

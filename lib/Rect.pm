@@ -529,4 +529,22 @@ sub parent_coord {
 
 
 
+sub resize_field {
+	my( $shape, $x, $y ) =  @_;
+
+	$shape->Util::resize_field( $x, $y );
+}
+
+
+
+sub off_resize {
+	my( $rect, $app_rect ) =  @_;
+
+	$rect->store;
+
+	delete $app_rect->{ on_resize    };
+	delete $app_rect->{ resize_field };
+}
+
+
 1;
