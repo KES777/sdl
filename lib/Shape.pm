@@ -45,9 +45,10 @@ sub on_press {
 
 
 sub on_release {
-	my( $shape, $h, $e ) =  @_;
+	my( $shape, $h, $e, $app_rect ) =  @_;
 
-	$shape->moving_off;
+	$shape->moving_off( $e, $app_rect );
+
 }
 
 

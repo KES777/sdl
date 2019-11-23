@@ -47,17 +47,29 @@ sub draw {
 
 
 sub on_btn_del {
-	my( $btn_del, $app_rect ) =  @_;
+	my( $btn_del, $app_rect, $e ) =  @_;
 
-	if( $app_rect->{ btn }->is_over( $btn_del->{ x }, $btn_del->{ y } ) ) {
+	DB::x;
+	my $x = 3;
+	if( $app_rect->{ btn }->is_over( $e->motion_x, $e->motion_y ) ) {
 		$app_rect->{ children } =  ();
 		Util::db()->resultset( 'Rect' )->delete;
 		$app_rect->draw_black;
 	}
+	# my $x;
+	# for my $shape( $app_rect->{ children }->@* ) {
+	# 	if( $shape->is_over( $btn_del->{ x }, $btn_del->{ y } ) ) {
+	# 		$x =  $shape;
+	# 		$shape->child_destroy;
+	# 		$shape->draw_black;
+	# 	}
+	# }
+
+	# $app_rect->{ children }->@* =  grep{ $_ != $x } $app_rect->{ children };
 }
 
 
-
+#revers
 sub is_drop {
 	my( $shape ) =  @_;
 

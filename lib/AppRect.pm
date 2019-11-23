@@ -6,7 +6,7 @@ use warnings;
 
 use SDLx::App;
 use SDL::Event;
-use Scalar::Util qw(weaken);
+use Scalar::Util qw/ weaken blessed /;
 
 
 use Rect;
@@ -61,10 +61,6 @@ sub new {
 	return $app_rect;
 }
 
-# zzzz
-
-sub _read_from_db {
-}
 
 
 sub _on_move {
@@ -129,6 +125,32 @@ sub _observer {
 }
 
 
+
+
+
+
+sub _is_group {
+	my( $app_rect, $h, $e ) =  @_;
+
+	my @alone;
+	my @grouped;
+	for my $shape ( $app_rect->{ children }->@* ) {
+		$shape->is_inside( $h->@{qw/ x y w h /} )?
+			push @grouped, $shape :
+			push @alone, $shape;
+	}
+
+	@grouped   or return;
+
+	return {
+		target  =>  $app_rect,
+		grouped =>  \@grouped,
+		alone   =>  \@alone,
+	};
+}
+
+
+
 sub _is_mousedown {
 	my( $e, $app, $app_rect ) =  @_;
 
@@ -156,34 +178,11 @@ sub _is_mousedown {
 
 
 
-sub _is_group {
-	my( $app_rect, $h, $e ) =  @_;
-
-	my @alone;
-	my @grouped;
-	for my $shape ( $app_rect->{ children }->@* ) {
-		$shape->is_inside( $h->@{qw/ x y w h /} )?
-			push @grouped, $shape :
-			push @alone, $shape;
-	}
-
-	@grouped   or return;
-
-	return {
-		target  =>  $app_rect,
-		grouped =>  \@grouped,
-		alone   =>  \@alone,
-	};
-}
-
-
-
 sub _is_mouseup {
 	my( $e, $app, $app_rect ) =  @_;
 
 	$e->type == SDL_MOUSEBUTTONUP
 		or return;
-
 
 	##
 	if( my $h =  $app_rect->{ is_moveable } ) {
@@ -191,8 +190,9 @@ sub _is_mouseup {
 			$app_rect->{ is_dropable } =  $drop;
 		}
 
-		$h->{ target }->on_release( $h, $e );
+		$h->{ target }->on_release( $h, $e, $app_rect );
 		delete $app_rect->{ is_moveable };
+		delete $app_rect->{ first };
 	}
 
 	##
@@ -203,6 +203,44 @@ sub _is_mouseup {
 
 		$h->draw_black;
 		delete $app_rect->{ is_selection };
+	}
+# DB::x;
+	##
+	if( my $h =  $app_rect->{ is_over } ) {
+		if( $h->{ target } == $app_rect->{ btn_del } ) {
+			$h->{ target }->on_btn_del( $app_rect, $e );
+		}
+	}
+}
+
+
+
+sub _on_mouse_move {
+	my( $e, $app, $app_rect ) =  @_;
+
+	$e->type == SDL_MOUSEMOTION
+		or return;
+
+	## Actualize data
+	$app_rect->{ is_over } =  _is_over( $app_rect, $e->motion_x, $e->motion_y );
+
+	##
+	if( my $h =  $app_rect->{ is_over } ) {
+		$h->{ target }->on_over( $h, $app_rect );
+	}
+
+	if( !$app_rect->{ is_over } ) {
+		delete $app_rect->{ first };
+	}
+
+	##
+	if( my $h =  $app_rect->{ is_moveable } ) {
+		$h->{ target }->on_move( $h, $e, $app_rect );
+	}
+
+	##
+	if( my $h =  $app_rect->{ is_selection } ) {
+		$h->on_resize( $h, $e );
 	}
 }
 
@@ -217,48 +255,12 @@ sub _is_over {
 		$over =  $shape->is_over( $x, $y )
 			or next;
 
-		$over->{ parent } =  $shape;
+		$over->{ owner } =  $shape;############?!
 		last;
 	}
 
 	return $over;
 }
-
-
-
-sub _on_mouse_move {
-	my( $e, $app, $app_rect ) =  @_;
-
-	$e->type == SDL_MOUSEMOTION
-		or return;
-
-
-	## Actualize data
-	$app_rect->{ is_over } =  _is_over( $app_rect, $e->motion_x, $e->motion_y );
-
-	##
-	if( my $h =  $app_rect->{ is_over } ) {
-		$h->{ target }->on_over( $h, $e );
-	}
-
-	##
-	if( my $h =  $app_rect->{ is_moveable } ) {
-		$h->{ target }->on_move( $h, $e );
-	}
-
-	##
-	if( my $h =  $app_rect->{ is_selection } ) {
-		$h->on_resize( $h, $e );
-	}
-
-	# ##
-	if( my $h =  $app_rect->{ btn_del } ) {
-		$h->on_btn_del( $app_rect );
-	}
-
-
-}
-
 
 
 
@@ -271,11 +273,11 @@ sub can_select {
 			return;
 	}
 
-	if( $app_rect->{ btn }->is_over( $event->motion_x, $event->motion_y ) ) {
+	if( $app_rect->{ btn }->is_over( $x, $y ) ) {
 		return;
 	}
 
-	if( $app_rect->{ btn_del }->is_over( $event->motion_x, $event->motion_y ) ) {
+	if( $app_rect->{ btn_del }->is_over( $x, $y ) ) {
 		return;
 	}
 
@@ -306,6 +308,9 @@ sub draw {
 
 	$app_rect->{ btn     }->draw( $app_rect->{ app } );
 	$app_rect->{ btn_del }->draw( $app_rect->{ app } );
+	if( $app_rect->{ first } ) {
+		$app_rect->{ first }->draw( $app_rect->{ app } );
+	}
 
 	$app_rect->{ app }->update;
 }
