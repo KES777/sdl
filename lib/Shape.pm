@@ -74,4 +74,31 @@ sub on_group {
 sub is_drop {
 }
 
+
+
+sub is_over_shape {
+	my( $shape, $x, $y ) =  @_;
+
+	my $over =  $shape->is_over( $x, $y );
+		return $over;
+}
+
+
+
+
+sub is_over_rf {
+	my( $shape, $x, $y ) =  @_;
+
+	$shape->resize_field( $x, $y );
+}
+
+
+
+sub resize_shape {
+	my( $shape, $x, $y, $app_rect ) =  @_;
+# DB::x;
+	$shape->resize_to( $x, $y );
+}
+
+
 1;

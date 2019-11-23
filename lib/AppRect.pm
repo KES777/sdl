@@ -252,7 +252,7 @@ sub _is_over {
 	my $over;
 	my @interface =  ( $app_rect->{ btn }, $app_rect->{ btn_del } );
 	for my $shape ( $app_rect->{ children }->@*, @interface ) {
-		$over =  $shape->is_over( $x, $y )
+		$over =  $shape->is_over_shape( $x, $y )
 			or next;
 
 		$over->{ owner } =  $shape;############?!
