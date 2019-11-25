@@ -16,6 +16,11 @@ $ffi->find_lib( lib => 'SDL2' );
 use SDL2::SDL;
 SDL2::SDL::attach( $ffi );
 
+# $ffi->attach( SDL_Init          => [ 'uint32' ] => 'int'    );
+# $ffi->attach( SDL_InitSubSystem => [ 'uint32' ] => 'int'    );
+# $ffi->attach( SDL_QuitSubSystem => [ 'uint32' ] => 'void'   );
+# $ffi->attach( SDL_WasInit       => [ 'uint32' ] => 'uint32' );
+# $ffi->attach( SDL_Quit          => [ 'void'   ] => 'void'   );
 
 
 # SDL_INIT_VIDEO    0x00000020;   #Инициализирует видеоподсистему.
@@ -24,7 +29,6 @@ if( SDL_Init( 0x00000020 ) < 0 ) {
 }
 my $res =  SDL_Init( 0x00000020 );
 print 'SDL_INIT_VIDEO  -->> ', $res,"\n";
-
 
 
     # //The surface contained by the window
@@ -37,15 +41,16 @@ print 'SDL_INIT_VIDEO  -->> ', $res,"\n";
 # extern DECLSPEC SDL_Window * SDLCALL SDL_CreateWindow(const char *title,
                                                      # int x, int y, int w,
                                                      # int h, Uint32 flags);
-
+# opaque - непрозрачный
 $ffi->type( 'opaque' => 'SDL_Window_ptr' );
 $ffi->attach( SDL_CreateWindow => [ 'string', 'int','int','int','int','uint32' ] => 'SDL_Window_ptr' );
 
 # //The window we'll be rendering to
 # SDL_Window* window = NULL;
-my $window =  SDL_CreateWindow( 'Hello', 100, 100, 300, 200, 0x00000004 );
+my $window =  SDL_CreateWindow( 'Hello', 100, 100, 300, 200, 0x00000004 ); #создаёт окно
 
 #extern DECLSPEC SDL_Surface * SDLCALL SDL_GetWindowSurface(SDL_Window * window);
+# SDL_Surface - Графическая структура поверхности
 $ffi->type( 'opaque' => 'SDL_Surface_ptr' );
 $ffi->attach( SDL_GetWindowSurface => [ 'SDL_Window_ptr' ] => 'SDL_Surface_ptr' );
 
@@ -54,24 +59,30 @@ my $screenSurface =  SDL_GetWindowSurface( $window );
 
 # extern DECLSPEC int SDLCALL SDL_FillRect
 #    (SDL_Surface * dst, const SDL_Rect * rect, Uint32 color);
+# SDL_Rect     - Определяет прямоугольную область
+# SDL_FillRect - Заливает поверхность окна
 $ffi->type( 'opaque' => 'SDL_Rect_ptr' );
 $ffi->attach( SDL_FillRect => [ 'SDL_Surface_ptr', 'SDL_Rect_ptr', 'uint32' ] => 'int' );
 
 # extern DECLSPEC Uint32 SDLCALL SDL_MapRGB(const SDL_PixelFormat * format,
 #                                          Uint8 r, Uint8 g, Uint8 b);
+
+# SDL_MapRGB - Сопоставляет значение цвета RGB с форматом пикселей
 $ffi->type( 'opaque' => 'SDL_PixelFormat_ptr' );
 $ffi->attach( SDL_MapRGB => [ 'SDL_PixelFormat_ptr', 'uint8', 'uint8', 'uint8' ] => 'uint32' );
-
 # SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF )
 # my $color =  SDL_MapRGB( $screenSurface->format, 0xFF, 0xFF, 0xFF );
 # XXXXXX
 
+
 #SDL_FillRect( screenSurface, NULL, $color );
-SDL_FillRect( $screenSurface, undef, 0x00FF0000 );
+SDL_FillRect( $screenSurface, undef, 0x00FF0000 ); #заливает поверхность окна
+
 
 # extern DECLSPEC int SDLCALL SDL_UpdateWindowSurface(SDL_Window * window);
 $ffi->attach( SDL_UpdateWindowSurface => [ 'SDL_Window_ptr' ] => 'int' );
 
+# SDL_UpdateWindowSurface - обновляет окно
 # SDL_UpdateWindowSurface( window );
 SDL_UpdateWindowSurface( $window );
 
@@ -79,7 +90,7 @@ SDL_UpdateWindowSurface( $window );
 $ffi->attach( SDL_Delay => [ 'uint32' ] => 'void' );
 
 # SDL_Delay( 2000 );
-SDL_Delay( 2000 );
+SDL_Delay( 2000 ); #ждёт заданное количество миллисекунд
 
 # sleep 5;
 
