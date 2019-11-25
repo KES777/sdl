@@ -73,8 +73,15 @@ sub moving_off {
 
 
 
+sub can_drop {
+	my( $btn_del, $e ) =  @_;
+
+}
+
+
+
 ##revers
-sub is_drop {
+sub drop {
 	my( $btn_del ) =  @_;
 
 	$btn_del->SUPER::moving_off;

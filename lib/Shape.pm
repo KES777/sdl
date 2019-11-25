@@ -72,12 +72,26 @@ sub on_group {
 
 
 
-sub is_drop_shape {
-	my( $shape, $h, $e ) =  @_;
+# sub is_drop_shape {
+# 	my( $shape, $h, $e ) =  @_;
 
-	$shape->is_drop( $h, $e );
+# 	$shape->is_drop( $h, $e );
+# }
+
+
+sub can_drop_shape {
+	my( $shape, $h, $e ) =  @_;
+# DB::x;
+	$shape->can_drop( $h, $e );
 }
 
+
+
+sub drop_shape {
+	my( $shape, $app_rect, $e ) =  @_;
+# DB::x;
+	$shape->drop( $app_rect, $e );
+}
 
 
 sub is_over_shape {
@@ -101,6 +115,7 @@ sub is_over_rf {
 sub resize_shape {
 	my( $shape, $x, $y, $app_rect ) =  @_;
 
+	$shape->on_resize;
 	$shape->draw_black;
 	$shape->resize_to( $x, $y );
 }
