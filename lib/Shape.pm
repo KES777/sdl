@@ -44,7 +44,7 @@ sub on_group {
 	$rect->{ parent } = $shape;
 	weaken $rect->{ parent };
 	$rect->store;
-	$rect->to_group( $group_info->{ grouped } );
+	$rect->calc_groupe_size( $group_info->{ grouped } );
 	$rect->{ children } =  $group_info->{ grouped };
 	$rect->save_prev;  ## Change parent to new one
 

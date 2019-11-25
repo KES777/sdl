@@ -324,20 +324,20 @@ sub can_group {
 
 
 
-sub regroup {
+sub resize_group {
 	my( $parent ) =  @_;
 
 	my @children =  $parent->{ children }->@*;
-	to_group( $parent, @children );
+	calc_groupe_size( $parent, @children );
 
 	if( $parent->{ parent } ) {
-		regroup( $parent->{ parent } );
+		calc_groupe_size( $parent->{ parent } );
 	}
 }
 
 
 
-sub to_group {
+sub calc_groupe_size {
 	my( $group, $children ) =  @_;
 
 	my $w =   0;
