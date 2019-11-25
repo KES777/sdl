@@ -196,17 +196,24 @@ sub _is_mouseup {
 
 	##
 	if( my $h =  $app_rect->{ on_resize } ) {
-		$h->off_resize_shape( $app_rect );
+		$h->off_resize( $app_rect );
 	}
 
 	##
 	if( my $h =  $app_rect->{ is_moveable } ) {
-		if( my $drop =  $h->{ target }->is_drop_shape( $h, $e ) ) {
+		if( my $container =  $h->{ target }->can_drop( $app_rect, $e->motion_x, $e->motion_y ) ) {
+			$h->{ target }->moving_off( $e, $app_rect );
+			delete $app_rect->{ is_moveable };
+			my $drop =  $h->{ target };
 			$app_rect->{ is_dropable } =  $drop;
+			$container->{ target }->drop( $drop, $app_rect, $e->motion_x, $e->motion_y );
+			delete $app_rect->{ is_moveable };
+			delete $app_rect->{ is_dropable };
 		}
-
-		$h->{ target }->on_release( $h, $e, $app_rect );
-		delete $app_rect->{ is_moveable };
+			if( $app_rect->{ is_moveable } ) {
+				$h->{ target }->moving_off( $e, $app_rect );
+				delete $app_rect->{ is_moveable };
+			}
 	}
 
 	##

@@ -297,41 +297,14 @@ sub can_group {
 
 
 
-# sub is_drop {}
-
-
-
-
-# sub drop {
-# 	my( $group, $rect, $squares, $drop_x, $drop_y ) =  @_;
-
-# 	$rect->parent( $group->{ id } );
-# 	$rect->moving_off;
-
-# 	push $group->{ children }->@*, $rect;
-# 	$group->save_prev;#load_parent####################
-# 	@$squares =  grep{ $_ != $rect } @$squares;
-
-# 	my @children =   $group->{ children }->@*;
-# 	to_group( $group, @children );
-
-# 	if( $group->{ parent } ) {
-# 		regroup( $group->{ parent } );
-# 	}
-
-# 	return 1;
-# }
-
-
-
 sub resize_group {
 	my( $parent ) =  @_;
 
 	my @children =  $parent->{ children }->@*;
-	calc_groupe_size( $parent, @children );
+	calc_groupe_size( $parent, \@children );
 
-	if( $parent->{ parent } ) {
-		calc_groupe_size( $parent->{ parent } );
+	if( $parent->{ parent }{ id } ) {
+		resize_group( $parent->{ parent } );
 	}
 }
 

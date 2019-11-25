@@ -56,6 +56,29 @@ sub on_group {
 
 
 
+sub drop {
+	my( $group, $drop, $app_rect, $drop_x, $drop_y ) =  @_;
+
+	$drop->draw_black;
+	$group->draw_black;
+	$drop->parent( $group->{ id } );#сохраняем в базе parent_id
+
+	push $group->{ children }->@*, $drop;
+	$group->save_prev;#FIX
+	$app_rect->{ children }->@* =  grep{ $_ != $drop } $app_rect->{ children }->@*;
+
+	my @children =   $group->{ children }->@*;
+	$group->calc_groupe_size( \@children );
+
+	if( $group->{ parent }{ id } ) {
+	$group->{ parent }->resize_group;
+	}
+
+
+}
+
+
+
 sub is_over_shape {
 	my( $shape, $x, $y ) =  @_;
 
