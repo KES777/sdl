@@ -218,13 +218,6 @@ sub _is_mouseup {
 		$h->draw_black;
 		delete $app_rect->{ is_selection };
 	}
-# DB::x;
-	##
-	if( my $h =  $app_rect->{ is_over } ) {
-		if( $h->{ target } == $app_rect->{ btn_del } ) {
-			$h->{ target }->on_btn_del( $app_rect, $e );
-		}
-	}
 }
 
 
@@ -251,7 +244,7 @@ sub _on_mouse_move {
 
 	##
 	if( my $h =  $app_rect->{ is_over } ) {
-		$h->{ target }->on_over_shape( $h, $app_rect, $e );
+		$app_rect->{ first } =  $h->{ owner };#отрисовка переднего объекта
 	}
 
 	if( !$app_rect->{ is_over } ) {

@@ -45,6 +45,11 @@ sub draw {
 }
 
 
+
+sub can_drop {}
+
+
+
 ##delete all shapes or any one
 sub moving_off {
 	my( $btn_del, $e, $app_rect ) =  @_;
@@ -53,6 +58,7 @@ sub moving_off {
 		$app_rect->{ children } =  ();
 		Util::db()->resultset( 'Rect' )->delete;
 		$app_rect->draw_black;
+		$btn_del->revers;
 			return;
 	}
 
@@ -64,24 +70,18 @@ sub moving_off {
 		}
 
 		if( $x ) {
-			$x->child_destroy;
+			$x->child_destroy;#удаление из базы по id
 		}
 
 		$app_rect->{ children }->@* =  grep{ $_ != $x } $app_rect->{ children }->@*;
 	}
+
+	$btn_del->revers;
 }
 
 
 
-sub can_drop {
-	my( $btn_del, $e ) =  @_;
-
-}
-
-
-
-##revers
-sub drop {
+sub revers {
 	my( $btn_del ) =  @_;
 
 	$btn_del->SUPER::moving_off;
@@ -92,8 +92,6 @@ sub drop {
 
 
 
-sub on_over {
-
-}
+sub on_over {}
 
 1;

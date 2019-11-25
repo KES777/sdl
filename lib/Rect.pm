@@ -297,39 +297,35 @@ sub can_group {
 
 
 
-sub is_drop {}
+# sub is_drop {}
 
 
 
 
-sub drop {
-	my( $rect, $group, $squares, $drop_x, $drop_y ) =  @_;
+# sub drop {
+# 	my( $group, $rect, $squares, $drop_x, $drop_y ) =  @_;
 
-	$rect->parent( $group->{ id } );
-	$rect->moving_off;
+# 	$rect->parent( $group->{ id } );
+# 	$rect->moving_off;
 
-	push $group->{ children }->@*, $rect;
-	$group->save_prev;#load_parent####################
-	@$squares =  grep{ $_ != $rect } @$squares;
+# 	push $group->{ children }->@*, $rect;
+# 	$group->save_prev;#load_parent####################
+# 	@$squares =  grep{ $_ != $rect } @$squares;
 
-	my @children =   $group->{ children }->@*;
-	to_group( $group, @children );
+# 	my @children =   $group->{ children }->@*;
+# 	to_group( $group, @children );
 
-	if( $group->{ parent } ) {
-		regroup( $group->{ parent } );
-	}
+# 	if( $group->{ parent } ) {
+# 		regroup( $group->{ parent } );
+# 	}
 
-	return 1;
-}
+# 	return 1;
+# }
 
 
-my $cnt =  0;
+
 sub regroup {
 	my( $parent ) =  @_;
-
-	$cnt++;
-
-	DB::x   if $cnt > 30;
 
 	my @children =  $parent->{ children }->@*;
 	to_group( $parent, @children );
@@ -337,8 +333,6 @@ sub regroup {
 	if( $parent->{ parent } ) {
 		regroup( $parent->{ parent } );
 	}
-
-	$cnt--;
 }
 
 
@@ -473,7 +467,7 @@ sub parent_coord {
 
 
 
-sub resize_field {
+sub is_over_rf {
 	my( $shape, $x, $y ) =  @_;
 
 	$shape->Util::resize_field( $x, $y );
@@ -488,23 +482,6 @@ sub on_resize {
 		$rect->{ old_c  } =  $rect->{ c };
 		$rect->{ c } =  Color->new( 0, 200, 0 );
 	}
-
-}
-
-
-
-sub on_over {
-	my( $rectangle, $app_rect, $e ) =  @_;
-
-	my $r;
-	for my $rect( $app_rect->{ children }->@* ) {
-		if( Util::mouse_target_square( $rect, $e->motion_x, $e->motion_y ) ) {
-
-			$r = $rect;
-		}
-	}
-
-	$app_rect->{ first } =  $r;
 }
 
 

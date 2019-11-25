@@ -17,14 +17,6 @@ sub is_moveable {
 
 
 
-sub on_over_shape {
-	my( $shape, $h, $app_rect, $e ) =  @_;
-
-	$shape->on_over( $app_rect, $e );
-}
-
-
-
 sub on_move {
 	my( $shape, $h, $e, $app_rect ) =  @_;
 
@@ -43,14 +35,6 @@ sub on_press {
 
 }
 
-
-
-sub on_release {
-	my( $shape, $h, $e, $app_rect ) =  @_;
-
-	$shape->moving_off( $e, $app_rect );
-
-}
 
 
 sub on_group {
@@ -72,42 +56,11 @@ sub on_group {
 
 
 
-# sub is_drop_shape {
-# 	my( $shape, $h, $e ) =  @_;
-
-# 	$shape->is_drop( $h, $e );
-# }
-
-
-sub can_drop_shape {
-	my( $shape, $h, $e ) =  @_;
-# DB::x;
-	$shape->can_drop( $h, $e );
-}
-
-
-
-sub drop_shape {
-	my( $shape, $app_rect, $e ) =  @_;
-# DB::x;
-	$shape->drop( $app_rect, $e );
-}
-
-
 sub is_over_shape {
 	my( $shape, $x, $y ) =  @_;
 
 	my $over =  $shape->is_over( $x, $y );
 		return $over;
-}
-
-
-
-
-sub is_over_rf {
-	my( $shape, $x, $y ) =  @_;
-
-	$shape->resize_field( $x, $y );
 }
 
 
