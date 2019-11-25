@@ -431,67 +431,6 @@ sub load_children {
 
 
 
-sub resize_on {
-	my( $rect ) =  @_;
-
-	$rect->{ resize } =  1;
-	$rect->{ old_c  } =  $rect->{ c };
-	$rect->{ c      } =  Color->new( 0, 200, 0 );
-}
-
-
-
-sub resize_to {
-	my( $rect, $x, $y ) =  @_;
-
-	$rect->{ w } = $x - $rect->{ x };
-	if( $x - $rect->{ x } < 50 ) {
-		$rect->{ w } = 50;
-	}
-	$rect->{ h } = $y - $rect->{ y };
-	if( $y - $rect->{ y } < 30 ) {
-		$rect->{ h } = 30;
-	}
-
-	$rect->{ children } or return;
-
-	my $h = 10;
-	for $square( $rect->{ children }->@* ) {
-		$h += $square->{ h } + 10;
-
-		if ( $rect->{ w } < $square->{ w } + 20 ) {
-			$rect->{ w } = $square->{ w } + 20;
-		}
-	}
-
-	$rect->{ h } < $h ?
-		$rect->{ h } = $h:
-			return;
-
-}
-
-
-
-sub resize_off {
-	my( $rect ) = @_;
-
-	$rect->{ c } =  delete $rect->{ old_c };
-	delete $rect->@{qw/ resize /};
-}
-
-
-
-sub btn_d_come_back {
-	my( $rect, $app ) = @_;
-
-	$rect->draw_black( $app );
-	$rect->moving_off;
-	$rect->{ x } = 250;
-	$rect->{ y } = 0;
-}
-
-
-
 sub child_destroy {
 	my( $square ) = @_;
 
@@ -542,13 +481,75 @@ sub resize_field {
 
 
 
+sub on_resize {
+	my( $rect ) =  @_;
+
+	if( !$rect->{ old_c } ) {
+		$rect->{ old_c  } =  $rect->{ c };
+		$rect->{ c } =  Color->new( 0, 200, 0 );
+	}
+
+}
+
+
+
+sub on_over {
+	my( $rectangle, $app_rect, $e ) =  @_;
+
+	my $r;
+	for my $rect( $app_rect->{ children }->@* ) {
+		if( Util::mouse_target_square( $rect, $e->motion_x, $e->motion_y ) ) {
+
+			$r = $rect;
+		}
+	}
+
+	$app_rect->{ first } =  $r;
+}
+
+
+
+sub resize_to {
+	my( $rect, $x, $y, $app_rect ) =  @_;
+
+	$rect->{ w } =  $x - $rect->{ x };
+	if( $x - $rect->{ x } < 50 ) {
+		$rect->{ w } =  50;
+	}
+
+	$rect->{ h } =  $y - $rect->{ y };
+	if( $y - $rect->{ y } < 30 ) {
+		$rect->{ h } =  30;
+	}
+
+
+	$rect->{ children } or return;
+
+	my $h = 10;
+	for $square( $rect->{ children }->@* ) {
+		$h +=  $square->{ h } + 10;
+
+		if ( $rect->{ w } < $square->{ w } + 20 ) {
+			$rect->{ w } =  $square->{ w } + 20;
+		}
+	}
+
+	if( $rect->{ h } < $h ) {
+		$rect->{ h } =  $h;
+	}
+}
+
+
+
 sub off_resize {
 	my( $rect, $app_rect ) =  @_;
 
-	$rect->store;
-
+	$rect->{ c } =  delete $rect->{ old_c };
 	delete $app_rect->{ on_resize    };
 	delete $app_rect->{ resize_field };
+
+
+	$rect->store;
 }
 
 

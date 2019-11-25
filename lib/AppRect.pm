@@ -251,7 +251,7 @@ sub _on_mouse_move {
 
 	##
 	if( my $h =  $app_rect->{ is_over } ) {
-		$h->{ target }->on_over( $h, $app_rect );
+		$h->{ target }->on_over_shape( $h, $app_rect, $e );
 	}
 
 	if( !$app_rect->{ is_over } ) {

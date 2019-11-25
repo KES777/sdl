@@ -17,9 +17,10 @@ sub is_moveable {
 
 
 
-sub on_over {
-	my( $shape, $h, $app_rect ) =  @_;
-	$app_rect->{ first } =  $shape;
+sub on_over_shape {
+	my( $shape, $h, $app_rect, $e ) =  @_;
+
+	$shape->on_over( $app_rect, $e );
 }
 
 
