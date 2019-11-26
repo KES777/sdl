@@ -24,16 +24,9 @@ sub on_move {
 
 	$shape->draw_black;
 	$shape->move_to( $e->motion_x,  $e->motion_y, $p->{ w }, $p->{ h } );
-
-	$app_rect->{ first } =  $shape;
 }
 
 
-
-sub on_press {
-	my( $shape, $h, $e ) =  @_;
-
-}
 
 
 
@@ -41,16 +34,21 @@ sub on_group {
 	my( $shape, $h, $e, $group_info ) =  @_;
 
 	my $rect =  Rect->new( $h->{ x }, $h->{ y } );
-	$rect->{ parent } = $shape;
+	$rect->{ parent } = $shape;# Объект не имеющий parent не сохранится в базе
 	weaken $rect->{ parent };
+
 	$rect->store;
-	$rect->calc_groupe_size( $group_info->{ grouped } );
+	$rect->calc_group_size( $group_info->{ grouped } );
+
 	$rect->{ children } =  $group_info->{ grouped };
-	$rect->save_prev;  ## Change parent to new one
+	for my $child( $rect->{ children }->@* ) {
+		$child->parent_id( $rect->{ id } );
+	}
+
+	$rect->load_parent_data;  ## Change parent to new one
 
 	$shape->{ children } =  $group_info->{ alone };
 	push $shape->{ children }->@*, $rect;
-
 	$shape->store;
 }
 
@@ -61,34 +59,37 @@ sub drop {
 
 	$drop->draw_black;
 	$group->draw_black;
-	$drop->parent( $group->{ id } );#сохраняем в базе parent_id
+	$drop->parent_id( $group->{ id } );
 
 	push $group->{ children }->@*, $drop;
-	$group->save_prev;#FIX
+	$group->load_parent_data;
 	$app_rect->{ children }->@* =  grep{ $_ != $drop } $app_rect->{ children }->@*;
 
 	my @children =   $group->{ children }->@*;
-	$group->calc_groupe_size( \@children );
+	$group->calc_group_size( \@children );
 
 	if( $group->{ parent }{ id } ) {
-	$group->{ parent }->resize_group;
+		$group->{ parent }->resize_group;
 	}
 
-
+	$group->store_group;
 }
 
 
 
-sub is_over_shape {
-	my( $shape, $x, $y ) =  @_;
+sub store_group {
+	my( $shape ) =  @_;
 
-	my $over =  $shape->is_over( $x, $y );
-		return $over;
+	$shape->store;
+
+	if( my $p =  $shape->{ parent } ) {
+		$p->store_group;
+	}
 }
 
 
 
-sub resize_shape {
+sub resize {
 	my( $shape, $x, $y, $app_rect ) =  @_;
 
 	$shape->on_resize;

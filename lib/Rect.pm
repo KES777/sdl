@@ -208,7 +208,7 @@ sub store {
 
 
 
-sub parent {
+sub parent_id {
 	my( $rect, $id ) =  @_;
 
 	Util::db()->resultset( 'Rect' )->search({
@@ -220,7 +220,8 @@ sub parent {
 
 
 
-sub save_prev {
+#назначение родителя его же детям
+sub load_parent_data {
 	my( $rect ) =  @_;
 	for my $child( $rect->{ children }->@* ) {
 		$child->{ parent } =   $rect;
