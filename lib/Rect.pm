@@ -13,6 +13,8 @@ use Shape;
 use base 'Shape';
 
 
+my $START_W =  50;
+my $START_H =  30;
 
 my $y_offset_n =  0;
 my $x_offset   =  50;
@@ -44,8 +46,8 @@ sub new {
 	my %rect = (
 		x      => $x,
 		y      => $y,
-		w      => $w // 50,
-		h      => $h // 30,
+		w      => $w // $START_W,
+		h      => $h // $START_H,
 		c      => $c // Color->new,
 	);
 
