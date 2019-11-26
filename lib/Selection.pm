@@ -20,30 +20,6 @@ sub new {
 
 
 
-sub resize {
-	my( $sel, $mx, $my ) =  @_;
-
-	my $tx =  $sel->{ sel_start_x };
-	my $ty =  $sel->{ sel_start_y };
-
-	if( $mx > $tx ) {
-		$sel->{ w } =  $mx - $sel->{ x };
-	}
-	else {
-		$sel->{ x } =  $mx;
-		$sel->{ w } =  $tx - $mx;
-	}
-
-	if( $my > $ty ) {
-		$sel->{ h } =  $my - $sel->{ y };
-	}
-	else {
-		$sel->{ y } =  $my;
-		$sel->{ h } =  $ty - $my;
-	}
-}
-
-
 sub draw {
 	my( $rect, $screen, $x, $y ) = @_;
 
@@ -83,6 +59,31 @@ sub on_resize {
 	$h->draw_black;
 	$h->resize( $e->motion_x, $e->motion_y );
 	$h->draw;
+}
+
+
+
+sub resize {
+	my( $sel, $mx, $my ) =  @_;
+
+	my $tx =  $sel->{ sel_start_x };
+	my $ty =  $sel->{ sel_start_y };
+
+	if( $mx > $tx ) {
+		$sel->{ w } =  $mx - $sel->{ x };
+	}
+	else {
+		$sel->{ x } =  $mx;
+		$sel->{ w } =  $tx - $mx;
+	}
+
+	if( $my > $ty ) {
+		$sel->{ h } =  $my - $sel->{ y };
+	}
+	else {
+		$sel->{ y } =  $my;
+		$sel->{ h } =  $ty - $my;
+	}
 }
 
 

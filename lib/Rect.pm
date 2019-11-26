@@ -231,10 +231,18 @@ sub load_parent_data {
 
 
 
-sub moving_on {
+sub is_moveable {
+	my( $shape, $event_obj ) =  @_;
+
+	$shape->move_color( $event_obj->{ x }, $event_obj->{ y } );
+	return $event_obj;
+}
+
+
+
+sub move_color {
 	my( $rect, $tp_x, $tp_y ) =  @_;
 
-	# $rect->{ moving  } =  1;
 
 	$rect->{ start_x } =  $rect->{ x };
 	$rect->{ start_y } =  $rect->{ y };
@@ -248,27 +256,24 @@ sub moving_on {
 
 
 
-sub moving_off {
+sub self_color {
 	my( $rect ) =  @_;
 
 	$rect->{ c } =  delete $rect->{ start_c };
-	delete $rect->@{qw/ moving dx dy start_x start_y /};
-
-	#for $btn_del
-	if( $rect->{ c }->{ r } == 255 ) {
-		return;
-	}
-
-	$rect->store;
+	delete $rect->@{qw/ dx dy start_x start_y /};
 }
 
 
 
+sub do {}
+
+
+
 sub can_drop {
-	my( $rect, $squares, $drop_x, $drop_y ) =  @_;
+	my( $rect, $app_rect, $drop_x, $drop_y ) =  @_;
 
 	my( $group, $child );
-	for my $s ( @$squares ) {
+	for my $s ( $app_rect->{ children }->@* ) {
 		$s != $rect   or next;
 		my $curr =  $s->is_over( $drop_x, $drop_y )   or next;
 
@@ -278,9 +283,6 @@ sub can_drop {
 		return $curr;
 	}
 
-# 	$group   or return;
-
-# 	return $group, $child;
 }
 
 
@@ -304,7 +306,7 @@ sub resize_group {
 	my( $parent ) =  @_;
 
 	my @children =  $parent->{ children }->@*;
-	calc_groupe_size( $parent, \@children );
+	calc_group_size( $parent, \@children );
 
 	if( $parent->{ parent }{ id } ) {
 		resize_group( $parent->{ parent } );
@@ -313,7 +315,7 @@ sub resize_group {
 
 
 
-sub calc_groupe_size {
+sub calc_group_size {
 	my( $group, $children ) =  @_;
 
 	my $w =   0;
@@ -326,11 +328,6 @@ sub calc_groupe_size {
 
 		$h +=  $s->{ h } +10;
 		$w  =  $s->{ w } > $w ? $s->{ w } : $w;
-
-		$s->parent( $group->{ id } );
-
-		$s->{ parent } =  $group;#load_parent
-		weaken $s->{ parent };
 	}
 
 	$group->{ w } =  $w + 20;
@@ -342,19 +339,6 @@ sub calc_groupe_size {
 	if( $group->{ h } < 30 ) {
 		$group->{ h } =  30;
 	}
-}
-
-
-
-sub moving_cancel {
-	my( $rect, $app ) =  @_;
-
-	$rect->draw_black( $app );
-
-	$rect->{ x } =  $rect->{ start_x };
-	$rect->{ y } =  $rect->{ start_y };
-
-	$rect->moving_off;
 }
 
 
@@ -377,7 +361,6 @@ sub move_to {
 	if( $app_h  &&  $rect->{ y } > $app_h - $rect->{ h } ) {
 		$rect->{ y } = $app_h - $rect->{ h };
 	}
-
 }
 
 
@@ -443,7 +426,8 @@ sub parent_coord {
 
 
 
-sub is_over_rf {
+
+sub is_over_res_field {
 	my( $shape, $x, $y ) =  @_;
 
 	$shape->Util::resize_field( $x, $y );
@@ -451,11 +435,11 @@ sub is_over_rf {
 
 
 
-sub on_resize {
+sub resize_color {
 	my( $rect ) =  @_;
 
-	if( !$rect->{ old_c } ) {
-		$rect->{ old_c  } =  $rect->{ c };
+	if( !$rect->{ start_c } ) {
+		$rect->{ start_c  } =  $rect->{ c };
 		$rect->{ c } =  Color->new( 0, 200, 0 );
 	}
 }
@@ -463,7 +447,7 @@ sub on_resize {
 
 
 sub resize_to {
-	my( $rect, $x, $y, $app_rect ) =  @_;
+	my( $rect, $x, $y ) =  @_;
 
 	$rect->{ w } =  $x - $rect->{ x };
 	if( $x - $rect->{ x } < 50 ) {
@@ -492,18 +476,6 @@ sub resize_to {
 	}
 }
 
-
-
-sub off_resize {
-	my( $rect, $app_rect ) =  @_;
-
-	$rect->{ c } =  delete $rect->{ old_c };
-	delete $app_rect->{ on_resize    };
-	delete $app_rect->{ resize_field };
-
-
-	$rect->store;
-}
 
 
 1;

@@ -128,7 +128,7 @@ sub _observer {
 
 
 
-
+## Проверяет, попали ли в поле selection объекты. Если да, то new rect (группа)
 sub _is_group {
 	my( $app_rect, $h, $e ) =  @_;
 
@@ -158,13 +158,14 @@ sub _is_mousedown {
 		or return;
 
 
-	## Создание свойства (ключа) изменения размеров объекта
+	## Создание свойства (ключа) "изменение размеров объекта"
 	if( my $h =  $app_rect->{ is_over_rf } ) {
-		$app_rect->{ on_resize } =  $app_rect->{ is_over_rf };
+		$h->resize_color;
+		$app_rect->{ on_resize } =  $h;
 	}
 
 
-	## Создание свойства (ключа) передвижения объекта
+	## Создание свойства (ключа) "передвижение объекта"
 	if( $app_rect->{ is_over }  && !$app_rect->{ is_over_rf } ) {
 		my $h =  $app_rect->{ is_over };
 		$h->{ target }->on_press( $h, $e );
@@ -174,7 +175,7 @@ sub _is_mousedown {
 		}
 	}
 
-	##
+	## Создание поля selection
 	if( !$app_rect->{ is_over }  &&  !$app_rect->{ is_selection } ) {
 		$app_rect->{ is_selection } =  Selection->new(
 			$e->motion_x, $e->motion_y, 0, 0,
@@ -191,28 +192,33 @@ sub _is_mouseup {
 	$e->type == SDL_MOUSEBUTTONUP
 		or return;
 
-	##
-	delete $app_rect->{ first };
 
-	##
+	## Выключение свойства "изменение размеров объекта"
 	if( my $h =  $app_rect->{ on_resize } ) {
-		$h->off_resize( $app_rect );
+
+		$h->self_color;## Возврат цвета объекту
+		$h->store;
+
+		delete $app_rect->{ on_resize    };
 	}
 
-	##
+	## Выключение свойства "движение объекта"
 	if( my $h =  $app_rect->{ is_moveable } ) {
-		$h->{ target }->moving_off( $e, $app_rect );
+
+		my $shape =  $h->{ target };
+		$shape->do( $e, $app_rect );
+		$shape->self_color;
+		$shape->store;
+
 		delete $app_rect->{ is_moveable };
 
-		if( my $group_rect =  $h->{ target }->can_drop( $app_rect, $e->motion_x, $e->motion_y ) ) {
-			my $drop =  $h->{ target };
-			# $app_rect->{ is_dropable } =  $drop;
-			$group_rect->{ target }->drop( $drop, $app_rect, $e->motion_x, $e->motion_y );
-			# delete $app_rect->{ is_dropable };
+		## Drop object
+		if( my $group_rect =  $shape->can_drop( $app_rect, $e->motion_x, $e->motion_y ) ) {
+			$group_rect->{ target }->drop( $shape, $app_rect, $e->motion_x, $e->motion_y );
 		}
 	}
 
-	##
+	## Создание группы из поля selection
 	if( my $h =  $app_rect->{ is_selection } ) {
 		if( my $group =  $app_rect->_is_group( $h, $e ) ) {
 			$group->{ target }->on_group( $h, $e, $group );
@@ -231,53 +237,57 @@ sub _on_mouse_move {
 	$e->type == SDL_MOUSEMOTION
 		or return;
 
+	## Объект, над полем resize которого находится курсор
+	$app_rect->{ is_over_rf } =
+		_is_over_res_field( $app_rect, $e->motion_x, $e->motion_y );
 
-	if( $app_rect->{ is_over_rf } =
-		_is_over_rf( $app_rect, $e->motion_x, $e->motion_y ) ) {
-			return;
-	}
 
+	## Активация свойства "изменение размеров обьекта"
 	if( my $h =  $app_rect->{ on_resize } ){
-		$h->resize_shape( $e->motion_x, $e->motion_y, $app_rect );
+		$h->resize( $e->motion_x, $e->motion_y );
 	}
 
 
 	## Actualize data
 	$app_rect->{ is_over } =  _is_over( $app_rect, $e->motion_x, $e->motion_y );
+	## TODO: в зависимости от предыдущего значения слать события:
+	# on_mouse_over/on_mouse_out
 
-	##
+
+	## Отрисовка объекта (над которым курсор) поверх других
 	if( my $h =  $app_rect->{ is_over } ) {
-		$app_rect->{ first } =  $h->{ owner };#отрисовка переднего объекта
+		$app_rect->{ first } =  $h->{ owner };
 	}
 
+	## Удаление ключа, отвечающего за отрисовку объекта поверх других
 	if( !$app_rect->{ is_over } ) {
 		delete $app_rect->{ first };
 	}
 
-	##
+	## Активация свойсва "передвижение", отрисовка этого объекта поверх других
 	if( my $h =  $app_rect->{ is_moveable } ) {
 		$h->{ target }->on_move( $h, $e, $app_rect );
 		$app_rect->{ first } =  $h->{ target };
 	}
 
-	##
+	## Активация свойства "изменение размеров" поля выделения
 	if( my $h =  $app_rect->{ is_selection } ) {
 		$h->on_resize( $h, $e );
 	}
 }
 
 
-
+## Возвращает объект, над которым кусрор
 sub _is_over {
 	my( $app_rect, $x, $y ) =  @_;
 
 	my $over;
 	my @interface =  ( $app_rect->{ btn }, $app_rect->{ btn_del } );
 	for my $shape ( $app_rect->{ children }->@*, @interface ) {
-		$over =  $shape->is_over_shape( $x, $y )
+		$over =  $shape->is_over( $x, $y )
 			or next;
 
-		$over->{ owner } =  $shape;############?!
+		$over->{ owner } =  $shape;
 		last;
 	}
 
@@ -285,13 +295,13 @@ sub _is_over {
 }
 
 
-
-sub _is_over_rf {
+## Возвращает объект, если над его полем resize находится курсор
+sub _is_over_res_field {
 	my( $app_rect, $x, $y ) =  @_;
-# DB::x;
+
 	my $object;
 	for my $shape ( $app_rect->{ children }->@* ) {
-		$shape->is_over_rf( $x, $y )
+		$shape->is_over_res_field( $x, $y )
 			or next;
 		$object =  $shape;
 	}
@@ -302,7 +312,7 @@ sub _is_over_rf {
 
 
 
-
+## Определяет, есть ли в поле выделения объекты
 sub can_select {
 	my( $app_rect, $x, $y ) =  @_;
 
@@ -324,7 +334,7 @@ sub can_select {
 }
 
 
-
+## Создание поля выделения
 sub new_selecting_field {
 	my( $rect, $x, $y ) =  @_;
 
@@ -334,7 +344,7 @@ sub new_selecting_field {
 }
 
 
-
+## Отрисовка всех объектов
 sub draw {
 	my( $app_rect ) =  @_;
 

@@ -3,15 +3,28 @@ package Btn_del;
 use Rect;
 use base 'Rect';
 
+my $START_X =  250;
+my $START_Y =    0;
+
+
 sub new {
 	my( $btn_del ) =  @_;
 
-	$btn_del  =  $btn_del->SUPER::new( 250, 0, 50, 30 );
-	$btn_del->{ c }->{ r }  =  255;
-	$btn_del->{ c }->{ g }  =  0;
-	$btn_del->{ c }->{ b }  =  0;
+	$btn_del  =  $btn_del->SUPER::new;
+	$btn_del->{ c } =   Color->new( 255,0,0 );
+
+	$btn_del->set_start_position;
 
 	return $btn_del;
+}
+
+
+
+sub set_start_position {
+	my( $btn_del ) =  @_;
+
+	$btn_del->{ x } =  $START_X;
+	$btn_del->{ y } =  $START_Y;
 }
 
 
@@ -46,24 +59,25 @@ sub draw {
 
 
 
-sub can_drop {}
-
-
-
 ##delete all shapes or any one
-sub moving_off {
+sub do {
 	my( $btn_del, $e, $app_rect ) =  @_;
 
+		$btn_del->start_position;
+
+	## Удаление всех объектов
 	if( $app_rect->{ btn }->is_over( $e->motion_x, $e->motion_y ) ) {
 		$app_rect->{ children } =  ();
 		Util::db()->resultset( 'Rect' )->delete;
 		$app_rect->draw_black;
-		$btn_del->revers;
-			return;
+
+		return;
 	}
 
-	my $x;
+
+	## Удаление одного объекта (группы)
 	for my $shape( $app_rect->{ children }->@* ) {
+		my $x;
 		if( $shape->is_over( $e->motion_x, $e->motion_y ) ) {
 			$x =  $shape;
 			$shape->draw_black;
@@ -75,23 +89,25 @@ sub moving_off {
 
 		$app_rect->{ children }->@* =  grep{ $_ != $x } $app_rect->{ children }->@*;
 	}
-
-	$btn_del->revers;
 }
 
 
-
-sub revers {
+## Возвращение кнопки на стартовую позицию
+sub start_position {
 	my( $btn_del ) =  @_;
 
-	$btn_del->SUPER::moving_off;
 	$btn_del->draw_black;
-	$btn_del->{ x } =  250;
-	$btn_del->{ y } =  0;
+	$btn_del->set_start_position;
 }
+
+
+
+sub store {}
 
 
 
 sub on_over {}
+
+
 
 1;

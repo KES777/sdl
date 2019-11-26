@@ -8,11 +8,20 @@ use Scalar::Util qw(weaken);
 use Rect;
 
 
-sub is_moveable {
-	my( $shape, $event_obj ) =  @_;
+# sub is_moveable {
+# 	my( $shape, $event_obj ) =  @_;
 
-	$shape->moving_on( $event_obj->{ x }, $event_obj->{ y } );
-	return $event_obj;
+# 	$shape->move_color( $event_obj->{ x }, $event_obj->{ y } );
+# 	return $event_obj;
+# }
+
+
+
+sub on_press {
+	my( $shape, $h, $e ) =  @_;
+
+	# warn "Object does not define this behavior yet. http://";
+	# 	if DEBUG;
 }
 
 
@@ -90,19 +99,11 @@ sub store_group {
 
 
 sub resize {
-	my( $shape, $x, $y, $app_rect ) =  @_;
+	my( $shape, $x, $y ) =  @_;
 
-	$shape->on_resize;
+	# $shape->on_resize;
 	$shape->draw_black;
 	$shape->resize_to( $x, $y );
-}
-
-
-
-sub off_resize_shape {
-	my( $shape, $app_rect ) =  @_;
-
-	$shape->off_resize( $app_rect );
 }
 
 
