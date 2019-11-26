@@ -11,12 +11,27 @@ use Rect;
 use base 'Rect';
 
 
+my $START_X =  0;
+my $START_Y =  0;
+
+
 sub new {
 	my( $btn ) =  @_;
 
-	$btn  =  $btn->SUPER::new( 0, 0, 50, 30 );
+	$btn  =  $btn->SUPER::new;
+
+	$btn->set_start_position;
 
 	return $btn;
+}
+
+
+
+sub set_start_position {
+	my( $btn_del ) =  @_;
+
+	$btn_del->{ x } =  $START_X;
+	$btn_del->{ y } =  $START_Y;
 }
 
 
@@ -27,6 +42,7 @@ sub on_press {
 	my $rect =  Rect->new;
 	$rect->{ parent } =  $btn->{ parent };
 	weaken $rect->{ parent };
+
 	$rect->store;
 	push $btn->{ parent }->{ children }->@*, $rect;
 }
@@ -75,11 +91,5 @@ sub is_moveable {
 
 
 
-sub on_press {
-	my( $btn, $h, $e ) =  @_;
-
-	my $rect =  Rect->new->store;
-	push $btn->{ parent }->{ children }->@*, $rect;
-}
 
 1;
