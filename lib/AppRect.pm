@@ -201,19 +201,15 @@ sub _is_mouseup {
 
 	##
 	if( my $h =  $app_rect->{ is_moveable } ) {
-		if( my $container =  $h->{ target }->can_drop( $app_rect, $e->motion_x, $e->motion_y ) ) {
-			$h->{ target }->moving_off( $e, $app_rect );
-			delete $app_rect->{ is_moveable };
+		$h->{ target }->moving_off( $e, $app_rect );
+		delete $app_rect->{ is_moveable };
+
+		if( my $group_rect =  $h->{ target }->can_drop( $app_rect, $e->motion_x, $e->motion_y ) ) {
 			my $drop =  $h->{ target };
-			$app_rect->{ is_dropable } =  $drop;
-			$container->{ target }->drop( $drop, $app_rect, $e->motion_x, $e->motion_y );
-			delete $app_rect->{ is_moveable };
-			delete $app_rect->{ is_dropable };
+			# $app_rect->{ is_dropable } =  $drop;
+			$group_rect->{ target }->drop( $drop, $app_rect, $e->motion_x, $e->motion_y );
+			# delete $app_rect->{ is_dropable };
 		}
-			if( $app_rect->{ is_moveable } ) {
-				$h->{ target }->moving_off( $e, $app_rect );
-				delete $app_rect->{ is_moveable };
-			}
 	}
 
 	##
@@ -261,6 +257,7 @@ sub _on_mouse_move {
 	##
 	if( my $h =  $app_rect->{ is_moveable } ) {
 		$h->{ target }->on_move( $h, $e, $app_rect );
+		$app_rect->{ first } =  $h->{ target };
 	}
 
 	##
