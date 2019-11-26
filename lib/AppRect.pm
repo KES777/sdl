@@ -158,15 +158,15 @@ sub _is_mousedown {
 		or return;
 
 
-	##
+	## Создание свойства (ключа) изменения размеров объекта
 	if( my $h =  $app_rect->{ is_over_rf } ) {
 		$app_rect->{ on_resize } =  $app_rect->{ is_over_rf };
-			return;
 	}
 
 
-	##
-	if( my $h =  $app_rect->{ is_over } ) {
+	## Создание свойства (ключа) передвижения объекта
+	if( $app_rect->{ is_over }  && !$app_rect->{ is_over_rf } ) {
+		my $h =  $app_rect->{ is_over };
 		$h->{ target }->on_press( $h, $e );
 
 		if( my $move =  $h->{ target }->is_moveable( $h, $e ) ) {
