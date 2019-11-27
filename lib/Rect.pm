@@ -131,7 +131,7 @@ sub draw {
 }
 
 
-
+## Заливка чёрным группированноо объекта
 sub draw_black_group {
 	my( $squares, $app, $x, $y ) = @_;
 
@@ -184,6 +184,7 @@ sub is_inside {
 
 
 
+## Сохранение (обновление) объекта в базу
 sub store {
 	my( $rect ) =  @_;
 
@@ -214,6 +215,7 @@ sub store {
 
 
 
+## Запись в базу parent_id для объекта
 sub parent_id {
 	my( $rect, $id ) =  @_;
 
@@ -237,15 +239,7 @@ sub load_parent_data {
 
 
 
-# sub moving_on {
-# 	my( $shape, $e ) =  @_;
-
-# 	$shape->save_state( $e->motion_x, $e->motion_y );
-# 	$shape->{ c } =  Color->new( 0, 0, 200 );
-# }
-
-
-
+## Сохранение состояние объекта
 sub save_state {
 	my( $rect, $tp_x, $tp_y ) =  @_; # tp - take point
 
@@ -261,6 +255,7 @@ sub save_state {
 
 
 
+## Восстановление  состояния объекта
 sub restore_state {
 	my( $rect ) =  @_;
 
@@ -269,11 +264,8 @@ sub restore_state {
 }
 
 
-
-sub do {}
-
-
-
+## Проверка условия, при котором возможно выполнить drop для объекта
+## Проверка - находится ли объект над другим объектом(возвращает этот объект)
 sub can_drop {
 	my( $rect, $app_rect, $drop_x, $drop_y ) =  @_;
 
@@ -291,7 +283,7 @@ sub can_drop {
 }
 
 
-
+## Проверяет, попали ли в группу выделения объекты
 sub can_group {
 	my( $group, $square ) = @_;
 
@@ -306,7 +298,7 @@ sub can_group {
 }
 
 
-
+## Пересчитывает размер группы(каждого объекта группы, который требует пересчёта)
 sub resize_group {
 	my( $parent ) =  @_;
 
@@ -319,7 +311,7 @@ sub resize_group {
 }
 
 
-
+## Пересчитывает размер группы в соответствии с её содержимым
 sub calc_group_size {
 	my( $group, $children ) =  @_;
 
@@ -347,7 +339,7 @@ sub calc_group_size {
 }
 
 
-
+## Передвигает объект в соответствии с координатами курсора
 sub move_to {
 	my( $rect, $x, $y, $app_w, $app_h ) =  @_;
 
@@ -370,7 +362,8 @@ sub move_to {
 }
 
 
-
+## Загружает из базы объекту его детей (создавая объекты для каждого ребёнка)
+## Загружает по рекурсии всем вложеным объектам их детей
 sub load_children {
 	my( $rect ) = @_;
 
@@ -389,7 +382,7 @@ sub load_children {
 }
 
 
-
+## Удаляет объект(пришедший в функцию) из числа детей его родителя
 sub child_destroy {
 	my( $square ) = @_;
 
@@ -406,7 +399,7 @@ sub child_destroy {
 }
 
 
-
+## Проверяет находится ли курсор над полем для изменения размеров объекта
 sub is_over_res_field {
 	my( $shape, $x, $y ) =  @_;
 
@@ -414,7 +407,7 @@ sub is_over_res_field {
 }
 
 
-
+## Изменяет цвет объекта при изменении его размеров(запоминает исходный цвет)
 sub resize_color {
 	my( $rect ) =  @_;
 
@@ -425,7 +418,7 @@ sub resize_color {
 }
 
 
-
+## Изменяет размер объекта в соответсвии с координатами курсора
 sub resize_to {
 	my( $rect, $x, $y ) =  @_;
 
