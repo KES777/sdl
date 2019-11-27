@@ -389,15 +389,6 @@ sub can_select {
 }
 
 
-## Создание поля выделения
-sub new_selecting_field {
-	my( $rect, $x, $y ) =  @_;
-
-	# xxxxx    or return;
-
-	$rect->{ sel } =  Selection->new( $x, $y, 0, 0, Color->new( 0, 0, 0 ) );
-}
-
 
 ## Отрисовка всех объектов
 sub draw {
