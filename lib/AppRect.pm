@@ -129,9 +129,11 @@ sub _observer {
 
 
 
-## Проверяет, попали ли в поле selection объекты. Если да, то new rect (группа)
-sub _is_group {
+## Проверяет, попали ли в поле selection объекты.
+# Если да, то разделить объекты на две группы
+sub _can_group {
 	my( $app_rect, $h, $e ) =  @_;
+	# h - объект selection
 
 	my @alone;
 	my @grouped;
@@ -143,6 +145,10 @@ sub _is_group {
 
 	@grouped   or return;
 
+	# !H
+	# target  - экран (поверхность), на которой происходит выделение
+	# grouped - выделенные объекты на "экране"
+	# alone   - не выделенные объекты на "экране"
 	return {
 		target  =>  $app_rect,
 		grouped =>  \@grouped,
@@ -158,7 +164,6 @@ sub _is_mousedown {
 	$e->type == SDL_MOUSEBUTTONDOWN
 		or return;
 
-
 	## Создание свойства (ключа) "изменение размеров объекта"
 	if( my $h =  $app_rect->{ is_over_rf } ) {
 		$h->resize_color;
@@ -167,8 +172,7 @@ sub _is_mousedown {
 
 
 	## Создание свойства (ключа) "передвижение объекта"
-	if( $app_rect->{ is_over }  &&  !$app_rect->{ is_over_rf } ) {
-		my $h =  $app_rect->{ is_over };
+	if( (my $h =  $app_rect->{ is_over })  &&  !$app_rect->{ is_over_rf } ) {
 		$h->{ target }->on_press( $h, $e );
 
 		if( $h->{ target }->{ parent }  &&  $app_rect->{ drag } ) {
@@ -182,16 +186,23 @@ sub _is_mousedown {
 	}
 
 	## Создание поля selection
+	# if( (!$app_rect->{ is_over } || "CTRL_KEY"  )  &&  !$app_rect->{ is_selection } ) {
 	if( !$app_rect->{ is_over }  &&  !$app_rect->{ is_selection } ) {
 		$app_rect->{ is_selection } =  Selection->new(
 			$e->motion_x, $e->motion_y, 0, 0,
 			Color->new( 0, 0, 0 )
 		);
+		# my $h =  {
+		# 	target =>  $app_rect->{ is_over } || $app_rect,
+		# 	draw   =>  Selection->new,
+		# };
+		# DDP::p $h;
+		# $app_rect->{ is_selection } =  $h;
 	}
 }
 
 
-
+## Флаг для начала функции drag
 sub _drag_flag {
 	my( $e, $app, $app_rect ) =  @_;
 
@@ -243,11 +254,12 @@ sub _is_mouseup {
 
 	## Создание группы из поля selection
 	if( my $h =  $app_rect->{ is_selection } ) {
-		if( my $group =  $app_rect->_is_group( $h, $e ) ) {
+		if( my $group =  $app_rect->_can_group( $h, $e ) ) {
 			$group->{ target }->on_group( $h, $e, $group );
 		}
 
 		$h->draw_black;
+		# $h->{ draw }->draw_black;
 		delete $app_rect->{ is_selection };
 	}
 }
