@@ -231,24 +231,24 @@ sub load_parent_data {
 
 
 
-sub is_moveable {
-	my( $shape, $event_obj ) =  @_;
+# sub moving_on {
+# 	my( $shape, $e ) =  @_;
 
-	$shape->move_color( $event_obj->{ x }, $event_obj->{ y } );
-	return $event_obj;
-}
+# 	$shape->save_state( $e->motion_x, $e->motion_y );
+# 	$shape->{ c } =  Color->new( 0, 0, 200 );
+# }
 
 
 
-sub move_color {
-	my( $rect, $tp_x, $tp_y ) =  @_;
+sub save_state {
+	my( $rect, $tp_x, $tp_y ) =  @_; # tp - take point
 
 
 	$rect->{ start_x } =  $rect->{ x };
 	$rect->{ start_y } =  $rect->{ y };
 
 	$rect->{ start_c } =  $rect->{ c };
-	$rect->{ c       } =  Color->new( 0, 0, 200 );
+	# $rect->{ c       } =  Color->new( 0, 0, 200 );
 
 	$rect->{ dx } =  $tp_x - $rect->{ x };
 	$rect->{ dy } =  $tp_y - $rect->{ y };
@@ -256,7 +256,7 @@ sub move_color {
 
 
 
-sub self_color {
+sub restore_state {
 	my( $rect ) =  @_;
 
 	$rect->{ c } =  delete $rect->{ start_c };
@@ -355,6 +355,7 @@ sub move_to {
 	if( $rect->{ y } < 0 ) {
 		$rect->{ y } = 0;
 	}
+
 	if( $app_w  &&  $rect->{ x } > $app_w - $rect->{ w } ) {
 		$rect->{ x } = $app_w - $rect->{ w };
 	}
@@ -401,28 +402,28 @@ sub child_destroy {
 
 
 
-sub detach {
-	my( $rect ) =  @_;
+# sub detach {
+# 	my( $rect, $app_rect ) =  @_;
 
-	my $parent =  $rect->{ parent };
-	my $children =  $parent->{ children };
-	@$children =  grep{ $_ != $rect } @$children;
-}
+# 	my $parent =  $rect->{ parent };
+# 	my $children =  $parent->{ children };
+# 	@$children =  grep{ $_ != $rect } @$children;
+# }
 
 
 
-sub parent_coord {
-	my( $rect, $x, $y ) =  @_;
+# sub parent_coord {
+# 	my( $rect, $x, $y ) =  @_;
 
-	if( $rect->{ parent } ) {
-		$x +=  $rect->{ parent }->{ x };
-		$y +=  $rect->{ parent }->{ y };
+# 	if( $rect->{ parent } ) {
+# 		$x +=  $rect->{ parent }->{ x };
+# 		$y +=  $rect->{ parent }->{ y };
 
-		( $x, $y ) =  $rect->{ parent }->parent_coord( $x, $y );
-	}
+# 		( $x, $y ) =  $rect->{ parent }->parent_coord( $x, $y );
+# 	}
 
-	return ( $x, $y );
-}
+# 	return ( $x, $y );
+# }
 
 
 

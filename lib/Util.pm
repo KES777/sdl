@@ -56,10 +56,10 @@ sub pause_handler {
 	elsif($event->type == SDL_KEYDOWN) {
 		if($event->key_sym == SDLK_SPACE) {
 			return 1 if $app->paused;
-			 
+
 			$app->pause(\&pause_handler);
 		}
-	}	
+	}
 }
 
 
@@ -71,7 +71,7 @@ sub mouse_target_square {
 		&& $x <= $object->{ x } + $object->{ w }
 		&& $y >= $object->{ y }
 		&& $y <= $object->{ y } + $object->{ h }
-}	
+}
 
 
 

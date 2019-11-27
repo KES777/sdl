@@ -31,4 +31,14 @@ sub geth {
 	return $color->%{qw/ r g b a /};
 }
 
+
+
+sub color_red {
+	my $color =  shift;
+
+	@_   or return $color->{ r } =  255;
+
+	return $color->{ r } =  shift;
+}
+
 1;

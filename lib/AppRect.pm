@@ -55,6 +55,7 @@ sub new {
 	$APP->add_event_handler( sub{ _on_mouse_move( @_, $app_rect ) } );
 	$APP->add_event_handler( sub{ _is_mousedown ( @_, $app_rect ) } );
 	$APP->add_event_handler( sub{ _is_mouseup   ( @_, $app_rect ) } );
+	$APP->add_event_handler( sub{ _drag_flag    ( @_, $app_rect ) } );
 
 	$APP->add_event_handler( sub{ _observer( @_, $app_rect ) } );
 
@@ -166,12 +167,17 @@ sub _is_mousedown {
 
 
 	## Создание свойства (ключа) "передвижение объекта"
-	if( $app_rect->{ is_over }  && !$app_rect->{ is_over_rf } ) {
+	if( $app_rect->{ is_over }  &&  !$app_rect->{ is_over_rf } ) {
 		my $h =  $app_rect->{ is_over };
 		$h->{ target }->on_press( $h, $e );
 
+		if( $h->{ target }->{ parent }  &&  $app_rect->{ drag } ) {
+			$h->{ target }->drag( $h, $app_rect, $e );
+		}
+
 		if( my $move =  $h->{ target }->is_moveable( $h, $e ) ) {
 			$app_rect->{ is_moveable } =  $move;
+			$move->{ target }->moving_on( $e );
 		}
 	}
 
@@ -186,6 +192,20 @@ sub _is_mousedown {
 
 
 
+sub _drag_flag {
+	my( $e, $app, $app_rect ) =  @_;
+
+	$e->type == SDL_KEYDOWN
+	&&  $e->key_sym == SDLK_d
+		or return;
+
+
+	$app_rect->{ drag } =  1;
+
+}
+
+
+
 sub _is_mouseup {
 	my( $e, $app, $app_rect ) =  @_;
 
@@ -193,10 +213,13 @@ sub _is_mouseup {
 		or return;
 
 
+	delete $app_rect->{ drag };
+
+
 	## Выключение свойства "изменение размеров объекта"
 	if( my $h =  $app_rect->{ on_resize } ) {
 
-		$h->self_color;## Возврат цвета объекту
+		$h->restore_state;## Возврат цвета объекту
 		$h->store;
 
 		delete $app_rect->{ on_resize    };
@@ -206,8 +229,8 @@ sub _is_mouseup {
 	if( my $h =  $app_rect->{ is_moveable } ) {
 
 		my $shape =  $h->{ target };
-		$shape->do( $e, $app_rect );
-		$shape->self_color;
+		# $shape->delete_target( $e, $app_rect );
+		$shape->moving_off( $app_rect, $e );
 		$shape->store;
 
 		delete $app_rect->{ is_moveable };

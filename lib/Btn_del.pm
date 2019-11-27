@@ -59,9 +59,9 @@ sub draw {
 
 
 
-##delete all shapes or any one
-sub do {
-	my( $btn_del, $e, $app_rect ) =  @_;
+## delete all shapes or any one
+sub moving_off {
+	my( $btn_del, $app_rect, $e ) =  @_;
 
 		$btn_del->start_position;
 
@@ -96,6 +96,7 @@ sub do {
 sub start_position {
 	my( $btn_del ) =  @_;
 
+	$btn_del->restore_state;
 	$btn_del->draw_black;
 	$btn_del->set_start_position;
 }

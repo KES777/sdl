@@ -8,12 +8,28 @@ use Scalar::Util qw(weaken);
 use Rect;
 
 
-# sub is_moveable {
-# 	my( $shape, $event_obj ) =  @_;
+sub is_moveable {
+	my( $shape, $event_obj ) =  @_;
 
-# 	$shape->move_color( $event_obj->{ x }, $event_obj->{ y } );
-# 	return $event_obj;
-# }
+	return $event_obj;
+}
+
+
+
+ sub moving_on {
+	my( $shape, $e ) =  @_;
+
+	$shape->save_state( $e->motion_x, $e->motion_y );
+	$shape->{ c } =  Color->new( 0, 0, 200 );
+}
+
+
+
+sub moving_off {
+	my( $shape ) =  @_;
+
+	$shape->restore_state;
+}
 
 
 
@@ -25,7 +41,7 @@ sub on_press {
 }
 
 
-
+##
 sub on_move {
 	my( $shape, $h, $e, $app_rect ) =  @_;
 
@@ -37,8 +53,7 @@ sub on_move {
 
 
 
-
-
+## Создание группы из объектов выделенных полем selection
 sub on_group {
 	my( $shape, $h, $e, $group_info ) =  @_;
 
@@ -59,6 +74,60 @@ sub on_group {
 	$shape->{ children } =  $group_info->{ alone };
 	push $shape->{ children }->@*, $rect;
 	$shape->store;
+}
+
+
+
+sub drag {
+	my( $shape, $h, $app_rect, $e ) =  @_;
+
+	$h->{ owner }->draw_black;
+	my $group =  $shape->{ parent };
+	my $children =  $group->{ children };
+	$shape->detach( $children );## Удаляем вытянутый объект из числа детей его родителя
+
+	$group->calc_group_size( $children );
+
+	if( $group->{ parent }{ id } ) {
+		$group->{ parent }->resize_group;
+	}
+
+	$group->store_group;
+
+	#изменить координаты на абсолютные
+	my( $x, $y ) =  $shape->parent_coord( $shape->{ x }, $shape->{ y } );
+	$shape->{ x } =  $x;
+	$shape->{ y } =  $y;
+	# DDP::p $shape;
+
+
+	$shape->{ parent_id } =  undef;
+	$shape->{ parent } =  $app_rect;
+	#запушить в app_rect->{ children }
+	push $app_rect->{ children }->@*, $shape;
+}
+
+
+
+sub parent_coord {
+	my( $shape, $x, $y ) =  @_;
+
+	if( $shape->{ parent } ) {
+		$x +=  $shape->{ parent }->{ x };
+		$y +=  $shape->{ parent }->{ y };
+
+		( $x, $y ) =  $shape->{ parent }->parent_coord( $x, $y );
+	}
+
+	return ( $x, $y );
+}
+
+
+## Удаляем вытянутый объект из числа детей его родителя
+sub detach {
+	my( $shape, $children ) =  @_;
+
+	@$children =  grep{ $_ != $shape } @$children;
 }
 
 
@@ -101,7 +170,6 @@ sub store_group {
 sub resize {
 	my( $shape, $x, $y ) =  @_;
 
-	# $shape->on_resize;
 	$shape->draw_black;
 	$shape->resize_to( $x, $y );
 }
