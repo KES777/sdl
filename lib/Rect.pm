@@ -477,6 +477,16 @@ sub resize_to {
 	}
 }
 
+sub on_mouse_over {
+	my( $btn ) =  @_;
 
+	$btn->{ c }{ g } =  150;
+}
+
+sub on_mouse_out {
+	my( $btn ) =  @_;
+
+	$btn->{ c }{ g } =  0;
+}
 
 1;

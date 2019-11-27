@@ -16,6 +16,10 @@ sub is_moveable {
 
 
 
+sub on_mouse_over {}
+sub on_mouse_out {}
+
+
  sub moving_on {
 	my( $shape, $e ) =  @_;
 

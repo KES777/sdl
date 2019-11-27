@@ -107,7 +107,17 @@ sub store {}
 
 
 
-sub on_over {}
+sub on_mouse_over {
+	my( $btn ) =  @_;
+
+	$btn->{ c }{ b } =  250;
+}
+
+sub on_mouse_out {
+	my( $btn ) =  @_;
+
+	$btn->{ c }{ b } =  0;
+}
 
 
 

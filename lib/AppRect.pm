@@ -272,9 +272,23 @@ sub _on_mouse_move {
 
 
 	## Actualize data
-	$app_rect->{ is_over } =  _is_over( $app_rect, $e->motion_x, $e->motion_y );
-	## TODO: в зависимости от предыдущего значения слать события:
-	# on_mouse_over/on_mouse_out
+	# $app_rect->{ is_over } =  _is_over( $app_rect, $e->motion_x, $e->motion_y );
+	my $oo =  $app_rect->{ is_over };                             # OLD OVER
+	my $no =  _is_over( $app_rect, $e->motion_x, $e->motion_y );  # NEW OVER
+	$app_rect->{ is_over } =  $no;
+
+	if( $no  &&  !$oo ) {
+		$no->{ target }->on_mouse_over( $e );
+	}
+
+	if( $oo  &&  $no  &&  $no->{ target } != $oo->{ target } ) {
+		$oo->{ target }->on_mouse_out( $e );
+		$no->{ target }->on_mouse_over( $e );
+	}
+
+	if( $oo  &&  !$no ) {
+		$oo->{ target }->on_mouse_out( $e );
+	}
 
 
 	## Отрисовка объекта (над которым курсор) поверх других
