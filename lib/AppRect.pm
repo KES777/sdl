@@ -271,7 +271,7 @@ sub _on_mouse_move {
 	}
 
 
-	## Actualize data
+	## Send events to objects with additional info
 	# $app_rect->{ is_over } =  _is_over( $app_rect, $e->motion_x, $e->motion_y );
 	my $oo =  $app_rect->{ is_over };                             # OLD OVER
 	my $no =  _is_over( $app_rect, $e->motion_x, $e->motion_y );  # NEW OVER
@@ -290,7 +290,19 @@ sub _on_mouse_move {
 		$oo->{ target }->on_mouse_out( $e );
 	}
 
+	##
+	if( my $h =  $app_rect->{ is_moveable } ) {
+		$h->{ target }->on_move( $h, $e, $app_rect );
+	}
 
+	## Активация свойства "изменение размеров" поля выделения
+	if( my $h =  $app_rect->{ is_selection } ) {
+		$h->on_resize( $h, $e );
+	}
+
+
+
+	#### Nazar
 	## Отрисовка объекта (над которым курсор) поверх других
 	if( my $h =  $app_rect->{ is_over } ) {
 		$app_rect->{ first } =  $h->{ owner };
@@ -301,15 +313,9 @@ sub _on_mouse_move {
 		delete $app_rect->{ first };
 	}
 
-	## Активация свойсва "передвижение", отрисовка этого объекта поверх других
+	## Активация свойства "передвижение", отрисовка этого объекта поверх других
 	if( my $h =  $app_rect->{ is_moveable } ) {
-		$h->{ target }->on_move( $h, $e, $app_rect );
 		$app_rect->{ first } =  $h->{ target };
-	}
-
-	## Активация свойства "изменение размеров" поля выделения
-	if( my $h =  $app_rect->{ is_selection } ) {
-		$h->on_resize( $h, $e );
 	}
 }
 
