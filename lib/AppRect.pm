@@ -138,7 +138,7 @@ sub _can_group {
 	my @alone;
 	my @grouped;
 	for my $shape ( $app_rect->{ children }->@* ) {
-		$shape->is_inside( $h->@{qw/ x y w h /} )?
+		$shape->is_inside( $h->{ draw }->@{qw/ x y w h /} )?
 			push @grouped, $shape :
 			push @alone, $shape;
 	}
@@ -188,16 +188,17 @@ sub _is_mousedown {
 	## Создание поля selection
 	# if( (!$app_rect->{ is_over } || "CTRL_KEY"  )  &&  !$app_rect->{ is_selection } ) {
 	if( !$app_rect->{ is_over }  &&  !$app_rect->{ is_selection } ) {
-		$app_rect->{ is_selection } =  Selection->new(
-			$e->motion_x, $e->motion_y, 0, 0,
-			Color->new( 0, 0, 0 )
-		);
-		# my $h =  {
-		# 	target =>  $app_rect->{ is_over } || $app_rect,
-		# 	draw   =>  Selection->new,
-		# };
-		# DDP::p $h;
-		# $app_rect->{ is_selection } =  $h;
+		# $app_rect->{ is_selection } =  Selection->new(
+		# 	$e->motion_x, $e->motion_y, 0, 0,
+		# 	Color->new( 0, 0, 0 )
+		# );
+		my $h =  {
+			target =>  $app_rect->{ is_over } || $app_rect,
+			draw   =>  Selection->new( $e->motion_x, $e->motion_y, 0, 0,
+						Color->new( 0, 0, 0 ) )
+		};
+		DDP::p $h;
+		$app_rect->{ is_selection } =  $h;
 	}
 }
 
@@ -233,7 +234,7 @@ sub _is_mouseup {
 		$h->restore_state;## Возврат цвета объекту
 		$h->store;
 
-		delete $app_rect->{ on_resize    };
+		delete $app_rect->{ on_resize };
 	}
 
 	## Выключение свойства "движение объекта"
@@ -258,8 +259,8 @@ sub _is_mouseup {
 			$group->{ target }->on_group( $h, $e, $group );
 		}
 
-		$h->draw_black;
-		# $h->{ draw }->draw_black;
+		# $h->draw_black;
+		$h->{ draw }->draw_black;
 		delete $app_rect->{ is_selection };
 	}
 }
@@ -309,7 +310,7 @@ sub _on_mouse_move {
 
 	## Активация свойства "изменение размеров" поля выделения
 	if( my $h =  $app_rect->{ is_selection } ) {
-		$h->on_resize( $h, $e );
+		$h->{ draw }->on_resize( $h, $e );
 	}
 
 

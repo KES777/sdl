@@ -61,7 +61,7 @@ sub on_move {
 sub on_group {
 	my( $shape, $h, $e, $group_info ) =  @_;
 
-	my $rect =  Rect->new( $h->{ x }, $h->{ y } );
+	my $rect =  Rect->new( $h->{ draw }->{ x }, $h->{ draw }->{ y } );
 	$rect->{ parent } = $shape;# Объект не имеющий parent не сохранится в базе
 	weaken $rect->{ parent };
 

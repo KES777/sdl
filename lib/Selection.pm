@@ -57,9 +57,9 @@ sub draw {
 sub on_resize {
 	my( $sel, $h, $e ) =  @_;
 
-	$h->draw_black;
-	$h->resize( $e->motion_x, $e->motion_y );
-	$h->draw;
+	$sel->draw_black;
+	$sel->resize( $e->motion_x, $e->motion_y );
+	$sel->draw;
 }
 
 
