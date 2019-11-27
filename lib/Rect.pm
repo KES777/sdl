@@ -144,6 +144,8 @@ sub draw_black_group {
 
 
 
+# Функция возвращает объект, над которым находится мышка.
+# Дополнительно сохранаяет информацию о координатах мыши.
 sub is_over {
 	my( $rect, $x, $y ) =  @_;
 
@@ -169,6 +171,7 @@ sub is_over {
 
 
 
+# Делает проверку, что объект $rect находится внутри квадрата x,y,w,h
 sub is_inside {
 	my( $rect, $x, $y, $w, $h ) =  @_;
 
@@ -398,32 +401,6 @@ sub child_destroy {
 		}
 	}
 }
-
-
-
-# sub detach {
-# 	my( $rect, $app_rect ) =  @_;
-
-# 	my $parent =  $rect->{ parent };
-# 	my $children =  $parent->{ children };
-# 	@$children =  grep{ $_ != $rect } @$children;
-# }
-
-
-
-# sub parent_coord {
-# 	my( $rect, $x, $y ) =  @_;
-
-# 	if( $rect->{ parent } ) {
-# 		$x +=  $rect->{ parent }->{ x };
-# 		$y +=  $rect->{ parent }->{ y };
-
-# 		( $x, $y ) =  $rect->{ parent }->parent_coord( $x, $y );
-# 	}
-
-# 	return ( $x, $y );
-# }
-
 
 
 

@@ -53,6 +53,7 @@ sub draw {
 
 
 
+## Изменение размеров поля selection с отрисовкой
 sub on_resize {
 	my( $sel, $h, $e ) =  @_;
 
@@ -63,6 +64,7 @@ sub on_resize {
 
 
 
+## Изменение размеров поля selection в соответствии с координатами курсора
 sub resize {
 	my( $sel, $mx, $my ) =  @_;
 

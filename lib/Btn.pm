@@ -26,7 +26,7 @@ sub new {
 }
 
 
-
+## Возвращает объекту стартовую позицию
 sub set_start_position {
 	my( $btn_del ) =  @_;
 
@@ -35,7 +35,7 @@ sub set_start_position {
 }
 
 
-
+## Создаёт новую фигуру(при нажатии кнопки мыши)
 sub on_press {
 	my( $btn, $h, $e ) =  @_;
 
@@ -91,17 +91,21 @@ sub is_moveable {
 
 
 
+## Меняет цвет объекта-кнопки (если над ней курсор)
 sub on_mouse_over {
-	my( $btn_del ) =  @_;
+	my( $btn ) =  @_;
 
 
-	$btn_del->{ c }{ b } =  250;
+	$btn->{ c }{ b } =  250;
 }
 
-sub on_mouse_out {
-	my( $btn_del ) =  @_;
 
-	$btn_del->{ c }{ b } =  190;
+
+## Возвращает объекту-кнопке её цвет (когда курсор с него уходит)
+sub on_mouse_out {
+	my( $btn ) =  @_;
+
+	$btn->{ c }{ b } =  190;
 }
 
 
