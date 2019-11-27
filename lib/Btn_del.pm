@@ -108,15 +108,16 @@ sub store {}
 
 
 sub on_mouse_over {
-	my( $btn ) =  @_;
+	my( $btn_del ) =  @_;
 
-	$btn->{ c }{ b } =  250;
+
+	$btn_del->{ c }{ b } =  250;
 }
 
 sub on_mouse_out {
-	my( $btn ) =  @_;
+	my( $btn_del ) =  @_;
 
-	$btn->{ c }{ b } =  0;
+	$btn_del->{ c }{ b } =  0;
 }
 
 

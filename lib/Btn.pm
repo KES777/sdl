@@ -91,5 +91,18 @@ sub is_moveable {
 
 
 
+sub on_mouse_over {
+	my( $btn_del ) =  @_;
+
+
+	$btn_del->{ c }{ b } =  250;
+}
+
+sub on_mouse_out {
+	my( $btn_del ) =  @_;
+
+	$btn_del->{ c }{ b } =  190;
+}
+
 
 1;

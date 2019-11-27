@@ -248,7 +248,6 @@ sub save_state {
 	$rect->{ start_y } =  $rect->{ y };
 
 	$rect->{ start_c } =  $rect->{ c };
-	# $rect->{ c       } =  Color->new( 0, 0, 200 );
 
 	$rect->{ dx } =  $tp_x - $rect->{ x };
 	$rect->{ dy } =  $tp_y - $rect->{ y };
@@ -478,15 +477,17 @@ sub resize_to {
 }
 
 sub on_mouse_over {
-	my( $btn ) =  @_;
+	my( $rect ) =  @_;
 
-	$btn->{ c }{ g } =  150;
+	# $rect->save_state;
+	$rect->{ c }{ g } =  150;
 }
 
 sub on_mouse_out {
-	my( $btn ) =  @_;
+	my( $rect ) =  @_;
 
-	$btn->{ c }{ g } =  0;
+	$rect->{ c }{ g } =  220;
+	# $rect->restore_state;
 }
 
 1;
