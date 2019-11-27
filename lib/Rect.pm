@@ -157,13 +157,16 @@ sub is_over {
 			}
 		}
 
-		return {
-			target 	=> $rect,
-			x      	=> $x,
-			y      	=> $y,
-			dx      => $x - $rect->{ x },
-			dy      => $y - $rect->{ y },
+
+		## !H
+		my $h =  {
+			target => $rect,             # Объект, над которым находится мышь
+			x      => $x - $rect->{ x },  # Координаты мыши отностельно левого верхнего угла объекта
+			y      => $y - $rect->{ y },
 		};
+
+		# DDP::p $h;
+		return $h;
 	}
 
 	return;
