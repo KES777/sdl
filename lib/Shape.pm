@@ -158,6 +158,38 @@ sub drop {
 }
 
 
+
+## Загружает из базы объекту его детей (создавая объекты для каждого ребёнка)
+## Загружает по рекурсии всем вложеным объектам их детей
+sub load_children {
+	my( $rect ) = @_;
+
+	my $child =  Util::db()->resultset( 'Rect' )->search({
+		parent_id => $rect->{ id }
+	});
+
+	for my $x ( $child->all ) {
+		if( $x->{ radius } ) {
+			my $c =  Circle->new( $x );
+			push $rect->{ children }->@*, $c;
+		}
+		else {
+			my $r =  Rect->new( $x );
+			push $rect->{ children }->@*, $r;
+		}
+	}
+	# $rect->{ children } =  [ map{ Rect->new( $_ ) } $child->all ];
+	for my $x ( $rect->{ children }->@* ) {
+		$x->{ parent_id } =  $rect->{ id };############parent_id
+		$x->{ parent } =  $rect;
+		weaken $x->{ parent };
+
+		$x->load_children;
+	}
+}
+
+
+
 ## Сохраняем (обновляем) все объекты грууппы, которые менялись, в базу
 sub store_group {
 	my( $shape ) =  @_;

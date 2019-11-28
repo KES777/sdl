@@ -318,13 +318,22 @@ sub calc_group_size {
 	my $w =   0;
 	my $h =  10;
 
-	for my $s ( @$children ) {
-		$s->move_to( 10, $h );
-		$s->{ c }{ r } =  $group->{ c }{ r } + 80;
-		$s->store;
+for my $s ( @$children ) {
+		if( $s->{ radius } ) {
+			my $r =  $s->{ radius };
+			$s->move_to( 10 + $r * 2, $h + $r * 2 );
+			$s->{ c }{ r } =  $group->{ c }{ r } + 80;
 
-		$h +=  $s->{ h } +10;
-		$w  =  $s->{ w } > $w ? $s->{ w } : $w;
+			$h +=  $r * 2 + 10;
+			$w  =  $r * 2 > $w ? $r * 2 : $w;
+		}
+		else {
+			$s->move_to( 10, $h );
+			$s->{ c }{ r } =  $group->{ c }{ r } + 80;
+
+			$h +=  $s->{ h } +10;
+			$w  =  $s->{ w } > $w ? $s->{ w } : $w;
+		}
 	}
 
 	$group->{ w } =  $w + 20;
@@ -361,25 +370,6 @@ sub move_to {
 	}
 }
 
-
-## Загружает из базы объекту его детей (создавая объекты для каждого ребёнка)
-## Загружает по рекурсии всем вложеным объектам их детей
-sub load_children {
-	my( $rect ) = @_;
-
-	my $child =  Util::db()->resultset( 'Rect' )->search({
-		parent_id => $rect->{ id }
-	});
-
-	$rect->{ children } =  [ map{ Rect->new( $_ ) } $child->all ];
-	for my $x ( $rect->{ children }->@* ) {
-		$x->{ parent_id } =  $rect->{ id };############parent_id
-		$x->{ parent } =  $rect;
-		weaken $x->{ parent };
-
-		$x->load_children;
-	}
-}
 
 
 ## Удаляет объект(пришедший в функцию) из числа детей его родителя
