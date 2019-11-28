@@ -168,17 +168,10 @@ sub load_children {
 		parent_id => $rect->{ id }
 	});
 
-	for my $x ( $child->all ) {
-		if( $x->{ radius } ) {
-			my $c =  Circle->new( $x );
-			push $rect->{ children }->@*, $c;
-		}
-		else {
-			my $r =  Rect->new( $x );
-			push $rect->{ children }->@*, $r;
-		}
-	}
-	# $rect->{ children } =  [ map{ Rect->new( $_ ) } $child->all ];
+	$rect->{ children } =  [ map{
+		my $type =  defined $_->radius? 'Circle' : 'Rect';
+		$type->new( $_ );
+	} $child->all ];
 	for my $x ( $rect->{ children }->@* ) {
 		$x->{ parent_id } =  $rect->{ id };############parent_id
 		$x->{ parent } =  $rect;
