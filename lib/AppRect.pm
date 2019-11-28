@@ -12,7 +12,8 @@ use Scalar::Util qw/ weaken blessed /;
 use Rect;
 use Btn_del;
 use Btn;
-
+use Circle;
+use Btn_Circle;
 
 use base 'Rect';
 
@@ -37,6 +38,10 @@ sub new {
 	$app_rect->{ btn } =  Btn->new( 0, 0, 50, 30 );
 	$app_rect->{ btn }{ parent } =  $app_rect;
 	weaken $app_rect->{ btn }{ parent };
+
+	$app_rect->{ btn_c } =  Btn_Circle->new;
+	$app_rect->{ btn_c }{ parent } =  $app_rect;
+	weaken $app_rect->{ btn_c }{ parent };
 
 	$app_rect->{ btn_del } =  Btn_del->new;
 	$app_rect->{ btn_del }{ parent } =  $app_rect;
@@ -404,6 +409,7 @@ sub draw {
 
 	$app_rect->{ btn     }->draw( $app_rect->{ app } );
 	$app_rect->{ btn_del }->draw( $app_rect->{ app } );
+	$app_rect->{ btn_c   }->draw;
 	if( $app_rect->{ first } ) {
 		$app_rect->{ first }->draw( $app_rect->{ app } );
 	}
