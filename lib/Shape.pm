@@ -203,6 +203,55 @@ sub resize {
 	$shape->resize_to( $x, $y );
 }
 
+## Включает свойство click/dbclick
+sub on_click {
+	my( $shape, $app_rect, $e ) =  @_;
+
+	$shape or return;
+
+	$app_rect->{ d_time } =  SDL::get_ticks;
+	if( $app_rect->{ dbclick_x  } == $e->motion_x  &&
+		$app_rect->{ dbclick_y  } == $e->motion_y  &&
+	 	$app_rect->{ dbclick    } == $shape        &&
+	 	$app_rect->{ d_time } - $app_rect->{ click_time } < 200
+	 ) {
+		$shape->dbclick( $app_rect );
+		return;
+	}
+
+	$app_rect->{ dbclick_x  } =  $e->motion_x;
+	$app_rect->{ dbclick_y  } =  $e->motion_y;
+	$app_rect->{ dbclick    } =  $shape;
+	$app_rect->{ click_time } =  SDL::get_ticks;
+
+	$shape->click;
+}
+
+
+
+sub click {
+	my( $shape ) =  @_;
+
+		$shape->draw_black;
+		$shape->{ w } +=  5;
+}
+
+
+
+sub dbclick {
+	my( $shape, $app_rect ) =  @_;
+
+	$shape->draw_black;
+	$shape->{ y } +=  20;
+
+	delete $app_rect->{ dbclick_x };
+	delete $app_rect->{ dbclick_y };
+	delete $app_rect->{ dbclick   };
+}
+
+
+
+
 
 
 1;
