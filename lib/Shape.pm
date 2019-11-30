@@ -251,7 +251,12 @@ sub dbclick {
 
 
 
+sub on_hint {
+	my( $shape, $app_rect ) =  @_;
 
+	$shape->draw_black;
+	$shape->{ x } +=  20;
+}
 
 
 1;

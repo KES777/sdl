@@ -3,6 +3,9 @@ package AppRect;
 use strict;
 use warnings;
 
+use threads;
+use threads::shared;
+use SDL::Time;
 
 use SDLx::App;
 use SDL::Event;
@@ -22,6 +25,17 @@ use base 'Rect';
 my $APP;
 sub SCREEN { return $APP }
 
+## Создаёт событие USEREVENT
+sub callback3 {
+	my $event =  SDL::Event->new();
+	$event->type( SDL_USEREVENT );
+	$event->user_code( 10 );
+	$event->user_data1( 'hello event' );
+
+	SDL::Events::push_event($event);
+
+	return 0;
+};
 
 
 sub new {
@@ -56,15 +70,30 @@ sub new {
 	$APP->add_show_handler ( sub{ $app_rect->draw } );
 
 
-
+	$APP->add_event_handler( sub{ _on_user_event( @_, $app_rect ) } );
 	$APP->add_event_handler( sub{ _on_mouse_move( @_, $app_rect ) } );
 	$APP->add_event_handler( sub{ _is_mousedown ( @_, $app_rect ) } );
 	$APP->add_event_handler( sub{ _is_mouseup   ( @_, $app_rect ) } );
+
+	$APP->add_event_handler( sub{ _is_hint      ( @_, $app_rect ) } );
+
 	$APP->add_event_handler( sub{ _drag_flag    ( @_, $app_rect ) } );
 
 	$APP->add_event_handler( sub{ _observer( @_, $app_rect ) } );
 
 	return $app_rect;
+}
+
+
+## Включает свойство hint (по событию USEREVENT )
+sub _on_user_event {
+	my( $e, $app, $app_rect ) =  @_;
+
+	$e->type == SDL_USEREVENT   or return;
+
+	if( my $h =  $app_rect->{ is_hint }{ target } ) {
+		$h->on_hint( $app_rect );
+	}
 }
 
 
@@ -426,5 +455,27 @@ sub draw {
 
 	$app_rect->{ app }->update;
 }
+
+
+## Включает/выключает таймер для hint
+sub _is_hint {
+	my( $e, $app, $app_rect ) =  @_;
+
+	$e->type == SDL_MOUSEMOTION
+		or return;
+
+
+	if( my $h =  $app_rect->{ is_hint } ) {
+		SDL::Time::remove_timer( $h->{ timer_id } );
+	}
+
+	my $timer_id =  SDL::Time::add_timer( 1000, 'AppRect::callback3' );
+	$app_rect->{ is_hint } =  {
+		target   =>  $app_rect->{ is_over }->{ target },
+		timer_id =>  $timer_id,
+	}
+}
+
+
 
 1;
