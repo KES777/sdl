@@ -395,7 +395,7 @@ sub child_destroy {
 sub is_over_res_field {
 	my( $shape, $x, $y ) =  @_;
 
-	$shape->Util::resize_field( $x, $y );
+	$shape->Util::resize_field_rect( $x, $y );
 }
 
 
