@@ -75,7 +75,6 @@ sub new {
 	$APP->add_event_handler( sub{ _is_mousedown ( @_, $app_rect ) } );
 	$APP->add_event_handler( sub{ _is_mouseup   ( @_, $app_rect ) } );
 
-	$APP->add_event_handler( sub{ _is_hint      ( @_, $app_rect ) } );
 
 	$APP->add_event_handler( sub{ _drag_flag    ( @_, $app_rect ) } );
 
@@ -331,6 +330,7 @@ sub _on_mouse_move {
 	}
 
 
+	##! OVER EVENT
 	## Send events to objects with additional info
 	# $app_rect->{ is_over } =  _is_over( $app_rect, $e->motion_x, $e->motion_y );
 	my $oo =  $app_rect->{ is_over };                             # OLD OVER
@@ -360,6 +360,19 @@ sub _on_mouse_move {
 		$h->{ draw }->on_resize( $h, $e );
 	}
 
+	##! HINT EVENT
+	if( my $h =  $app_rect->{ is_hint } ) {
+		delete $app_rect->{ is_hint };
+		SDL::Time::remove_timer( $h->{ timer_id } );
+	}
+
+	if( $no ) {
+		my $timer_id =  SDL::Time::add_timer( 1000, 'AppRect::callback3' );
+		$app_rect->{ is_hint } =  {
+			target   =>  $app_rect->{ is_over }->{ target },
+			timer_id =>  $timer_id,
+		}
+	}
 
 
 	#### Nazar
@@ -460,25 +473,8 @@ sub draw {
 }
 
 
-## Включает/выключает таймер для hint
-sub _is_hint {
-	my( $e, $app, $app_rect ) =  @_;
-
-	$e->type == SDL_MOUSEMOTION
-		or return;
-
-
-	if( my $h =  $app_rect->{ is_hint } ) {
-		SDL::Time::remove_timer( $h->{ timer_id } );
-	}
-
-	my $timer_id =  SDL::Time::add_timer( 1000, 'AppRect::callback3' );
-	$app_rect->{ is_hint } =  {
-		target   =>  $app_rect->{ is_over }->{ target },
-		timer_id =>  $timer_id,
-	}
-}
-
-
+# tv $app_rect->{ is_over }
+# tv %$app_rect
+# tv @array
 
 1;
