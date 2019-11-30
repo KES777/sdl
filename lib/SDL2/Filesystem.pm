@@ -1,0 +1,14 @@
+package SDL2::Filesystem;
+
+use strict;
+use warnings;
+
+
+sub attach {
+
+	my( $ffi ) =  @_;
+
+
+}
+
+1;

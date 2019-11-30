@@ -17,6 +17,8 @@ sub attach {
 	my( $ffi ) =  @_;
 
   # SDL2::Stdinc::attach( $ffi );
+  # SDL2::Rwops::attach( $ffi );
+  SDL2::Blendmode::attach( $ffi );
   SDL2::Pixels::attach( $ffi );
   SDL2::Rect::attach( $ffi );
 

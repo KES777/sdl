@@ -3,6 +3,8 @@ package SDL2::Pixels;
 use strict;
 use warnings;
 
+use SDL2::Stdinc;
+use SDL2::Endian;
 
 my $processed;
 sub attach {
