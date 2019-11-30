@@ -90,6 +90,9 @@ sub is_moveable {
 
 }
 
+sub on_click { }
+sub on_dbl_click { }
+
 
 
 ## Меняет цвет объекта-кнопки (если над ней курсор)

@@ -16,8 +16,18 @@ sub is_moveable {
 
 
 
-sub on_mouse_over {}
-sub on_mouse_out {}
+sub on_mouse_over {
+	my( $shape, $h, $e ) =  @_;
+
+
+}
+
+
+
+sub on_mouse_out {
+	my( $shape ) =  @_;
+}
+
 
 
  sub moving_on {
@@ -158,7 +168,6 @@ sub drop {
 }
 
 
-
 ## Загружает из базы объекту его детей (создавая объекты для каждого ребёнка)
 ## Загружает по рекурсии всем вложеным объектам их детей
 sub load_children {
@@ -183,6 +192,7 @@ sub load_children {
 
 
 
+
 ## Сохраняем (обновляем) все объекты грууппы, которые менялись, в базу
 sub store_group {
 	my( $shape ) =  @_;
@@ -203,50 +213,23 @@ sub resize {
 	$shape->resize_to( $x, $y );
 }
 
+
+
 ## Включает свойство click/dbclick
 sub on_click {
-	my( $shape, $app_rect, $e ) =  @_;
-
-	$shape or return;
-
-	$app_rect->{ d_time } =  SDL::get_ticks;
-	if( $app_rect->{ dbclick_x  } == $e->motion_x  &&
-		$app_rect->{ dbclick_y  } == $e->motion_y  &&
-	 	$app_rect->{ dbclick    } == $shape        &&
-	 	$app_rect->{ d_time } - $app_rect->{ click_time } < 200
-	 ) {
-		$shape->dbclick( $app_rect );
-		return;
-	}
-
-	$app_rect->{ dbclick_x  } =  $e->motion_x;
-	$app_rect->{ dbclick_y  } =  $e->motion_y;
-	$app_rect->{ dbclick    } =  $shape;
-	$app_rect->{ click_time } =  SDL::get_ticks;
-
-	$shape->click;
-}
-
-
-
-sub click {
 	my( $shape ) =  @_;
 
-		$shape->draw_black;
-		$shape->{ w } +=  5;
+	$shape->draw_black;
+	$shape->{ w } +=  50;
 }
 
 
 
-sub dbclick {
-	my( $shape, $app_rect ) =  @_;
+sub on_dbl_click {
+	my( $shape ) =  @_;
 
 	$shape->draw_black;
-	$shape->{ y } +=  20;
-
-	delete $app_rect->{ dbclick_x };
-	delete $app_rect->{ dbclick_y };
-	delete $app_rect->{ dbclick   };
+	$shape->{ w } -=  50;
 }
 
 

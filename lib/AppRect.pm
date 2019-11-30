@@ -197,8 +197,6 @@ sub _is_mousedown {
 	$e->type == SDL_MOUSEBUTTONDOWN
 		or return;
 
-	$app_rect->{ click_x } =  $e->motion_x;
-	$app_rect->{ click_y } =  $e->motion_y;
 
 	## Создание свойства (ключа) "изменение размеров объекта"
 	if( my $h =  $app_rect->{ is_over_rf } ) {
@@ -239,6 +237,13 @@ sub _is_mousedown {
 		DDP::p $h;
 		$app_rect->{ is_selection } =  $h;
 	}
+
+
+	##! CLICK
+	if( my $h =  $app_rect->{ is_over } ) {
+		$app_rect->{ is_click }{ type } =  'CLICK';
+		$app_rect->{ is_click }->@{ keys %$h } =  values %$h;
+	}
 }
 
 
@@ -262,14 +267,6 @@ sub _is_mouseup {
 
 	$e->type == SDL_MOUSEBUTTONUP
 		or return;
-
-	## Включает свойство on_click
-	if( $app_rect->{ click_x } ==  $e->motion_x  &&
-		$app_rect->{ click_y } ==  $e->motion_y  &&
-		$app_rect->{ is_over }{ target }
-	){
-		$app_rect->{ is_over }{ target }->on_click( $app_rect, $e );
-	}
 
 	delete $app_rect->{ drag };
 
@@ -308,6 +305,30 @@ sub _is_mouseup {
 		# $h->draw_black;
 		$h->{ draw }->draw_black;
 		delete $app_rect->{ is_selection };
+	}
+
+
+	##! CLICK
+	if( my $ch =  $app_rect->{ is_click } ) {
+		delete $app_rect->{ is_click };
+
+
+		##! DBL CLICK
+		if( my $dh =  $app_rect->{ is_dbl_click } ) {
+			delete $app_rect->{ is_dbl_click }; # TODO: удалять лучше сначала
+
+			if( $dh->{ target } == $ch->{ target }
+				&&  (SDL::get_ticks() -$dh->{ time }) < 2000
+			) {
+				$dh->{ target }->on_dbl_click( $dh, $e );
+			}
+
+		}
+		else {
+			$ch->{ target }->on_click( $ch, $e );
+			$app_rect->{ is_dbl_click }->@{ keys %$ch } =  values %$ch;
+			$app_rect->{ is_dbl_click }{ time } =  SDL::get_ticks();
+		}
 	}
 }
 
@@ -373,6 +394,9 @@ sub _on_mouse_move {
 			timer_id =>  $timer_id,
 		}
 	}
+
+	##! CLICK
+	delete $app_rect->{ is_click };
 
 
 	#### Nazar

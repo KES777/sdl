@@ -39,6 +39,9 @@ sub set_start_position {
 }
 
 
+sub on_click { }
+sub on_dbl_click { }
+
 
 sub draw {
 	my( $app_rect, $screen, $x, $y ) =  @_;

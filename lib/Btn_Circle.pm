@@ -51,6 +51,9 @@ sub set_color {
 	$btn_c->{ c } =   Color->new( $r, $g, $b );
 }
 
+sub on_click { }
+sub on_dbl_click { }
+
 
 ## Создаёт новую фигуру(при нажатии кнопки мыши)
 sub on_press {
@@ -65,7 +68,6 @@ sub on_press {
 	$rect->store;
 	push $btn_c->{ parent }->{ children }->@*, $rect;
 }
-
 
 
 
