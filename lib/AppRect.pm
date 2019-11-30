@@ -90,8 +90,8 @@ sub _on_user_event {
 
 	$e->type == SDL_USEREVENT   or return;
 
-	if( my $h =  $app_rect->{ is_hint }{ target } ) {
-		$h->on_hint( $app_rect );
+	if( my $h =  $app_rect->{ is_hint } ) {
+		$h->{ target }->on_hint( $h, $e, $app_rect );
 	}
 }
 
