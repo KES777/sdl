@@ -1,7 +1,37 @@
+use strict;
+use warnings;
+
 package SDL2::Video;
 
+# include "SDL_stdinc.h"
+#include "SDL_pixels.h"
+#include "SDL_rect.h"
+#include "SDL_surface.h"
+
+#include "begin_code.h"
+
+use SDL2::Stdinc;
+use SDL2::Pixels;
+use SDL2::Rect;
+use SDL2::Surface;
+
+my $processed;
 sub attach {
+	!$processed   or return;
+	$processed++;
+
 	my( $ffi ) =  @_;
+	$ffi->type( 'opaque' => 'SDL_DisplayOrientation_ptr' );
+	$ffi->type( 'opaque' => 'SDL_DisplayMode_ptr' );
+	$ffi->type( 'opaque' => 'SDL_Window_ptr' );
+	$ffi->type( 'opaque' => 'SDL_HitTest_ptr' );
+	$ffi->type( 'opaque' => 'SDL_GLattr_ptr' );
+	$ffi->type( 'opaque' => 'SDL_GLContext_ptr' );
+
+	# SDL2::Stdinc::attach( $ffi );
+	SDL2::Pixels::attach( $ffi );
+	SDL2::Rect::attach( $ffi );
+	SDL2::Surface::attach( $ffi );
 
 	# extern DECLSPEC int SDLCALL SDL_GetNumVideoDrivers(void);
 	$ffi->attach( SDL_GetNumVideoDrivers => [ 'void'  ] => 'int' );
@@ -31,7 +61,6 @@ sub attach {
 
 
 	# extern DECLSPEC int SDLCALL SDL_GetDisplayBounds(int displayIndex, SDL_Rect * rect);
-	$ffi->type( 'opaque' => 'SDL_Rect_ptr' );
 	$ffi->attach( SDL_GetDisplayBounds   => [ 'int', 'SDL_Rect_ptr' ] => 'int' );
 
 
@@ -44,7 +73,6 @@ sub attach {
 
 
 	# extern DECLSPEC SDL_DisplayOrientation SDLCALL SDL_GetDisplayOrientation(int displayIndex);
-	$ffi->type( 'opaque' => 'SDL_DisplayOrientation_ptr' );
 	$ffi->attach( SDL_GetDisplayOrientation => [ 'int' ] => 'SDL_DisplayOrientation_ptr' );
 
 
@@ -54,7 +82,6 @@ sub attach {
 
 	# extern DECLSPEC int SDLCALL SDL_GetDisplayMode(int displayIndex, int modeIndex,
 	#                                                SDL_DisplayMode * mode);
-	$ffi->type( 'opaque' => 'SDL_DisplayMode_ptr' );
 	$ffi->attach( SDL_GetDisplayMode    => [ 'int', 'int', 'SDL_DisplayMode_ptr' ] => 'int' );
 
 
@@ -71,7 +98,6 @@ sub attach {
 
 
 	# extern DECLSPEC int SDLCALL SDL_GetWindowDisplayIndex(SDL_Window * window);
-	$ffi->type( 'opaque' => 'SDL_Window_ptr' );
 	$ffi->attach( SDL_GetWindowDisplayIndex    => [ 'SDL_Window_ptr' ] => 'int' );
 
 
@@ -124,7 +150,6 @@ sub attach {
 
 	# extern DECLSPEC void SDLCALL SDL_SetWindowIcon(SDL_Window * window,
 	#                                                SDL_Surface * icon);
-	$ffi->type( 'opaque' => 'SDL_Surface_ptr' );
 	$ffi->attach( SDL_SetWindowIcon => [ 'SDL_Window_ptr', 'SDL_Surface_ptr' ] =>  'void' );
 
 
@@ -187,13 +212,11 @@ sub attach {
 # ????????????????????????SDL_bool bordered
 	# extern DECLSPEC void SDLCALL SDL_SetWindowBordered(SDL_Window * window,
 	#                                                    SDL_bool bordered);
-	$ffi->type( 'opaque' => 'SDL_bool_ptr' );
 	$ffi->attach( SDL_SetWindowBordered => [ 'SDL_Window_ptr', 'SDL_bool_ptr' ] =>  'void' );
 
 # ????????????????????????SDL_bool resizable
 	# extern DECLSPEC void SDLCALL SDL_SetWindowResizable(SDL_Window * window,
 	#                                                     SDL_bool resizable);
-	# $ffi->type( 'opaque' => 'SDL_bool resizable_ptr' );
 	$ffi->attach( SDL_SetWindowResizable => [ 'SDL_Window_ptr', 'SDL_bool_ptr' ] =>  'void' );
 
 
@@ -296,8 +319,7 @@ sub attach {
 	# extern DECLSPEC int SDLCALL SDL_SetWindowHitTest(SDL_Window * window,
 	#                                                  SDL_HitTest callback,
 	#                                                  void *callback_data);
-	$ffi->type( 'opaque' => 'SDL_HitTest_ptr' );
-	$ffi->attach( SDL_SetWindowHitTest => [ 'SDL_Window_ptr', 'SDL_HitTest_ptr', 'void' ] =>  'int' );
+	$ffi->attach( SDL_SetWindowHitTest => [ 'SDL_Window_ptr', 'SDL_HitTest_ptr', 'opaque' ] =>  'int' );
 
 
 	# extern DECLSPEC void SDLCALL SDL_DestroyWindow(SDL_Window * window);
@@ -312,7 +334,7 @@ sub attach {
 	$ffi->attach( SDL_EnableScreenSaver => [ 'void' ] =>  'void' );
 
 
-	extern DECLSPEC void SDLCALL SDL_DisableScreenSaver(void);
+	# extern DECLSPEC void SDLCALL SDL_DisableScreenSaver(void);
 	$ffi->attach( SDL_DisableScreenSaver => [ 'void' ] =>  'void' );
 
 
@@ -338,7 +360,6 @@ sub attach {
 
 
 	# extern DECLSPEC int SDLCALL SDL_GL_SetAttribute(SDL_GLattr attr, int value);
-	$ffi->type( 'opaque' => 'SDL_GLattr_ptr' );
 	$ffi->attach( SDL_GL_SetAttribute => [ 'SDL_GLattr_ptr', 'int' ] =>  'int' );
 
 
@@ -348,7 +369,6 @@ sub attach {
 
 	# extern DECLSPEC SDL_GLContext SDLCALL SDL_GL_CreateContext(SDL_Window *
 	#                                                            window);
-	$ffi->type( 'opaque' => 'SDL_GLContext_ptr' );
 	$ffi->attach( SDL_GL_CreateContext => [ 'SDL_Window_ptr' ] =>  'SDL_GLContext_ptr' );
 
 
@@ -362,7 +382,7 @@ sub attach {
 
 
 	# extern DECLSPEC SDL_GLContext SDLCALL SDL_GL_GetCurrentContext(void);
-	$ffi->attach( SDL_GL_GetCurrentContext => [ 'void' ] =>  'SDL_GLContext_ptr'
+	$ffi->attach( SDL_GL_GetCurrentContext => [ 'void' ] =>  'SDL_GLContext_ptr' );
 
 
 	# extern DECLSPEC void SDLCALL SDL_GL_GetDrawableSize(SDL_Window * window, int *w,
@@ -380,6 +400,7 @@ sub attach {
 
 	# extern DECLSPEC void SDLCALL SDL_GL_SwapWindow(SDL_Window * window);
 	$ffi->attach( SDL_GL_SwapWindow => [ 'SDL_Window_ptr' ] =>  'void' );
+
 
 	# extern DECLSPEC void SDLCALL SDL_GL_DeleteContext(SDL_GLContext context);
 	$ffi->attach( SDL_GL_DeleteContext => [ 'SDL_GLContext_ptr' ] =>  'void' );

@@ -1,7 +1,21 @@
+use strict;
+use warnings;
+
 package SDL2::SDL;
+
+use SDL2::Stdinc;
+use SDL2::Rwops;
+use SDL2::Blendmode;
+use SDL2::Video;
 
 sub attach {
 	my( $ffi ) =  @_;
+
+
+	SDL2::Stdinc::attach( $ffi );
+	SDL2::Rwops::attach( $ffi );
+	SDL2::Blendmode::attach( $ffi );
+	SDL2::Video::attach( $ffi );
 
 	# extern DECLSPEC int SDLCALL SDL_Init(Uint32 flags);
 	# extern DECLSPEC int SDLCALL SDL_InitSubSystem(Uint32 flags);

@@ -1,7 +1,21 @@
 package SDL2::Pixels;
 
+use strict;
+use warnings;
+
+
+my $processed;
 sub attach {
+	!$processed   or return;
+	$processed++;
+
+
 	my( $ffi ) =  @_;
+
+	$ffi->type( 'opaque' => 'SDL_PixelFormat_ptr' );
+	$ffi->type( 'opaque' => 'SDL_Palette_ptr' );
+	$ffi->type( 'opaque' => 'SDL_Color_ptr' );
+
 
 
 	# extern DECLSPEC const char* SDLCALL SDL_GetPixelFormatName(Uint32 format);
@@ -14,7 +28,6 @@ sub attach {
 	#                                                             Uint32 * Gmask,
 	#                                                             Uint32 * Bmask,
 	#                                                             Uint32 * Amask);
-	$ffi->type( 'opaque' => 'SDL_bool_ptr' );
 	$ffi->attach( SDL_PixelFormatEnumToMasks  => [ 'uint32', 'int', 'uint32*', 'uint32*', 'uint32*', 'uint32*' ] => 'SDL_bool_ptr'  );
 
 
@@ -27,12 +40,10 @@ sub attach {
 
 
 	# extern DECLSPEC void SDLCALL SDL_FreeFormat(SDL_PixelFormat *format);
-	$ffi->type( 'opaque' => 'SDL_PixelFormat_ptr' );
 	$ffi->attach( SDL_FreeFormat  => [ 'SDL_PixelFormat_ptr' ] => 'void'  );
 
 
 	# extern DECLSPEC SDL_Palette *SDLCALL SDL_AllocPalette(int ncolors);
-	$ffi->type( 'opaque' => 'SDL_Palette_ptr' );
 	$ffi->attach( SDL_AllocPalette  => [ 'int' ] => 'SDL_Palette_ptr'  );
 
 
@@ -44,7 +55,6 @@ sub attach {
 	# extern DECLSPEC int SDLCALL SDL_SetPaletteColors(SDL_Palette * palette,
 	#                                                  const SDL_Color * colors,
 	#                                                  int firstcolor, int ncolors);
-	$ffi->type( 'opaque' => 'SDL_Color_ptr' );
 	$ffi->attach( SDL_SetPaletteColors  => [ 'SDL_Palette_ptr', 'SDL_Color_ptr', 'int', 'int' ] => 'int'  );
 
 
@@ -77,7 +87,7 @@ sub attach {
 
 
 	# extern DECLSPEC void SDLCALL SDL_CalculateGammaRamp(float gamma, Uint16 * ramp);
-	$ffi->attach( SDL_CalculateGammaRamp  => [ 'fload', 'uint16*' ] => 'void'  );
+	$ffi->attach( SDL_CalculateGammaRamp  => [ 'float', 'uint16*' ] => 'void'  );
 
 }
 
