@@ -448,8 +448,10 @@ sub resize_to {
 		if ( $rect->{ radius } < ( $square->{ w } + 20 ) / 2 ) {
 			$rect->{ radius } =  ( $square->{ w } + 20 ) / 2;
 		}
-		delete $square->{ h };
-		delete $square->{ w };
+		if( $square->{ radius } ) {
+			delete $square->{ h };
+			delete $square->{ w };
+		}
 	}
 
 	if( $rect->{ radius } < $h / 2 ) {
