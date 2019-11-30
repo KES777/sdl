@@ -318,7 +318,9 @@ sub calc_group_size {
 		if( $s->{ radius } ) {
 			my $r =  $s->{ radius };
 			$s->move_to( 10 + $r * 2, $h + $r * 2 );
-			$s->{ c }{ r } =  $group->{ c }{ r } + 80;
+			if( $s->{ c }{ b } < 225 ) {
+				$s->{ c }{ b } =  $group->{ c }{ b } + 30;
+			}
 
 			$h +=  $r * 2 + 10;
 			$w  =  $r * 2 > $w ? $r * 2 : $w;
@@ -337,7 +339,7 @@ sub calc_group_size {
 	$res =  $h < $w + 20 ? $w + 20 : $h;
 	$group->{ radius } =  $res / 2;
 	if( $group->{ radius } *2 < 50 ) {
-		$group->{ radius } =  50;
+		$group->{ radius } =  25;
 	}
 
 }

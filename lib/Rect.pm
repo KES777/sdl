@@ -318,11 +318,13 @@ sub calc_group_size {
 	my $w =   0;
 	my $h =  10;
 
-for my $s ( @$children ) {
+	for my $s ( @$children ) {
 		if( $s->{ radius } ) {
 			my $r =  $s->{ radius };
 			$s->move_to( 10 + $r * 2, $h + $r * 2 );
-			$s->{ c }{ r } =  $group->{ c }{ r } + 80;
+			if( $s->{ c }{ r } < 225 ) {
+				$s->{ c }{ r } =  $group->{ c }{ r } + 30;
+			}
 
 			$h +=  $r * 2 + 10;
 			$w  =  $r * 2 > $w ? $r * 2 : $w;
