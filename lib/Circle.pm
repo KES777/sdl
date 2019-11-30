@@ -417,4 +417,47 @@ sub on_mouse_out {
 }
 
 
+
+sub on_press {
+	my( $shape, $h, $e ) =  @_;
+
+}
+
+
+
+## Изменяет размер объекта в соответсвии с координатами курсора
+sub resize_to {
+	my( $rect, $x, $y ) =  @_;
+
+	$rect->{ radius } =  $x - $rect->{ x };
+	if( $x - $rect->{ x } < 25 ) {
+		$rect->{ radius } =  25;
+	}
+
+	$rect->{ children } or return;
+
+	my $h = 10;
+	for my $square( $rect->{ children }->@* ) {
+		if( !$square->{ h }  &&  !$square->{ w } ) {
+			$square->{ h } =  $square->{ radius } * 2;
+			$square->{ w } =  $square->{ radius } * 2;
+		}
+
+		$h +=  $square->{ h } + 10;
+
+		if ( $rect->{ radius } < ( $square->{ w } + 20 ) / 2 ) {
+			$rect->{ radius } =  ( $square->{ w } + 20 ) / 2;
+		}
+		delete $square->{ h };
+		delete $square->{ w };
+	}
+
+	if( $rect->{ radius } < $h / 2 ) {
+		$rect->{ radius } =  $h / 2;
+	}
+}
+
+
+
+
 1;

@@ -428,12 +428,19 @@ sub resize_to {
 	$rect->{ children } or return;
 
 	my $h = 10;
-	for $square( $rect->{ children }->@* ) {
+	for my $square( $rect->{ children }->@* ) {
+		if( !$square->{ h }  &&  !$square->{ w } ) {
+			$square->{ h } =  $square->{ radius } * 2;
+			$square->{ w } =  $square->{ radius } * 2;
+		}
+
 		$h +=  $square->{ h } + 10;
 
 		if ( $rect->{ w } < $square->{ w } + 20 ) {
 			$rect->{ w } =  $square->{ w } + 20;
 		}
+		delete $square->{ h };
+		delete $square->{ w };
 	}
 
 	if( $rect->{ h } < $h ) {
