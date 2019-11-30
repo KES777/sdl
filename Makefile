@@ -13,7 +13,7 @@ export PERL5LIB :=  ${LOCAL_LIBS}:${PERL5LIB}
 
 DOCKER_CONTAINER :=  postgres-db
 
-DEBUG_CMD = PERLDB_OPTS="white_box" PERL5DB="use DB::Hooks qw'::Terminal NonStop'" perl -d
+DEBUG_CMD = PERLDB_OPTS="white_box" PERL5DB="use DB::Hooks qw'::Terminal ::TraceVariable NonStop'" perl -d
 
 
 # gen_conf:
@@ -168,7 +168,7 @@ dbpopulateone:
 setenv:
 	export PATH=${PATH}
 	export PERL5LIB=${LOCAL_LIBS}
-	export PERL5DB="use DB::Hooks qw'::Terminal NonStop'"
+	export PERL5DB="use DB::Hooks qw'::Terminal ::TraceVariable NonStop'"
 	export PERLDB_OPTS="white_box"
 	export MOJO_INACTIVITY_TIMEOUT=0
 
