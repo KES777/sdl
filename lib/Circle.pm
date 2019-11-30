@@ -210,7 +210,7 @@ sub mouse_target_square {
 sub is_over_res_field {
 	my( $shape, $x, $y ) =  @_;
 
-	$shape->Util::resize_field( $x, $y );
+	$shape->Util::resize_field_circle( $x, $y );
 }
 
 
