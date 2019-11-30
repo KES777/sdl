@@ -435,6 +435,15 @@ sub _is_over {
 }
 
 
+
+sub refresh_over {
+	my( $app_rect, $x, $y ) =  @_;
+
+	# $app_rect->{ is_over } =  _is_over( $app_rect, $x, $y );
+	$app_rect->{ is_over } =  _is_over( @_ );
+}
+
+
 ## Возвращает объект, если над его полем resize находится курсор
 sub _is_over_res_field {
 	my( $app_rect, $x, $y ) =  @_;
