@@ -432,21 +432,11 @@ sub _is_over_res_field {
 sub can_select {
 	my( $app_rect, $x, $y ) =  @_;
 
-	for my $child ( @$app_rect ){
+	for my $child ( @$app_rect ){## В is_over проверяем толко $app_rect->{ children }
 		$child->is_over( $x, $y )   or next;
 
 			return;
 	}
-
-	if( $app_rect->{ btn }->is_over( $x, $y ) ) {
-		return;
-	}
-
-	if( $app_rect->{ btn_del }->is_over( $x, $y ) ) {
-		return;
-	}
-
-	return 1;
 }
 
 
