@@ -210,15 +210,18 @@ sub _is_mousedown {
 
 	## Создание свойства (ключа) "передвижение объекта"
 	if( (my $h =  $app_rect->{ is_over })  &&  !$app_rect->{ is_over_rf } ) {
-		$h->{ target }->on_press( $h, $e );
+		if( $h->{ target } ){
+			$h->{ target }->on_press( $h, $e );
 
-		if( $h->{ target }->{ parent }  &&  $app_rect->{ drag } ) {
-			$h->{ target }->drag( $h, $app_rect, $e );
-		}
 
-		if( my $move =  $h->{ target }->is_moveable( $h, $e ) ) {
-			$app_rect->{ is_moveable } =  $move;
-			$move->{ target }->moving_on( $e );
+			if( $h->{ target }->{ parent }  &&  $app_rect->{ drag } ) {
+				$h->{ target }->drag( $h, $app_rect, $e );
+			}
+
+			if( my $move =  $h->{ target }->is_moveable( $h, $e ) ) {
+				$app_rect->{ is_moveable } =  $move;
+				$move->{ target }->moving_on( $e );
+			}
 		}
 	}
 
