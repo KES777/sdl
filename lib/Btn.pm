@@ -50,15 +50,16 @@ sub on_press {
 
 
 sub draw {
-	my( $app_rect, $app, $x, $y ) =  @_;
+	my( $app_rect, $screen, $x, $y ) =  @_;
 
+	$screen //=  AppRect::SCREEN();
 	$x //=  0;
 	$y //=  0;
 
 	$x += $app_rect->{ x };
 	$y += $app_rect->{ y };
 
-	$app->draw_rect([
+	$screen->draw_rect([
 		$x,
 		$y,
 		$app_rect->{ w },
@@ -67,7 +68,7 @@ sub draw {
 		255,255,255,255
 	]);
 	#circuit
-	$app->draw_rect([
+	$screen->draw_rect([
 		$x +1,
 		$y +1,
 		$app_rect->{ w }-2,

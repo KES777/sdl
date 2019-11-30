@@ -452,11 +452,11 @@ sub draw {
 		}
 	}
 
-	$app_rect->{ btn     }->draw( $app_rect->{ app } );
-	$app_rect->{ btn_del }->draw( $app_rect->{ app } );
+	$app_rect->{ btn     }->draw;
+	$app_rect->{ btn_del }->draw;
 	$app_rect->{ btn_c   }->draw;
 	if( $app_rect->{ first } ) {
-		$app_rect->{ first }->draw( $app_rect->{ app } );
+		$app_rect->{ first }->draw;
 	}
 
 	$app_rect->{ app }->update;
