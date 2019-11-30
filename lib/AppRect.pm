@@ -393,12 +393,12 @@ sub _on_mouse_move {
 }
 
 
-## Возвращает объект, над которым кусрор
+## Возвращает объект, над которым курсор
 sub _is_over {
 	my( $app_rect, $x, $y ) =  @_;
 
 	my $over;
-	my @interface =  ( $app_rect->{ btn }, $app_rect->{ btn_del } );
+	my @interface =  ( $app_rect->{ btn }, $app_rect->{ btn_del }, $app_rect->{ btn_c } );
 	for my $shape ( $app_rect->{ children }->@*, @interface ) {
 		$over =  $shape->is_over( $x, $y )
 			or next;
