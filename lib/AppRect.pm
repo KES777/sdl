@@ -313,15 +313,15 @@ sub _is_mouseup {
 
 
 		##! DBL CLICK
-		if( my $dh =  $app_rect->{ is_dbl_click } ) {
+		my $dh =  $app_rect->{ is_dbl_click };
+		if( $dh ) {
 			delete $app_rect->{ is_dbl_click }; # TODO: удалять лучше сначала
+		}
 
-			if( $dh->{ target } == $ch->{ target }
-				&&  (SDL::get_ticks() -$dh->{ time }) < 2000
+		if( $dh->{ target } == $ch->{ target }
+				&&  (SDL::get_ticks() -$dh->{ time }) < 1000
 			) {
 				$dh->{ target }->on_dbl_click( $dh, $e );
-			}
-
 		}
 		else {
 			$ch->{ target }->on_click( $ch, $e );
