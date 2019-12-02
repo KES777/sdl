@@ -44,20 +44,23 @@ sub on_dbl_click { }
 
 
 sub draw {
-	my( $app_rect, $screen, $x, $y ) =  @_;
+	my( $btn_del, $screen, $x, $y ) =  @_;
+
+	$btn_del->draw_black;
+	$btn_del->save_draw_coord;
 
 	$screen //=  AppRect::SCREEN();
 	$x //=  0;
 	$y //=  0;
 
-	$x += $app_rect->{ x };
-	$y += $app_rect->{ y };
+	$x += $btn_del->{ x };
+	$y += $btn_del->{ y };
 
 	$screen->draw_rect([
 		$x,
 		$y,
-		$app_rect->{ w },
-		$app_rect->{ h },
+		$btn_del->{ w },
+		$btn_del->{ h },
 	],[
 		255,255,255,255
 	]);
@@ -65,10 +68,10 @@ sub draw {
 	$screen->draw_rect([
 		$x +1,
 		$y +1,
-		$app_rect->{ w }-2,
-		$app_rect->{ h }-2,
+		$btn_del->{ w }-2,
+		$btn_del->{ h }-2,
 	],[
-		$app_rect->{ c }->get()
+		$btn_del->{ c }->get()
 	]);
 }
 
@@ -84,7 +87,7 @@ sub moving_off {
 	if( $app_rect->{ btn }->is_over( $e->motion_x, $e->motion_y ) ) {
 		$app_rect->{ children } =  ();
 		Util::db()->resultset( 'Rect' )->delete;
-		$app_rect->draw_black;
+		$app_rect->draw_black;## Затираем перед удалением
 
 		return;
 	}
@@ -95,10 +98,7 @@ sub moving_off {
 		my $x;
 		if( $shape->is_over( $e->motion_x, $e->motion_y ) ) {
 			$x =  $shape;
-			$shape->draw_black;
-		}
-
-		if( $x ) {
+			$shape->draw_black;## Затираем перед удалением
 			$x->child_destroy;#удаление из базы по id
 		}
 
@@ -113,14 +113,11 @@ sub start_position {
 	my( $btn_del ) =  @_;
 
 	# $btn_del->restore_state;
-	$btn_del->draw_black;
 	$btn_del->set_start_position;
 	$btn_del->set_start_color;
 }
 
 
-
-sub store {}
 
 
 

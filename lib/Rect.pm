@@ -63,15 +63,15 @@ sub draw_black {
 	$x //=  0;
 	$y //=  0;
 
-	$x += $rect->{ x };
-	$y += $rect->{ y };
+	$x += $rect->{ ox } // $rect->{ x };
+	$y += $rect->{ oy } // $rect->{ y };
 
 
 	$screen->draw_rect([
 		$x,
 		$y,
-		$rect->{ w },
-		$rect->{ h },
+		$rect->{ ow } // $rect->{ w },
+		$rect->{ oh } // $rect->{ h },
 	],[ 0, 0, 0, 0 ]);
 }
 
@@ -79,6 +79,10 @@ sub draw_black {
 
 sub draw {
 	my( $rect, $screen, $x, $y ) = @_;
+
+	$rect->draw_black;
+	$rect->save_draw_coord;
+
 
 	$screen //=  AppRect::SCREEN();
 	$x //=  0;

@@ -302,8 +302,7 @@ sub _is_mouseup {
 			$group->{ target }->on_group( $h, $e, $group );
 		}
 
-		# $h->draw_black;
-		$h->{ draw }->draw_black;
+		$h->{ draw }->draw_black;## Затираем перед удалением
 		delete $app_rect->{ is_selection };
 	}
 

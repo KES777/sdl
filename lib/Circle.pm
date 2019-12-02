@@ -53,16 +53,16 @@ sub new {
 
 
 sub draw_black {
-	my( $rect, $screen, $x, $y ) = @_;
+	my( $circle, $screen, $x, $y ) = @_;
 
 	$screen //=  AppRect::SCREEN();
 	$x //=  0;
 	$y //=  0;
 
-	$x += $rect->{ x };
-	$y += $rect->{ y };
+	$x +=  $circle->{ ox } // $circle->{ x };
+	$y +=  $circle->{ oy } // $circle->{ y };
 
-	my $r    =  $rect->{ radius };
+	my $r    =  $circle->{ oradius } // $circle->{ radius };
 	my $diam =  $r * 2;
 	$screen->draw_rect([
 		$x -$r,
@@ -76,16 +76,19 @@ sub draw_black {
 
 
 sub draw {
-	my( $rect, $screen, $x, $y ) = @_;
+	my( $circle, $screen, $x, $y ) = @_;
+
+	$circle->draw_black;
+	$circle->save_draw_coord;
 
 	$screen //=  AppRect::SCREEN();
 	$x //=  0;
 	$y //=  0;
 
-	$x += $rect->{ x };
-	$y += $rect->{ y };
+	$x += $circle->{ x };
+	$y += $circle->{ y };
 
-	my $r    =  $rect->{ radius };
+	my $r    =  $circle->{ radius };
 	my $diam =  $r * 2;
 	$screen->draw_rect([
 		$x -$r,
@@ -102,13 +105,13 @@ sub draw {
 		$diam-4,
 		$diam-4,
 	],[
-		$rect->{ c }->get()
+		$circle->{ c }->get()
 	]);
 
 	#size_button
 	$screen->draw_rect([
 		$x + $r -15,
-		$y + $r -10,
+		$y -5,
 		15,
 		10,
 	],[
@@ -116,11 +119,22 @@ sub draw {
 	]);
 
 
-	if( $rect->{ children } ) {
-		for my $s ( $rect->{ children }->@* ) {
+	if( $circle->{ children } ) {
+		for my $s ( $circle->{ children }->@* ) {
 			$s->draw( $screen, $x -$r, $y -$r );
 		}
 	}
+}
+
+
+
+## Сохраняет состояние объекта для draw_black его перед следующей отрисовкой
+sub save_draw_coord {
+	my( $circle ) =  @_;
+
+	$circle->{ ox } =  $circle->{ x };
+	$circle->{ oy } =  $circle->{ y };
+	$circle->{ oradius } =  $circle->{ radius };
 }
 
 
