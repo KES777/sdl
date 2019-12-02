@@ -364,10 +364,10 @@ sub resize_group {
 	my( $parent ) =  @_;
 
 	my @children =  $parent->{ children }->@*;
-	calc_group_size( $parent, \@children );
+	$parent->calc_group_size( \@children );
 
 	if( $parent->{ parent }{ id } ) {
-		resize_group( $parent->{ parent } );
+		$parent->{ parent }->resize_group;
 	}
 }
 
