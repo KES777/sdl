@@ -20,7 +20,7 @@ sub new {
 sub get {
 	my( $color ) =  @_;
 
-	return $color->@{qw/ r g b a /};
+	return map{ $_>255?255:$_ } $color->@{qw/ r g b a /};
 }
 
 
