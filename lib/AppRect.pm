@@ -21,7 +21,7 @@ use Btn_Circle;
 use base 'Rect';
 
 
-
+my $HINT_TIMER =  1000;
 my $APP;
 sub SCREEN { return $APP }
 
@@ -187,6 +187,21 @@ sub _can_group {
 		grouped =>  \@grouped,
 		alone   =>  \@alone,
 	};
+}
+
+
+
+sub make_handle {
+	my( $app_rect, $key, $props ) =  @_;
+
+	$props   or return delete $app_rect->{ $key };
+
+
+	my %h =  %$props;
+	$h{ app } =  $app_rect;
+	weaken $h{ app };
+
+	$app_rect->{ $key } =  \%h;
 }
 
 
@@ -387,11 +402,25 @@ sub _on_mouse_move {
 	}
 
 	if( $no ) {
-		my $timer_id =  SDL::Time::add_timer( 1000, 'AppRect::callback3' );
-		$app_rect->{ is_hint } =  {
+		my $timer_id =  SDL::Time::add_timer( $HINT_TIMER, 'AppRect::callback3' );
+		# $app_rect->{ is_hint } =  {
+		# 	target   =>  $app_rect->{ is_over }->{ target },
+		# 	timer_id =>  $timer_id,
+		# 	app      =>  $app_rect, #TODO: do this for all
+		# }
+		# weaken $app_rect->{ is_hint }{ app };
+
+		## V1
+		# $app_rect->{ is_hint } =  $app_rect->make_handle({
+		# 	target   =>  $app_rect->{ is_over }->{ target },
+		# 	timer_id =>  $timer_id,
+		# });
+
+		## V2
+		$app_rect->make_handle( is_hint => {
 			target   =>  $app_rect->{ is_over }->{ target },
 			timer_id =>  $timer_id,
-		}
+		});
 	}
 
 	##! CLICK
