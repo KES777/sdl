@@ -76,8 +76,6 @@ sub new {
 	$APP->add_event_handler( sub{ _is_mouseup   ( @_, $app_rect ) } );
 
 
-	$APP->add_event_handler( sub{ _drag_flag    ( @_, $app_rect ) } );
-
 	$APP->add_event_handler( sub{ _observer( @_, $app_rect ) } );
 
 	return $app_rect;
@@ -90,8 +88,9 @@ sub _on_user_event {
 
 	$e->type == SDL_USEREVENT   or return;
 
+	##!
 	if( my $h =  $app_rect->{ is_hint } ) {
-		$h->{ target }->on_hint( $h, $e, $app_rect );
+		$h->{ target }->on_hint( $h, $e );
 	}
 }
 
@@ -160,8 +159,6 @@ sub _observer {
 
 
 
-
-
 ## Проверяет, попали ли в поле selection объекты.
 # Если да, то разделить объекты на две группы
 sub _can_group {
@@ -220,23 +217,6 @@ sub _is_mousedown {
 	}
 
 
-	## Создание свойства (ключа) "передвижение объекта"
-	if( (my $h =  $app_rect->{ is_over })  &&  !$app_rect->{ is_over_rf } ) {
-		if( $h->{ target } ){
-			$h->{ target }->on_press( $h, $e );
-
-
-			if( $h->{ target }->{ parent }  &&  $app_rect->{ drag } ) {
-				$h->{ target }->drag( $h, $app_rect, $e );
-			}
-
-			if( my $move =  $h->{ target }->is_moveable( $h, $e ) ) {
-				$app_rect->make_handle( is_moveable => $move );
-				$move->{ target }->moving_on( $e );
-			}
-		}
-	}
-
 	## Создание поля selection
 	# if( (!$app_rect->{ is_over } || "CTRL_KEY"  )  &&  !$app_rect->{ is_selection } ) {
 	if( !$app_rect->{ is_over }  &&  !$app_rect->{ is_selection } ) {
@@ -254,26 +234,12 @@ sub _is_mousedown {
 	}
 
 
-	##! CLICK
+	##! PRESS
 	if( my $h =  $app_rect->{ is_over } ) {
-		$app_rect->make_handle( is_click => { %$h,
-			type => 'CLICK',
-		});
+		$h->{ target }->on_press( $h, $e );
+
+		$app_rect->make_handle( is_down => $h );
 	}
-}
-
-
-## Флаг для начала функции drag
-sub _drag_flag {
-	my( $e, $app, $app_rect ) =  @_;
-
-	$e->type == SDL_KEYDOWN
-	&&  $e->key_sym == SDLK_d
-		or return;
-
-
-	$app_rect->{ drag } =  1;
-
 }
 
 
@@ -296,20 +262,12 @@ sub _is_mouseup {
 		delete $app_rect->{ on_resize };
 	}
 
-	## Выключение свойства "движение объекта"
+
+	##! MOVE STOP
 	if( my $h =  $app_rect->{ is_moveable } ) {
-
-		my $shape =  $h->{ target };
-		# $shape->delete_target( $e, $app_rect );
-		$shape->moving_off( $app_rect, $e );
-		$shape->store;
-
 		delete $app_rect->{ is_moveable };
 
-		## Drop object
-		if( my $group_rect =  $shape->can_drop( $app_rect, $e->motion_x, $e->motion_y ) ) {
-			$group_rect->{ target }->drop( $shape, $app_rect, $e->motion_x, $e->motion_y );
-		}
+		$h->{ target }->on_drop( $h, $e );
 	}
 
 	## Создание группы из поля selection
@@ -323,26 +281,20 @@ sub _is_mouseup {
 	}
 
 
+	##! RELEASE
+	if( my $h =  $app_rect->{ is_over } ) {
+		$h->{ target }->on_release( $h, $e );
+	}
+
+
 	##! CLICK
-	if( my $ch =  $app_rect->{ is_click } ) {
-		delete $app_rect->{ is_click };
+	if( my $down =  $app_rect->{ is_down } ) {
+		delete $app_rect->{ is_down };
 
+		my $over =  $app_rect->{ is_over };
+		if( $over  &&  $over->{ target } == $down->{ target } ) {
+			$over->{ target }->on_click( $over, $e, $down ); # TODO: Move $e to first place
 
-		##! DBL CLICK
-		my $dh =  $app_rect->{ is_dbl_click };
-		if( $dh ) {
-			delete $app_rect->{ is_dbl_click }; # TODO: удалять лучше сначала
-		}
-
-		if( $dh->{ target } == $ch->{ target }
-				&&  (SDL::get_ticks() -$dh->{ time }) < 1000
-			) {
-				$dh->{ target }->on_dbl_click( $dh, $e );
-		}
-		else {
-			$ch->{ target }->on_click( $ch, $e );
-			$app_rect->{ is_dbl_click }->@{ keys %$ch } =  values %$ch;
-			$app_rect->{ is_dbl_click }{ time } =  SDL::get_ticks();
 		}
 	}
 }
@@ -386,15 +338,25 @@ sub _on_mouse_move {
 		$oo->{ target }->on_mouse_out( $e );
 	}
 
-	##
-	if( my $h =  $app_rect->{ is_moveable } ) {
-		$h->{ target }->on_move( $h, $e, $app_rect );
+
+	##! MOVE START
+	if( !$app_rect->{ is_moveable }  &&  my $h =  $app_rect->{ is_down } ) {
+		$h->{ target }->on_drag( $h, $e );
+		$app_rect->make_handle( is_moveable => %$h );
 	}
+
+
+	##! MOVEABLE
+	if( my $h =  $app_rect->{ is_moveable } ) {
+		$h->{ target }->on_move( $h, $e );
+	}
+
 
 	## Активация свойства "изменение размеров" поля выделения
 	if( my $h =  $app_rect->{ is_selection } ) {
 		$h->{ draw }->on_resize( $h, $e );
 	}
+
 
 	##! HINT EVENT
 	if( my $h =  $app_rect->{ is_hint } ) {
@@ -424,8 +386,6 @@ sub _on_mouse_move {
 		});
 	}
 
-	##! CLICK
-	delete $app_rect->{ is_click };
 
 
 	#### Nazar
@@ -438,6 +398,7 @@ sub _on_mouse_move {
 	if( !$app_rect->{ is_over } ) {
 		delete $app_rect->{ first };
 	}
+
 
 	## Активация свойства "передвижение", отрисовка этого объекта поверх других
 	if( my $h =  $app_rect->{ is_moveable } ) {
