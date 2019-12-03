@@ -288,13 +288,34 @@ sub _is_mouseup {
 
 
 	##! CLICK
-	if( my $down =  $app_rect->{ is_down } ) {
-		delete $app_rect->{ is_down };
+	my $up  =  $app_rect->{ is_over };
+	my $dw  =  delete $app_rect->{ is_down };
+	my $dcl =  delete $app_rect->{ is_dbl_click }; # TODO: Rename: dbl -> double
+	my $tcl =  delete $app_rect->{ is_triple_click };
 
-		my $over =  $app_rect->{ is_over };
-		if( $over  &&  $over->{ target } == $down->{ target } ) {
-			$over->{ target }->on_click( $over, $e, $down ); # TODO: Move $e to first place
 
+	if( $up  &&  $dw  &&  $up->{ target } == $dw->{ target } ) {
+		if   ( $tcl  &&  (SDL::get_ticks() -$tcl->{ time }) < 1000 ) {
+			$tcl->{ target }->on_triple_click( $up, $e );
+
+			# $app_rect->make_handle( is_quad_click => { %$over,
+			# 	time => SDL::get_ticks(),
+			# });
+		}
+		elsif( $dbl  &&  (SDL::get_ticks() -$dbl->{ time }) < 1000 ) {
+			$dcl->{ target }->on_dbl_click( $up, $e );
+
+			$app_rect->make_handle( is_triple_click => { %$over,
+				time => SDL::get_ticks(),
+			});
+		}
+		# else ( $dw   &&  (SDL::get_ticks() -$dbl->{ time }) < 1000 ) {
+		else {
+			$dcl->{ target }->on_click( $up, $e );
+
+			$app_rect->make_handle( is_dbl_click => { %$over,
+				time => SDL::get_ticks(),
+			});
 		}
 	}
 }
