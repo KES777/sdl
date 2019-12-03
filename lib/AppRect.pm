@@ -231,7 +231,7 @@ sub _is_mousedown {
 			}
 
 			if( my $move =  $h->{ target }->is_moveable( $h, $e ) ) {
-				$app_rect->{ is_moveable } =  $move;
+				$app_rect->make_handle( is_moveable => $move );
 				$move->{ target }->moving_on( $e );
 			}
 		}
@@ -256,8 +256,9 @@ sub _is_mousedown {
 
 	##! CLICK
 	if( my $h =  $app_rect->{ is_over } ) {
-		$app_rect->{ is_click }{ type } =  'CLICK';
-		$app_rect->{ is_click }->@{ keys %$h } =  values %$h;
+		$app_rect->make_handle( is_click => { %$h,
+			type => 'CLICK',
+		});
 	}
 }
 
@@ -370,7 +371,7 @@ sub _on_mouse_move {
 	# $app_rect->{ is_over } =  _is_over( $app_rect, $e->motion_x, $e->motion_y );
 	my $oo =  $app_rect->{ is_over };                             # OLD OVER
 	my $no =  _is_over( $app_rect, $e->motion_x, $e->motion_y );  # NEW OVER
-	$app_rect->{ is_over } =  $no;
+	$app_rect->make_handle( is_over => $no );
 
 	if( $no  &&  !$oo ) {
 		$no->{ target }->on_mouse_over( $e );
@@ -468,8 +469,9 @@ sub refresh_over {
 	my( $app_rect, $x, $y ) =  @_;
 
 	# $app_rect->{ is_over } =  _is_over( $app_rect, $x, $y );
-	$app_rect->{ is_over } =  _is_over( @_ );
+	$app_rect->make_handle( is_over => _is_over( @_ ) );
 }
+
 
 
 ## Возвращает объект, если над его полем resize находится курсор
