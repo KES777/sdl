@@ -366,15 +366,18 @@ sub _on_mouse_move {
 
 
 	##! MOVE START
-	if( !$app_rect->{ is_moveable }  &&  my $h =  $app_rect->{ is_down } ) {
-		$h->{ target }->on_drag( $h, $e );
-		$app_rect->make_handle( is_moveable => %$h );
+	if( !$app_rect->{ is_moveable }
+		&&	!$app_rect->{ on_resize }
+		&&  ( my $h =  $app_rect->{ is_down } )
+	) {
+		$h->{ target }->on_drag( $e, $h );
+		$app_rect->make_handle( is_moveable =>  $h );
 	}
 
 
 	##! MOVEABLE
 	if( my $h =  $app_rect->{ is_moveable } ) {
-		$h->{ target }->on_move( $h, $e );
+		$h->{ target }->on_move( $e, $h );
 	}
 
 
