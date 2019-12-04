@@ -290,7 +290,7 @@ sub _is_mouseup {
 	##! CLICK
 	my $up  =  $app_rect->{ is_over };
 	my $dw  =  delete $app_rect->{ is_down };
-	my $dcl =  delete $app_rect->{ is_dbl_click }; # TODO: Rename: dbl -> double
+	my $dcl =  delete $app_rect->{ is_double_click };
 	my $tcl =  delete $app_rect->{ is_triple_click };
 
 
@@ -302,18 +302,18 @@ sub _is_mouseup {
 			# 	time => SDL::get_ticks(),
 			# });
 		}
-		elsif( $dbl  &&  (SDL::get_ticks() -$dbl->{ time }) < 1000 ) {
-			$dcl->{ target }->on_dbl_click( $up, $e );
+		elsif( $dcl  &&  (SDL::get_ticks() -$dcl->{ time }) < 1000 ) {
+			$dcl->{ target }->on_double_click( $up, $e );
 
 			$app_rect->make_handle( is_triple_click => { %$over,
 				time => SDL::get_ticks(),
 			});
 		}
-		# else ( $dw   &&  (SDL::get_ticks() -$dbl->{ time }) < 1000 ) {
+		# else ( $dw   &&  (SDL::get_ticks() -$dcl->{ time }) < 1000 ) {
 		else {
 			$dcl->{ target }->on_click( $up, $e );
 
-			$app_rect->make_handle( is_dbl_click => { %$over,
+			$app_rect->make_handle( is_double_click => { %$over,
 				time => SDL::get_ticks(),
 			});
 		}

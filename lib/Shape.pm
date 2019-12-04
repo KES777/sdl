@@ -225,8 +225,8 @@ sub on_click {
 
 
 
-sub on_dbl_click {
-	my( $shape ) =  @_;
+sub on_double_click {
+	my( $shape, $h, $e ) =  @_;
 
 	$shape->draw_black;
 	$shape->{ w } -=  50;
