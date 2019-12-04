@@ -6,6 +6,7 @@ use warnings;
 use Scalar::Util qw(weaken);
 
 use Rect;
+use SDL::Event;
 
 
 sub is_moveable {
@@ -30,7 +31,35 @@ sub on_mouse_out {
 
 
 
- sub moving_on {
+sub on_drag {
+	my( $shape, $e, $h ) =  @_;
+
+	if( $h->{ app }{ event_state }{ SDLK_d() } ) {
+		$shape->drag( $h );
+		$shape->moving_enable( $e );
+	}
+	else {
+		$shape->moving_enable( $e );
+	}
+}
+
+
+
+sub on_drop {
+	my( $shape, $e, $h ) =  @_;
+
+	$shape->moving_disable( $e, $h );
+	if( my $target =  $shape->can_drop( $e->motion_x, $e->motion_y, $h ) ) {
+		$shape->drop( $target->{ target }, $h, $e->motion_x, $e->motion_y );
+	}
+	else {
+		$shape->store;
+	}
+}
+
+
+
+ sub moving_enable {
 	my( $shape, $e ) =  @_;
 
 	$shape->save_state( $e->motion_x, $e->motion_y );
@@ -39,10 +68,11 @@ sub on_mouse_out {
 
 
 
-sub moving_off {
+sub moving_disable {
 	my( $shape ) =  @_;
 
 	$shape->restore_state;
+	# $shape->store;
 }
 
 
@@ -57,11 +87,11 @@ sub on_press {
 
 ##
 sub on_move {
-	my( $shape, $h, $e, $app_rect ) =  @_;
+	my( $shape, $e, $h ) =  @_;
 
-	my $p =  $shape->{ parent };
+	# my $p =  $shape->{ parent };
+	my $p =  $h->{ app };
 
-	$shape->draw_black;
 	$shape->move_to( $e->motion_x,  $e->motion_y, $p->{ w }, $p->{ h } );
 }
 
@@ -93,9 +123,9 @@ sub on_group {
 
 ## Извлечение объекта из группы
 sub drag {
-	my( $shape, $h, $app_rect, $e ) =  @_;
+	my( $shape, $h ) =  @_;
 
-	$h->{ owner }->draw_black;
+	my $app_rect =  $h->{ app };
 	my $group =  $shape->{ parent };
 	my $children =  $group->{ children };
 	$shape->detach( $children );## Удаляем вытянутый объект из числа детей его родителя
@@ -147,10 +177,9 @@ sub detach {
 
 ## Помещаем объект внутрь другого объекта, или группы
 sub drop {
-	my( $group, $drop, $app_rect, $drop_x, $drop_y ) =  @_;
+	my( $drop, $group, $h,  $drop_x, $drop_y ) =  @_;
 
-	$drop->draw_black;
-	$group->draw_black;
+	my $app_rect =  $h->{ app };
 	$drop->parent_id( $group->{ id } );
 
 	push $group->{ children }->@*, $drop;
@@ -209,7 +238,6 @@ sub store_group {
 sub resize {
 	my( $shape, $x, $y ) =  @_;
 
-	$shape->draw_black;
 	$shape->resize_to( $x, $y );
 }
 
