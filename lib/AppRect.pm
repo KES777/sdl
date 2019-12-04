@@ -347,16 +347,16 @@ sub _on_mouse_move {
 	$app_rect->make_handle( is_over => $no );
 
 	if( $no  &&  !$oo ) {
-		$no->{ target }->on_mouse_over( $e );
+		$no->{ target }->on_mouse_over( $e, $no );
 	}
 
 	if( $oo  &&  $no  &&  $no->{ target } != $oo->{ target } ) {
-		$oo->{ target }->on_mouse_out( $e );
-		$no->{ target }->on_mouse_over( $e );
+		$oo->{ target }->on_mouse_out( $e, $oo );
+		$no->{ target }->on_mouse_over( $e, $no );
 	}
 
 	if( $oo  &&  !$no ) {
-		$oo->{ target }->on_mouse_out( $e );
+		$oo->{ target }->on_mouse_out( $e, $oo );
 	}
 
 
