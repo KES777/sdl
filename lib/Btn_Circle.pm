@@ -27,7 +27,6 @@ sub new {
 
 	$btn_c  =  $btn_c->SUPER::new;
 
-	$btn_c->{ h } =  50;
 	$btn_c->set_color;
 	$btn_c->set_start_position;
 
@@ -51,8 +50,6 @@ sub set_color {
 	$btn_c->{ c } =   Color->new( $r, $g, $b );
 }
 
-sub on_click { }
-sub on_dbl_click { }
 
 
 ## Создаёт новую фигуру(при нажатии кнопки мыши)
@@ -61,7 +58,6 @@ sub on_press {
 
 	my $rect =  Circle->new;
 	$rect->{ c } =  $btn_c->{ c };
-	$rect->{ h } =  50;
 	$rect->{ parent } =  $btn_c->{ parent };
 	weaken $rect->{ parent };
 
@@ -89,7 +85,7 @@ sub draw {
 		$diam,
 		$diam,
 	],[
-		255,255,255,255
+		255,0,0,255
 	]);
 	#circuit
 	$screen->draw_rect([
@@ -104,17 +100,14 @@ sub draw {
 
 
 
-sub on_over {
+sub on_over { }
+sub is_moveable { }
 
-}
-
-
-
-sub is_moveable {
-
-}
-
-
+sub on_click { }
+sub on_dbl_click { }
+sub on_hint{ }
+sub on_triple_click{ }
+sub move_to{ }
 
 ## Меняет цвет объекта-кнопки (если над ней курсор)
 sub on_mouse_over {
