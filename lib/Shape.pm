@@ -217,10 +217,10 @@ sub resize {
 
 ## Включает свойство click/dbclick
 sub on_click {
-	my( $shape ) =  @_;
+	my( $shape, $h, $e ) =  @_;
 
-	$shape->draw_black;
-	$shape->{ w } +=  50;
+	# $shape->{ w } -=  30;
+	$h->{ app }->refresh_over( $e->motion_x, $e->motion_y );
 }
 
 
@@ -228,18 +228,21 @@ sub on_click {
 sub on_double_click {
 	my( $shape, $h, $e ) =  @_;
 
-	$shape->draw_black;
-	$shape->{ w } -=  50;
+	# $shape->{ w } +=  50;
+	$h->{ app }->refresh_over( $e->motion_x, $e->motion_y );
 }
 
 
 
 sub on_hint {
-	my( $shape, $app_rect ) =  @_;
+	my( $shape, $h, $e ) =  @_;
 
-	$shape->draw_black;
-	$shape->{ x } +=  20;
+	# $shape->{ x } -=  20;
+	$h->{ app }->refresh_over( $e->motion_x, $e->motion_y );### вызывает on_press (создаёт новый объект)
 }
 
+
+
+sub on_release { }
 
 1;
