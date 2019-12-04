@@ -387,22 +387,7 @@ sub _on_mouse_move {
 
 	if( $no ) {
 		my $timer_id =  SDL::Time::add_timer( $HINT_TIMER, 'AppRect::callback3' );
-		# $app_rect->{ is_hint } =  {
-		# 	target   =>  $app_rect->{ is_over }->{ target },
-		# 	timer_id =>  $timer_id,
-		# 	app      =>  $app_rect, #TODO: do this for all
-		# }
-		# weaken $app_rect->{ is_hint }{ app };
-
-		## V1
-		# $app_rect->{ is_hint } =  $app_rect->make_handle({
-		# 	target   =>  $app_rect->{ is_over }->{ target },
-		# 	timer_id =>  $timer_id,
-		# });
-
-		## V2
-		$app_rect->make_handle( is_hint => {
-			target   =>  $app_rect->{ is_over }->{ target },
+		$app_rect->make_handle( is_hint => { %$no,
 			timer_id =>  $timer_id,
 		});
 	}
