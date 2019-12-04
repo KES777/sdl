@@ -245,4 +245,7 @@ sub on_hint {
 
 sub on_release { }
 
+sub on_keydown { }
+sub on_keyup   { }
+
 1;

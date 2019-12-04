@@ -150,10 +150,18 @@ sub _observer {
 
 	if( $e->type == SDL_KEYDOWN ) {
 		$app_rect->{ event_state }{ $e->key_sym } =  1;
+
+		if( my $h =  $app_rect->{ is_over } ) {
+			$h->{ target }->on_keydown( $h, $e );
+		}
 	}
 
 	if( $e->type == SDL_KEYUP ) {
 		$app_rect->{ event_state }{ $e->key_sym } =  0;
+
+		if( my $h =  $app_rect->{ is_over } ) {
+			$h->{ target }->on_keyup( $h, $e );
+		}
 	}
 }
 
