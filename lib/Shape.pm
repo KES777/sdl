@@ -127,8 +127,8 @@ sub parent_coord {
 	my( $shape, $x, $y ) =  @_;
 
 	if( $shape->{ parent } ) {
-		$x +=  $shape->{ parent }->{ x };
-		$y +=  $shape->{ parent }->{ y };
+		$x +=  $shape->{ parent }->{ x } - $shape->{ parent }->{ radius };
+		$y +=  $shape->{ parent }->{ y } - $shape->{ parent }->{ radius };
 
 		( $x, $y ) =  $shape->{ parent }->parent_coord( $x, $y );
 	}
