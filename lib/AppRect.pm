@@ -250,34 +250,39 @@ sub _is_mouseup {
 	$e->type == SDL_MOUSEBUTTONUP
 		or return;
 
-	delete $app_rect->{ drag };
+	delete $app_rect->{ event_state }{ SDLK_d };
 
 
 	## Выключение свойства "изменение размеров объекта"
-	if( my $h =  $app_rect->{ on_resize } ) {
-
+	if( my $h =  delete $app_rect->{ on_resize } ) {
 		$h->restore_state;## Возврат цвета объекту
 		$h->store;
-
-		delete $app_rect->{ on_resize };
 	}
 
-
+	## Выключение свойства "движение объекта"
 	##! MOVE STOP
-	if( my $h =  $app_rect->{ is_moveable } ) {
-		delete $app_rect->{ is_moveable };
-
+	if( my $h =  delete $app_rect->{ is_moveable } ) {
 		$h->{ target }->on_drop( $h, $e );
+
+		# my $shape =  $h->{ target };
+		# # $shape->delete_target( $e, $app_rect );
+		# $shape->moving_off( $app_rect, $e );###передать нужно только $shape
+		# $shape->store;### нужно ли переносить в Shape.pm в  sub moving_off?
+
+
+		# ## Drop object
+		# if( my $group_rect =  $shape->can_drop( $h, $e->motion_x, $e->motion_y ) ) {###замена $app_rect на $h
+		# 	$group_rect->{ target }->drop( $shape, $app_rect, $e->motion_x, $e->motion_y );
+		# }
 	}
 
 	## Создание группы из поля selection
-	if( my $h =  $app_rect->{ is_selection } ) {
+	if( my $h =  delete $app_rect->{ is_selection } ) {
 		if( my $group =  $app_rect->_can_group( $h, $e ) ) {
 			$group->{ target }->on_group( $h, $e, $group );
 		}
 
 		$h->{ draw }->draw_black;## Затираем перед удалением
-		delete $app_rect->{ is_selection };
 	}
 
 
@@ -380,8 +385,7 @@ sub _on_mouse_move {
 
 
 	##! HINT EVENT
-	if( my $h =  $app_rect->{ is_hint } ) {
-		delete $app_rect->{ is_hint };
+	if( my $h =  delete $app_rect->{ is_hint } ) {
 		SDL::Time::remove_timer( $h->{ timer_id } );
 	}
 
