@@ -5,6 +5,8 @@ package Rect;
 
 
 use Scalar::Util qw(weaken);
+use SDL::Event;
+
 use AppRect;
 use Color;
 use Shape;
@@ -467,5 +469,25 @@ sub on_mouse_out {
 	$rect->{ c }{ g } =  220;
 	# $rect->restore_state;
 }
+
+
+sub on_keydown {
+	my( $rect, $h, $e ) =  @_;
+
+	$h->{ app }{ event_state }{ SDLK_d() }
+		or return;
+
+
+	if( $rect->{ my_d } ) {
+		delete $rect->{ my_d };
+	}
+	else {
+		$rect->{ my_d } =  1;
+	}
+
+	printf "MY D: %s\n", $rect->{ my_d };
+}
+
+
 
 1;
