@@ -50,14 +50,24 @@ sub draw {
 
 	_draw_row( 100, 100, \@columns );
 	my $dy =  0;
+	my $row_n =  0;
+	my $row_displayed =  1;
 	while( my $row =  $dsRect->next ) {
+		$row_n++;
+
+		$row_n >= $rect->{ display_from }   or next;
+		$row_displayed <= 10  or last;##$rect->{ display_count }
+
 		my $data;
 
 		for my $col ( @columns ) {
-			push @$data, $row->$col()
+			push @$data, $row->$col();
 		}
+
 		_draw_row( 100, 130 + $dy, $data );
 		$dy +=  30;
+
+		$row_displayed++;
 	}
 }
 
