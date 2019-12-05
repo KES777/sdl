@@ -275,10 +275,10 @@ sub restore_state {
 ## Проверка условия, при котором возможно выполнить drop для объекта
 ## Проверка - находится ли объект над другим объектом(возвращает этот объект)
 sub can_drop {
-	my( $rect, $app_rect, $drop_x, $drop_y ) =  @_;
+	my( $rect, $drop_x, $drop_y, $h ) =  @_;
 
 	my( $group, $child );
-	for my $s ( $app_rect->{ children }->@* ) {
+	for my $s ( $h->{ app }{ children }->@* ) {
 		$s != $rect   or next;
 		my $curr =  $s->is_over( $drop_x, $drop_y )   or next;
 
