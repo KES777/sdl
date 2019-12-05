@@ -16,16 +16,14 @@ sub attach {
 
 	my( $ffi ) =  @_;
 
-  # SDL2::Stdinc::attach( $ffi );
-  # SDL2::Rwops::attach( $ffi );
-  SDL2::Blendmode::attach( $ffi );
-  SDL2::Pixels::attach( $ffi );
-  SDL2::Rect::attach( $ffi );
-
-
 	$ffi->type( 'opaque' => 'SDL_Surface_ptr' );
   $ffi->type( 'opaque' => 'SDL_YUV_CONVERSION_MODE_ptr' );
 
+  SDL2::Stdinc::attach( $ffi );
+  SDL2::Rwops::attach( $ffi );
+  SDL2::Blendmode::attach( $ffi );
+  SDL2::Pixels::attach( $ffi );
+  SDL2::Rect::attach( $ffi );
 
 	# extern DECLSPEC SDL_Surface *SDLCALL SDL_CreateRGBSurface
 	#     (Uint32 flags, int width, int height, int depth,
@@ -88,7 +86,7 @@ sub attach {
 
 
   # extern DECLSPEC SDL_bool SDLCALL SDL_HasColorKey(SDL_Surface * surface);
-  $ffi->attach( SDL_HasColorKey  => [ 'SDL_Surface_ptr' ] => 'SDL_bool_ptr'  );
+  $ffi->attach( SDL_HasColorKey  => [ 'SDL_Surface_ptr' ] => 'SDL_bool'  );
 
 
   # extern DECLSPEC int SDLCALL SDL_GetColorKey(SDL_Surface * surface,
@@ -119,17 +117,17 @@ sub attach {
 
   # extern DECLSPEC int SDLCALL SDL_SetSurfaceBlendMode(SDL_Surface * surface,
   #                                                     SDL_BlendMode blendMode);
-  $ffi->attach( SDL_SetSurfaceBlendMode  => [ 'SDL_Surface_ptr', 'SDL_BlendMode_ptr' ] => 'int'  );
+  $ffi->attach( SDL_SetSurfaceBlendMode  => [ 'SDL_Surface_ptr', 'SDL_BlendMode' ] => 'int'  );
 
 
   # extern DECLSPEC int SDLCALL SDL_GetSurfaceBlendMode(SDL_Surface * surface,
   #                                                     SDL_BlendMode *blendMode);
-  $ffi->attach( SDL_GetSurfaceBlendMode  => [ 'SDL_Surface_ptr', 'SDL_BlendMode_ptr' ] => 'int'  );
+  $ffi->attach( SDL_GetSurfaceBlendMode  => [ 'SDL_Surface_ptr', 'SDL_BlendMode' ] => 'int'  );
 
 
   # extern DECLSPEC SDL_bool SDLCALL SDL_SetClipRect(SDL_Surface * surface,
   #                                                  const SDL_Rect * rect);
-  $ffi->attach( SDL_SetClipRect  => [ 'SDL_Surface_ptr', 'SDL_Rect_ptr' ] => 'SDL_bool_ptr'  );
+  $ffi->attach( SDL_SetClipRect  => [ 'SDL_Surface_ptr', 'SDL_Rect_ptr' ] => 'SDL_bool'  );
 
 
   # extern DECLSPEC void SDLCALL SDL_GetClipRect(SDL_Surface * surface,

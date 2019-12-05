@@ -21,14 +21,17 @@ sub attach {
 	$processed++;
 
 	my( $ffi ) =  @_;
-	$ffi->type( 'opaque' => 'SDL_DisplayOrientation_ptr' );
-	$ffi->type( 'opaque' => 'SDL_DisplayMode_ptr' );
+	$ffi->type( 'opaque' => 'SDL_DisplayMode_ptr' );        #struct
+# ??????????
 	$ffi->type( 'opaque' => 'SDL_Window_ptr' );
-	$ffi->type( 'opaque' => 'SDL_HitTest_ptr' );
-	$ffi->type( 'opaque' => 'SDL_GLattr_ptr' );
+	$ffi->type( 'int'    => 'SDL_DisplayOrientation' );     #enum
+	# typedef void *SDL_GLContext;
 	$ffi->type( 'opaque' => 'SDL_GLContext_ptr' );
+	$ffi->type( 'int' => 'SDL_GLattr_ptr' );                #enum
+# ??????????
+	$ffi->type( 'opaque' => 'SDL_HitTest_ptr' );
 
-	# SDL2::Stdinc::attach( $ffi );
+	SDL2::Stdinc::attach( $ffi );
 	SDL2::Pixels::attach( $ffi );
 	SDL2::Rect::attach( $ffi );
 	SDL2::Surface::attach( $ffi );
@@ -73,7 +76,7 @@ sub attach {
 
 
 	# extern DECLSPEC SDL_DisplayOrientation SDLCALL SDL_GetDisplayOrientation(int displayIndex);
-	$ffi->attach( SDL_GetDisplayOrientation => [ 'int' ] => 'SDL_DisplayOrientation_ptr' );
+	$ffi->attach( SDL_GetDisplayOrientation => [ 'int' ] => 'SDL_DisplayOrientation' );
 
 
 	# extern DECLSPEC int SDLCALL SDL_GetNumDisplayModes(int displayIndex);
@@ -212,12 +215,12 @@ sub attach {
 # ????????????????????????SDL_bool bordered
 	# extern DECLSPEC void SDLCALL SDL_SetWindowBordered(SDL_Window * window,
 	#                                                    SDL_bool bordered);
-	$ffi->attach( SDL_SetWindowBordered => [ 'SDL_Window_ptr', 'SDL_bool_ptr' ] =>  'void' );
+	$ffi->attach( SDL_SetWindowBordered => [ 'SDL_Window_ptr', 'SDL_bool' ] =>  'void' );
 
 # ????????????????????????SDL_bool resizable
 	# extern DECLSPEC void SDLCALL SDL_SetWindowResizable(SDL_Window * window,
 	#                                                     SDL_bool resizable);
-	$ffi->attach( SDL_SetWindowResizable => [ 'SDL_Window_ptr', 'SDL_bool_ptr' ] =>  'void' );
+	$ffi->attach( SDL_SetWindowResizable => [ 'SDL_Window_ptr', 'SDL_bool' ] =>  'void' );
 
 
 	# extern DECLSPEC void SDLCALL SDL_ShowWindow(SDL_Window * window);
@@ -266,11 +269,11 @@ sub attach {
 # ????????????????????????SDL_bool grabbed
 	# extern DECLSPEC void SDLCALL SDL_SetWindowGrab(SDL_Window * window,
 	#                                                SDL_bool grabbed);
-	$ffi->attach( SDL_SetWindowGrab => [ 'SDL_Window_ptr', 'SDL_bool_ptr' ] =>  'void' );
+	$ffi->attach( SDL_SetWindowGrab => [ 'SDL_Window_ptr', 'SDL_bool' ] =>  'void' );
 
 
 	# extern DECLSPEC SDL_bool SDLCALL SDL_GetWindowGrab(SDL_Window * window);
-	$ffi->attach( SDL_GetWindowGrab => [ 'SDL_Window_ptr' ] =>  'SDL_bool_ptr' );
+	$ffi->attach( SDL_GetWindowGrab => [ 'SDL_Window_ptr' ] =>  'SDL_bool' );
 
 
 	# extern DECLSPEC SDL_Window * SDLCALL SDL_GetGrabbedWindow(void);
@@ -327,7 +330,7 @@ sub attach {
 
 
 	# extern DECLSPEC SDL_bool SDLCALL SDL_IsScreenSaverEnabled(void);
-	$ffi->attach( SDL_IsScreenSaverEnabled => [ 'void' ] =>  'SDL_bool_ptr' );
+	$ffi->attach( SDL_IsScreenSaverEnabled => [ 'void' ] =>  'SDL_bool' );
 
 
 	# extern DECLSPEC void SDLCALL SDL_EnableScreenSaver(void);
@@ -352,7 +355,7 @@ sub attach {
 
 	# extern DECLSPEC SDL_bool SDLCALL SDL_GL_ExtensionSupported(const char
 	#                                                            *extension);
-	$ffi->attach( SDL_GL_ExtensionSupported => [ 'string' ] =>  'SDL_bool_ptr' );
+	$ffi->attach( SDL_GL_ExtensionSupported => [ 'string' ] =>  'SDL_bool' );
 
 
 	# extern DECLSPEC void SDLCALL SDL_GL_ResetAttributes(void);

@@ -18,7 +18,8 @@ sub attach {
 	$ffi->type( 'opaque' => 'SDL_Palette_ptr' );
 	$ffi->type( 'opaque' => 'SDL_Color_ptr' );
 
-
+	SDL2::Stdinc::attach( $ffi );
+	SDL2::Endian::attach( $ffi );
 
 	# extern DECLSPEC const char* SDLCALL SDL_GetPixelFormatName(Uint32 format);
 	$ffi->attach( SDL_GetPixelFormatName  => [ 'uint32' ] => 'string'  );
@@ -30,7 +31,7 @@ sub attach {
 	#                                                             Uint32 * Gmask,
 	#                                                             Uint32 * Bmask,
 	#                                                             Uint32 * Amask);
-	$ffi->attach( SDL_PixelFormatEnumToMasks  => [ 'uint32', 'int', 'uint32*', 'uint32*', 'uint32*', 'uint32*' ] => 'SDL_bool_ptr'  );
+	$ffi->attach( SDL_PixelFormatEnumToMasks  => [ 'uint32', 'int', 'uint32*', 'uint32*', 'uint32*', 'uint32*' ] => 'SDL_bool'  );
 
 
 	# extern DECLSPEC Uint32 SDLCALL SDL_MasksToPixelFormatEnum(int bpp,
