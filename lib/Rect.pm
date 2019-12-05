@@ -82,8 +82,10 @@ sub draw_black {
 sub draw {
 	my( $rect, $screen, $x, $y ) = @_;
 
-	$rect->draw_black;
-	$rect->save_draw_coord;
+	if( !$rect->{ parent }{ id } ) {
+		$rect->draw_black;
+		$rect->save_draw_coord;
+	}
 
 
 	$screen //=  AppRect::SCREEN();

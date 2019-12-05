@@ -78,8 +78,10 @@ sub draw_black {
 sub draw {
 	my( $circle, $screen, $x, $y ) = @_;
 
-	$circle->draw_black;
-	$circle->save_draw_coord;
+	if( !$circle->{ parent }{ id } ) {
+		$circle->draw_black;
+		$circle->save_draw_coord;
+	}
 
 	$screen //=  AppRect::SCREEN();
 	$x //=  0;
