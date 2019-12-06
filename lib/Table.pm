@@ -5,6 +5,7 @@ use warnings;
 
 use SDLx::Text;
 
+use Scroll_bar;
 use AppRect;
 use Color;
 use base 'Rect';
@@ -13,6 +14,24 @@ use base 'Rect';
 ## Размеры ячейки таблицы
 my $w =  75;
 my $h =  30;
+
+
+sub new {
+	my( $obj ) =  shift;
+
+	$obj =  $obj->SUPER::new( @_ );
+
+
+	my $sw =  15;
+	my $sh =  20;
+	my $sx =  $obj->{ x } + $obj->{ w } - $sw;
+	my $sy =  $obj->{ y };
+
+	my $s =  $obj->{ scroll } =  Scroll_bar->new( $sx, $sy, $sw, $sh );
+
+	return $obj;
+}
+
 
 
 sub _draw_row {
@@ -24,18 +43,19 @@ sub _draw_row {
 		$screen->draw_rect( [ $x +$dx, $y, $w, $h ], [ 0, 0, 255, 0 ] );
 		$screen->draw_rect( [ $x +$dx + 2, $y + 2, $w - 4, $h - 4 ], [ 255, 255, 255, 255 ] );
 
-		my $length =  length $value;
-		my $text =  SDLx::Text->new(
-			color   => [0, 0, 0], # "white"
-            size    => 16,
-            x       => $x + $dx + ($w - $length * 7) / 2,
-            y       => $y + $h / 6,
-            h_align => 'left',
-            text    => $value,
-        );
-
-		$dx += $w;
-        $text->write_to( $screen );
+		if( $value ) {
+			my $length =  length $value;
+			my $text =  SDLx::Text->new(
+				color   => [0, 0, 0], # "white"
+	            size    => 16,
+	            x       => $x + $dx + ($w - $length * 7) / 2,
+	            y       => $y + $h / 6,
+	            h_align => 'left',
+	            text    => $value,
+	        );
+	        $text->write_to( $screen );
+    	}
+			$dx += $w;
 	}
 }
 
@@ -45,17 +65,23 @@ sub draw {
 	my( $rect ) = @_;
 
 	my $dsRect =  Util::db()->resultset( 'Rect' );
-
 	my @columns =  $dsRect->result_source->columns;
 
-	_draw_row( 100, 100, \@columns );
+	# Draw headers
+	_draw_row( $rect->{ x }, $rect->{ y }, \@columns );
+
+	# Calc row position
+	my $scroll_pos =  $rect->{ scroll }{ pos };
+	my $display_from =  $dsRect->count * $scroll_pos / 100;
+
+	# Draw data
 	my $dy =  0;
 	my $row_n =  0;
 	my $row_displayed =  1;
 	while( my $row =  $dsRect->next ) {
 		$row_n++;
 
-		$row_n >= $rect->{ display_from }   or next;
+		$row_n >= $display_from   or next;
 		$row_displayed <= 10  or last;##$rect->{ display_count }
 
 		my $data;
@@ -69,6 +95,32 @@ sub draw {
 
 		$row_displayed++;
 	}
+
+	$rect->{ scroll }->draw;
+}
+
+
+
+sub move_to {
+	my( $rect, $x, $y, $app_w, $app_h ) =  @_;
+
+	$rect->{ scroll }{ y } =  $y;
+	my $rh =  $rect->{ scroll }{ h };
+
+	if( $rect->{ scroll }{ y } < $rect->{ y } ) {
+		$rect->{ scroll }{ y } = $rect->{ y };
+	}
+
+	if( $rect->{ scroll }{ y } > $rect->{ h } - $rh ) {
+		$rect->{ scroll }{ y } = $rect->{ h } - $rh;
+	}
+
+	if( $y > $rect->{ h } - $rh )  {
+		$y =  $rect->{ h } - $rh;
+	}
+
+	$rect->draw_black;
+	$rect->{ scroll }{ pos } =  ( $y - $rect->{ y } ) * 100 / ( $rect->{ h } - $rh );
 }
 
 
