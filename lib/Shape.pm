@@ -328,4 +328,47 @@ sub is_over {
 	return;
 }
 
+
+
+## Сохранение (обновление) объекта в базу
+sub store {
+	my( $rect ) =  @_;
+
+	if( $rect->{ id } ) {
+		my $row =  Util::db()->resultset( 'Rect' )->search({
+			id => $rect->{ id },
+		})->first;
+		$row->update({
+			$rect->%{qw/ x y w h radius parent_id/},
+			$rect->{ c }->geth,
+		});
+	}
+	elsif( $rect->{ parent } ) {
+		my $row =  Util::db()->resultset( 'Rect' )->create({
+			$rect->%{qw/ x y w h radius /},
+			$rect->{ c }->geth,
+		});
+
+		$rect->{ id } =  $row->id;
+	}
+
+	for my $r ( $rect->{ children }->@* ) {
+		$r->store;
+	}
+
+	return $rect;
+}
+
+
+
+
+sub draw_black {
+	my( $shape ) =  @_;
+
+	Rect->draw_black;
+}
+
+
+
+
 1;
