@@ -277,37 +277,48 @@ sub on_keydown { }
 sub on_keyup   { }
 
 sub draw {
-	my( $rect ) =  @_;
+	shift->propagate( draw => @_ );
+	# shift->propagate( 'draw', @_ );
+}
 
-	if( $rect->{ children } ) {
-		for my $s ( $rect->{ children }->@* ) {
+
+
+sub propagate {
+	my( $shape, $event ) =  ( shift, shift );
+
+	if( $shape->{ children } ) {
+		for my $s ( $shape->{ children }->@* ) {
 			$s   or next;
-			$s->draw;
+			$s->$event( @_ );
 		}
 	}
-
 }
+
 
 
 # Функция возвращает объект, над которым находится мышка.
 # Дополнительно сохранаяет информацию о координатах мыши.
-sub is_over { # TODO? Переименовать в can_over   Назар не согласен
-	my( $rect, $x, $y ) =  @_;
+sub is_over {
+	my( $shape, $x, $y ) =  @_;
 
-	my $bool =  $rect->is_inside( $x, $y );
+	my $bool =  $shape->is_over_in( $x, $y );
 	if( $bool ) {
-		for my $r ( $rect->{ children }->@* ) {
-			if( my $over = $r->is_over( $x - $rect->{ x }, $y - $rect->{ y } ) ) {
-				return $over;
-			}
+		if( !$shape->{ radius } ) {
+			$shape->propagate( is_over => $x - $shape->{ x }, $y - $shape->{ y } );
+		}
+		else {
+			$shape->propagate( is_over =>
+				$x - $shape->{ x } + $shape->{ radius },
+				$y - $shape->{ y } + $shape->{ radius },
+			);
 		}
 
 
 		## !H
 		my $h =  {
-			target => $rect,             # Объект, над которым находится мышь
-			x      => $x - $rect->{ x },  # Координаты мыши отностельно левого верхнего угла объекта
-			y      => $y - $rect->{ y },
+			target => $shape,             # Объект, над которым находится мышь
+			x      => $x - $shape->{ x },  # Координаты мыши отностельно левого верхнего угла объекта
+			y      => $y - $shape->{ y },
 		};
 
 		# DDP::p $h;
