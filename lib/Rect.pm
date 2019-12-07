@@ -124,60 +124,38 @@ sub draw {
 	]);
 
 
-	if( $rect->{ children } ) {
-		# my $h =  10;
-		for my $s ( $rect->{ children }->@* ) {
-		# 	$s->{ x }      =  $rect->{ x } + 10;
-		# 	$s->{ y }      =  $rect->{ y } + $h;
-		# 	$s->{ c }{ r } =  $rect->{ c }{ r } + 80;
-
-		# 	$h +=  $s->{ h } +10;
-
-			$s->draw( $screen, $x, $y );
-		}
-	}
+	$rect->SUPER::draw( $screen, $x, $y );
 }
 
 
-## Заливка чёрным группированноо объекта
-sub draw_black_group {
-	my( $squares, $app, $x, $y ) = @_;
+## Сохраняет состояние объекта для draw_black перед его следующей отрисовкой
+sub save_draw_coord {
+	my( $rect ) =  @_;
 
-	for my $rect( @$squares ) {
-		if( $rect->Util::mouse_target_square( $x, $y ) ) {
-			$rect->draw_black( $app );
-		}
-	}
+	$rect->{ ox } =  $rect->{ x };
+	$rect->{ oy } =  $rect->{ y };
+	$rect->{ ow } =  $rect->{ w };
+	$rect->{ oh } =  $rect->{ h };
 }
 
 
 
-# Функция возвращает объект, над которым находится мышка.
-# Дополнительно сохранаяет информацию о координатах мыши.
-sub is_over {
-	my( $rect, $x, $y ) =  @_;
+## На данный момент не испоьзуется!!!
+# ## Заливка чёрным группированноо объекта
+# sub draw_black_group {
+# 	my( $squares, $app, $x, $y ) = @_;
 
-	my $bool =  Util::mouse_target_square( $rect, $x, $y );
-	if( $bool ) {
-		for my $r ( $rect->{ children }->@* ) {
-			if( my $over = $r->is_over( $x - $rect->{ x }, $y - $rect->{ y } ) ) {
-				return $over;
-			}
-		}
+# 	for my $rect( @$squares ) {
+# 		if( $rect->Util::mouse_target_square( $x, $y ) ) {
+# 			# $rect->draw_black( $app );
+# 		}
+# 	}
+# }
 
 
-		## !H
-		my $h =  {
-			target => $rect,             # Объект, над которым находится мышь
-			x      => $x - $rect->{ x },  # Координаты мыши отностельно левого верхнего угла объекта
-			y      => $y - $rect->{ y },
-		};
 
-		# DDP::p $h;
-		return $h;
-	}
-
-	return;
+sub is_inside {
+	return Util::mouse_target_square( @_ );
 }
 
 

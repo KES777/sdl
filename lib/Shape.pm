@@ -276,4 +276,45 @@ sub on_release { }
 sub on_keydown { }
 sub on_keyup   { }
 
+sub draw {
+	my( $rect ) =  @_;
+
+	if( $rect->{ children } ) {
+		for my $s ( $rect->{ children }->@* ) {
+			$s   or next;
+			$s->draw;
+		}
+	}
+
+}
+
+
+# Функция возвращает объект, над которым находится мышка.
+# Дополнительно сохранаяет информацию о координатах мыши.
+sub is_over { # TODO? Переименовать в can_over   Назар не согласен
+	my( $rect, $x, $y ) =  @_;
+
+	my $bool =  $rect->is_inside( $x, $y );
+	if( $bool ) {
+		for my $r ( $rect->{ children }->@* ) {
+			if( my $over = $r->is_over( $x - $rect->{ x }, $y - $rect->{ y } ) ) {
+				return $over;
+			}
+		}
+
+
+		## !H
+		my $h =  {
+			target => $rect,             # Объект, над которым находится мышь
+			x      => $x - $rect->{ x },  # Координаты мыши отностельно левого верхнего угла объекта
+			y      => $y - $rect->{ y },
+		};
+
+		# DDP::p $h;
+		return $h;
+	}
+
+	return;
+}
+
 1;
