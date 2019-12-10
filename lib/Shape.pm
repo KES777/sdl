@@ -330,6 +330,14 @@ sub is_over {
 
 
 
+sub new {
+	my( $shape ) =  shift;
+
+	return bless {}, $shape;
+}
+
+
+
 ## Сохранение (обновление) объекта в базу
 sub store {
 	my( $rect ) =  @_;
