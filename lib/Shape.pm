@@ -35,7 +35,7 @@ sub on_drag {
 	my( $shape, $e, $h ) =  @_;
 
 	if( $h->{ app }{ event_state }{ SDLK_d() }
-		&&  $h->{ app } !=  $shape->{ parent }
+		&&  $h->{ app } !=  $shape->{ parent }## или !$shape->{ parent_id }
 	) {
 		$shape->drag( $h );
 		$shape->moving_enable( $e );
@@ -183,7 +183,7 @@ sub drop {
 
 	my $app_rect =  $h->{ app };
 	$drop->parent_id( $group->{ id } );## Присвоили id группы
-	$drop->draw_black;## Затираем перед тем, как удалим как самостоятельный объект
+	$drop->draw_black;## Затираем перед тем, как удалим из $app_rect->{ children }
 
 	push $group->{ children }->@*, $drop;## Добавили объект в группу
 	$group->load_parent_data;
@@ -260,7 +260,7 @@ sub on_click {
 sub on_double_click {
 	my( $shape, $h, $e ) =  @_;
 
-	# $shape->{ w } +=  50;
+	$h->{ app }->draw_black;
 	$h->{ app }->refresh_over( $e->motion_x, $e->motion_y );
 }
 
@@ -269,8 +269,8 @@ sub on_double_click {
 sub on_hint {
 	my( $shape, $h, $e ) =  @_;
 
-	# $shape->{ x } -=  20;
-	$h->{ app }->refresh_over( $e->motion_x, $e->motion_y );### вызывает on_press (создаёт новый объект)
+	# Table->new->draw;
+	# $h->{ app }->refresh_over( $e->motion_x, $e->motion_y );
 }
 
 
