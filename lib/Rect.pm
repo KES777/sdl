@@ -45,6 +45,8 @@ sub new {
 		$y_offset_n++;
 	}
 
+	$rect =  $rect->SUPER::new();
+
 	my %rect = (
 		x      => $x,
 		y      => $y,

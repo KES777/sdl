@@ -40,14 +40,17 @@ sub new {
 		$y_offset_n++;
 	}
 
+	$rect =  $rect->SUPER::new();
+
 	my %rect = (
 		x      => $x,
 		y      => $y,
-		radius      => $r // $START_R,
+		radius => $r // $START_R,
 		c      => $c // Color->new,
 	);
+	$rect->@{ keys %rect } =  values %rect;
 
-	return bless \%rect, $rect;
+	return $rect;
 }
 
 
