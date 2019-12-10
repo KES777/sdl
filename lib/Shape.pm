@@ -293,7 +293,10 @@ sub propagate {
 	if( $shape->{ children } ) {
 		for my $s ( $shape->{ children }->@* ) {
 			$s   or next;
-			$s->$event( @_ );
+			# $s->$event( @_ );## это не работает
+			if( my $target =  $s->$event( @_ ) ) {
+				return $target;
+			}
 		}
 	}
 }
@@ -305,18 +308,11 @@ sub propagate {
 sub is_over {
 	my( $shape, $x, $y ) =  @_;
 
-	my $bool =  $shape->is_over_in( $x, $y );
+	my( $bool, $xi, $yi ) =  $shape->is_over_in( $x, $y );
 	if( $bool ) {
-		if( !$shape->{ radius } ) {
-			$shape->propagate( is_over => $x - $shape->{ x }, $y - $shape->{ y } );
+		if( my $over = $shape->propagate( is_over => $xi, $yi ) ) {
+			return $over;
 		}
-		else {
-			$shape->propagate( is_over =>
-				$x - $shape->{ x } + $shape->{ radius },
-				$y - $shape->{ y } + $shape->{ radius },
-			);
-		}
-
 
 		## !H
 		my $h =  {
