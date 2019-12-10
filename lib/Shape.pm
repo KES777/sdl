@@ -180,10 +180,12 @@ sub drop {
 	my( $drop, $group, $h,  $drop_x, $drop_y ) =  @_;
 
 	my $app_rect =  $h->{ app };
-	$drop->parent_id( $group->{ id } );
+	$drop->parent_id( $group->{ id } );## Присвоили id группы
+	$drop->draw_black;## Затираем перед тем, как удалим как самостоятельный объект
 
-	push $group->{ children }->@*, $drop;
+	push $group->{ children }->@*, $drop;## Добавили объект в группу
 	$group->load_parent_data;
+
 	$app_rect->{ children }->@* =  grep{ $_ != $drop } $app_rect->{ children }->@*;
 
 	my @children =   $group->{ children }->@*;
