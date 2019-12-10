@@ -277,8 +277,10 @@ sub move_to {
 sub is_inside {
 	my( $rect, $x, $y, $w, $h ) =  @_;
 
-	return $rect->{ x } > $x  &&  $rect->{ x } + $rect->{ radius } * 2 < $x + $w
-		&& $rect->{ y } > $y  &&  $rect->{ y } + $rect->{ radius } * 2 < $y + $h;
+	return  $rect->{ x } - $rect->{ radius } > $x
+		&&  $rect->{ x } + $rect->{ radius } < $x + $w
+		&&  $rect->{ y } - $rect->{ radius } > $y
+		&&  $rect->{ y } + $rect->{ radius } < $y + $h;
 }
 
 
