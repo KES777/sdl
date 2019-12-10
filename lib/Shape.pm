@@ -34,7 +34,9 @@ sub on_mouse_out {
 sub on_drag {
 	my( $shape, $e, $h ) =  @_;
 
-	if( $h->{ app }{ event_state }{ SDLK_d() } ) {
+	if( $h->{ app }{ event_state }{ SDLK_d() }
+		&&  $h->{ app } !=  $shape->{ parent }
+	) {
 		$shape->drag( $h );
 		$shape->moving_enable( $e );
 	}
