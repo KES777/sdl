@@ -142,41 +142,53 @@ sub save_draw_coord {
 
 
 ## Сохранение (обновление) объекта в базу
-sub store {
-	my( $rect ) =  @_;
+# sub store {
+# 	my( $rect ) =  @_;
 
-	if( $rect->{ id } ) {
-		my $row =  Util::db()->resultset( 'Rect' )->search({
-			id => $rect->{ id },
-		})->first;
-		$row->update({
-			$rect->%{qw/ x y radius parent_id/},
-			$rect->{ c }->geth,
-		});
-	}
-	elsif( $rect->{ parent } ) {
-		my $row =  Util::db()->resultset( 'Rect' )->create({
-			$rect->%{qw/ x y radius /},
-			$rect->{ c }->geth,
-		});
+# 	if( $rect->{ id } ) {
+# 		my $row =  Util::db()->resultset( 'Rect' )->search({
+# 			id => $rect->{ id },
+# 		})->first;
+# 		$row->update({
+# 			$rect->%{qw/ x y radius parent_id/},
+# 			$rect->{ c }->geth,
+# 		});
+# 	}
+# 	elsif( $rect->{ parent } ) {
+# 		my $row =  Util::db()->resultset( 'Rect' )->create({
+# 			$rect->%{qw/ x y radius /},
+# 			$rect->{ c }->geth,
+# 		});
 
-		$rect->{ id } =  $row->id;
-	}
+# 		$rect->{ id } =  $row->id;
+# 	}
 
-	for my $r ( $rect->{ children }->@* ) {
-		$r->store;
-	}
+# 	for my $r ( $rect->{ children }->@* ) {
+# 		$r->store;
+# 	}
 
-	return $rect;
-}
+# 	return $rect;
+# }
 
 
 
 # Функция возвращает объект, над которым находится мышка.
 # Дополнительно сохранаяет информацию о координатах мыши.
-sub is_inside { # TODO? Переименовать в can_over   Назар не согласен
-	return mouse_target_square( $rect, $x, $y );
+sub is_over_in {
+	my( $shape, $x, $y ) =  @_;
+
+	if( !$shape->{ parent_id } ) {
+		my $target =   mouse_target_square( $shape, $x, $y );
+			return $target, $x, $y;
+	}
+	else {
+		$x = $x - $shape->{ parent }{ x } + $shape->{ parent }{ radius };
+		$y = $y - $shape->{ parent }{ y } + $shape->{ parent }{ radius };
+		my $target =  mouse_target_square( $shape, $x, $y );
+			return $target, $x, $y;
+	}
 }
+
 
 
 

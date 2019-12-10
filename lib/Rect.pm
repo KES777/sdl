@@ -140,22 +140,19 @@ sub save_draw_coord {
 
 
 
-## На данный момент не испоьзуется!!!
-# ## Заливка чёрным группированноо объекта
-# sub draw_black_group {
-# 	my( $squares, $app, $x, $y ) = @_;
+sub is_over_in {
+	my( $shape, $x, $y ) =  @_;
 
-# 	for my $rect( @$squares ) {
-# 		if( $rect->Util::mouse_target_square( $x, $y ) ) {
-# 			# $rect->draw_black( $app );
-# 		}
-# 	}
-# }
-
-
-
-sub is_inside {
-	return Util::mouse_target_square( @_ );
+	if( !$shape->{ parent_id } ) {
+		my $target =   Util::mouse_target_square( $shape, $x, $y );
+			return $target, $x, $y;
+	}
+	else {
+		$x = $x - $shape->{ parent }{ x } + $shape->{ parent }{ radius };
+		$y = $y - $shape->{ parent }{ y } + $shape->{ parent }{ radius };
+		my $target =  Util::mouse_target_square( $shape, $x, $y );
+			return $target, $x, $y;
+	}
 }
 
 
