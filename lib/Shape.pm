@@ -332,6 +332,8 @@ sub save_draw_coord {
 	$shape->{ oy } =  $shape->{ y };
 }
 
+
+sub draw_black {}
 sub draw {
 	my( $shape ) =  shift;
 
@@ -416,15 +418,6 @@ sub store {
 	}
 
 	return $shape;
-}
-
-
-
-
-sub draw_black {
-	my( $shape ) =  @_;
-
-	Rect->draw_black;
 }
 
 
