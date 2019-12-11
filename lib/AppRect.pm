@@ -490,6 +490,12 @@ sub can_select {
 sub draw {
 	my( $app_rect ) =  @_;
 
+	$app_rect->{ app }->draw_rect([
+		0,
+		0,
+		$app_rect->{ app }->width,
+		$app_rect->{ app }->height,
+	],[ 0, 0, 0, 0 ]);
 	$app_rect->SUPER::draw;
 
 	$app_rect->{ btn     }->draw;

@@ -336,14 +336,17 @@ sub save_draw_coord {
 }
 
 
-sub draw_black {}
-sub draw {
-	my( $shape ) =  shift;
+sub refresh {
+	my( $shape ) =  @_;
 
 	$shape->draw_black;
+	$shape->draw;
 	$shape->save_draw_coord;
+}
 
-	$shape->propagate( draw => @_ );
+sub draw_black {}
+sub draw {
+	shift->propagate( draw => @_ );
 }
 
 
