@@ -50,13 +50,23 @@ sub new {
 
 
 	my $view  =  $scroll->{ h } / $dimension;
-	my $ruler =  _ruler->new( 0, 0, $scroll->{ w }, $scroll->{ h } *$view,
+	my $ruler =  _ruler->new( 0, 0,
+		$scroll->{ w },
+		limit_min( $scroll->{ h } *$view, 10 ),
 		Color->new( 50, 250, 50 )
 	);
 	$scroll->children( $ruler );
 
 
 	return $scroll;
+}
+
+
+
+sub limit_min {
+	my( $value, $min ) =  @_;
+
+	return $value >= $min? $value : $min;
 }
 
 
