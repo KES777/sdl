@@ -374,5 +374,22 @@ sub draw_black {
 
 
 
+sub children {
+	@_ > 1   or return shift->{ children };
+
+
+	my( $shape, @children ) =  @_;
+
+	for my $c ( @children ) {
+		$c->{ parent } =  $shape;
+		weaken $c->{ parent };
+	}
+	push $shape->{ children }->@*, @children;
+
+
+	return $shape->{ children };
+}
+
+
 
 1;
