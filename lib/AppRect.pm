@@ -18,7 +18,7 @@ use Btn;
 use Circle;
 use Btn_Circle;
 
-use base 'Rect';
+use base 'Shape';
 
 
 my $HINT_TIMER =  1000;
@@ -77,6 +77,7 @@ sub new {
 
 
 	$APP->add_event_handler( sub{ _observer( @_, $app_rect ) } );
+
 
 	return $app_rect;
 }
@@ -489,12 +490,7 @@ sub can_select {
 sub draw {
 	my( $app_rect ) =  @_;
 
-	if( $app_rect->{ children } ) {
-		for my $s ( $app_rect->{ children }->@* ) {
-			$s   or next;
-			$s->draw( $app_rect->{ app } );
-		}
-	}
+	$app_rect->SUPER::draw;
 
 	$app_rect->{ btn     }->draw;
 	$app_rect->{ btn_del }->draw;
