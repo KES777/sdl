@@ -86,6 +86,26 @@ sub on_press {
 }
 
 
+
+## Передвигает объект в соответствии с координатами курсора
+sub move_to {
+	my( $rect, $x, $y ) =  @_;
+
+	$rect->{ x } =  $x //0;
+	$rect->{ y } =  $y //0;
+}
+
+
+
+sub move_by {
+	my( $rect, $dx, $dy ) =  @_;
+
+	$rect->{ x } +=  $dx //0;
+	$rect->{ y } +=  $dy //0;
+}
+
+
+
 ##
 sub on_move {
 	my( $shape, $e, $h ) =  @_;
@@ -94,12 +114,11 @@ sub on_move {
 	my $dy =  $e->motion_y -$h->{ event_start_y };
 
 
-	my $p =  $shape->{ parent };
 	$shape->move_to(
 		$h->{ target }{ start_x } +$dx,
 		$h->{ target }{ start_y } +$dy,
-		$p->{ w }, $p->{ h }
 	);
+	$shape->clip;
 }
 
 

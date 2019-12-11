@@ -328,12 +328,14 @@ sub calc_group_size {
 }
 
 
-## Передвигает объект в соответствии с координатами курсора
-sub move_to {
-	my( $rect, $x, $y, $app_w, $app_h ) =  @_;
 
-	$rect->{ x } =  $x //0;
-	$rect->{ y } =  $y //0;
+sub clip {
+	my( $rect, $w, $h ) =  @_;
+
+	if( my $p =  $rect->{ parent } ) {
+		$w //=  $p->{ w };
+		$h //=  $p->{ h };
+	}
 
 	if( $rect->{ x } < 0 ) {
 		$rect->{ x } = 0;
@@ -342,11 +344,11 @@ sub move_to {
 		$rect->{ y } = 0;
 	}
 
-	if( $app_w  &&  $rect->{ x } > $app_w - $rect->{ w } ) {
-		$rect->{ x } = $app_w - $rect->{ w };
+	if( $w  &&  $rect->{ x } > $w - $rect->{ w } ) {
+		$rect->{ x } = $w - $rect->{ w };
 	}
-	if( $app_h  &&  $rect->{ y } > $app_h - $rect->{ h } ) {
-		$rect->{ y } = $app_h - $rect->{ h };
+	if( $h  &&  $rect->{ y } > $h - $rect->{ h } ) {
+		$rect->{ y } = $h - $rect->{ h };
 	}
 }
 
