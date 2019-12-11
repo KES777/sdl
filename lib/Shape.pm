@@ -359,6 +359,8 @@ sub propagate {
 			return $target;
 		}
 	}
+
+	return;
 }
 
 
