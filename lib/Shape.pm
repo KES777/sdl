@@ -309,6 +309,9 @@ sub on_double_click {
 }
 
 
+sub on_triple_click {}
+
+
 
 sub on_hint {
 	my( $shape, $h, $e ) =  @_;
