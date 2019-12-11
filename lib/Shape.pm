@@ -309,10 +309,10 @@ sub is_over {
 	my( $shape, $x, $y ) =  @_;
 
 	if( $shape->mouse_target( $x, $y ) ) {
-		my $coord =  [ $x - $shape->{ x }, $y - $shape->{ y } ];
-		if( my $over =  $shape->propagate( is_over => @$coord ) ) {
-			return $over;
-		}
+		my $over =  $shape->propagate(
+			is_over => $x - $shape->{ x }, $y - $shape->{ y }
+		)
+		!$over   or return $over;
 
 		## !H
 		my $h =  {
