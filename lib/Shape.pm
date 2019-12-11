@@ -324,9 +324,21 @@ sub on_release { }
 sub on_keydown { }
 sub on_keyup   { }
 
+
+sub save_draw_coord {
+	my( $shape ) =  @_;
+
+	$shape->{ ox } =  $shape->{ x };
+	$shape->{ oy } =  $shape->{ y };
+}
+
 sub draw {
-	shift->propagate( draw => @_ );
-	# shift->propagate( 'draw', @_ );
+	my( $shape ) =  shift;
+
+	$shape->draw_black;
+	$shape->save_draw_coord;
+
+	$shape->propagate( draw => @_ );
 }
 
 

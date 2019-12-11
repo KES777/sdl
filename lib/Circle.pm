@@ -137,8 +137,8 @@ sub draw {
 sub save_draw_coord {
 	my( $circle ) =  @_;
 
-	$circle->{ ox } =  $circle->{ x };
-	$circle->{ oy } =  $circle->{ y };
+	$circle->SUPER::save_draw_coord;
+
 	$circle->{ oradius } =  $circle->{ radius };
 }
 
