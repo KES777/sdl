@@ -89,31 +89,31 @@ sub on_press {
 
 ## Передвигает объект в соответствии с координатами курсора
 sub move_to {
-	my( $rect, $x, $y ) =  @_;
+	my( $shape, $x, $y ) =  @_;
 
-	$rect->{ x } =  $x //0;
-	$rect->{ y } =  $y //0;
+	$shape->{ x } =  $x //0;
+	$shape->{ y } =  $y //0;
 }
 
 
 
 sub move_by {
-	my( $rect, $dx, $dy ) =  @_;
+	my( $shape, $dx, $dy ) =  @_;
 
-	$rect->{ x } +=  $dx //0;
-	$rect->{ y } +=  $dy //0;
+	$shape->{ x } +=  $dx //0;
+	$shape->{ y } +=  $dy //0;
 }
 
 
 
 sub clip {
-	my( $rect, $shape ) =  @_;
+	my( $shape, $target ) =  @_;
 
-	$shape //=  $rect->{ parent }
+	$target //=  $shape->{ parent }
 		or return;
 
-	for my $point ( $rect->get_points ) {
-		$shape->mouse_target( $point->@{ 'x', 'y' } )
+	for my $point ( $shape->get_points ) {
+		$target->mouse_target( $point->@{ 'x', 'y' } )
 			or return;
 	}
 
@@ -244,19 +244,19 @@ sub drop {
 ## Загружает из базы объекту его детей (создавая объекты для каждого ребёнка)
 ## Загружает по рекурсии всем вложеным объектам их детей
 sub load_children {
-	my( $rect ) = @_;
+	my( $shape ) = @_;
 
 	my $child =  Util::db()->resultset( 'Rect' )->search({
-		parent_id => $rect->{ id }
+		parent_id => $shape->{ id }
 	});
 
-	$rect->{ children } =  [ map{
+	$shape->{ children } =  [ map{
 		my $type =  defined $_->radius? 'Circle' : 'Rect';
 		$type->new( $_ );
 	} $child->all ];
-	for my $x ( $rect->{ children }->@* ) {
-		$x->{ parent_id } =  $rect->{ id };############parent_id
-		$x->{ parent } =  $rect;
+	for my $x ( $shape->{ children }->@* ) {
+		$x->{ parent_id } =  $shape->{ id };############parent_id
+		$x->{ parent } =  $shape;
 		weaken $x->{ parent };
 
 		$x->load_children;
@@ -376,31 +376,31 @@ sub new {
 
 ## Сохранение (обновление) объекта в базу
 sub store {
-	my( $rect ) =  @_;
+	my( $shape ) =  @_;
 
-	if( $rect->{ id } ) {
+	if( $shape->{ id } ) {
 		my $row =  Util::db()->resultset( 'Rect' )->search({
-			id => $rect->{ id },
+			id => $shape->{ id },
 		})->first;
 		$row->update({
-			$rect->%{qw/ x y w h radius parent_id/},
-			$rect->{ c }->geth,
+			$shape->%{qw/ x y w h radius parent_id/},
+			$shape->{ c }->geth,
 		});
 	}
-	elsif( $rect->{ parent } ) {
+	elsif( $shape->{ parent } ) {
 		my $row =  Util::db()->resultset( 'Rect' )->create({
-			$rect->%{qw/ x y w h radius /},
-			$rect->{ c }->geth,
+			$shape->%{qw/ x y w h radius /},
+			$shape->{ c }->geth,
 		});
 
-		$rect->{ id } =  $row->id;
+		$shape->{ id } =  $row->id;
 	}
 
-	for my $r ( $rect->{ children }->@* ) {
+	for my $r ( $shape->{ children }->@* ) {
 		$r->store;
 	}
 
-	return $rect;
+	return $shape;
 }
 
 
