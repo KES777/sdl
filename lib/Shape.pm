@@ -60,9 +60,9 @@ sub on_drop {
 
 
 sub moving_enable {
-	my( $shape, $e ) =  @_;
+	my( $shape ) =  @_;
 
-	$shape->save_state( $e->motion_x, $e->motion_y );
+	$shape->save_state();
 	$shape->{ c } =  Color->new( 0, 0, 200 );
 }
 
@@ -72,7 +72,6 @@ sub moving_disable {
 	my( $shape ) =  @_;
 
 	$shape->restore_state;
-	# $shape->store;
 }
 
 
@@ -92,7 +91,9 @@ sub on_move {
 	# my $p =  $shape->{ parent };
 	my $p =  $h->{ app };
 
-	$shape->move_to( $e->motion_x,  $e->motion_y, $p->{ w }, $p->{ h } );
+	$shape->move_to( $e->motion_x -$h->{ x },  $e->motion_y -$h->{ y },
+		$p->{ w }, $p->{ h }
+	);
 }
 
 

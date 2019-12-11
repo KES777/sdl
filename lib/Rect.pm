@@ -222,16 +222,13 @@ sub load_parent_data {
 
 ## Сохранение состояние объекта
 sub save_state {
-	my( $rect, $tp_x, $tp_y ) =  @_; # tp - take point
+	my( $rect ) =  @_;
 
 
 	$rect->{ start_x } =  $rect->{ x };
 	$rect->{ start_y } =  $rect->{ y };
 
 	$rect->{ start_c } =  $rect->{ c };
-
-	$rect->{ dx } =  $tp_x - $rect->{ x };
-	$rect->{ dy } =  $tp_y - $rect->{ y };
 }
 
 
@@ -241,7 +238,7 @@ sub restore_state {
 	my( $rect ) =  @_;
 
 	$rect->{ c } =  delete $rect->{ start_c };
-	delete $rect->@{qw/ dx dy start_x start_y /};
+	delete $rect->@{qw/ start_x start_y /};
 }
 
 
@@ -335,8 +332,8 @@ sub calc_group_size {
 sub move_to {
 	my( $rect, $x, $y, $app_w, $app_h ) =  @_;
 
-	$rect->{ x } =  $x - $rect->{ dx } //0;
-	$rect->{ y } =  $y - $rect->{ dy } //0;
+	$rect->{ x } =  $x //0;
+	$rect->{ y } =  $y //0;
 
 	if( $rect->{ x } < 0 ) {
 		$rect->{ x } = 0;

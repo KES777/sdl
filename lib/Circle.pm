@@ -209,16 +209,13 @@ sub is_over_res_field {
 
 ## Сохранение состояние объекта
 sub save_state {
-	my( $rect, $tp_x, $tp_y ) =  @_; # tp - take point
+	my( $rect ) =  @_;
 
 
 	$rect->{ start_x } =  $rect->{ x };
 	$rect->{ start_y } =  $rect->{ y };
 
 	$rect->{ start_c } =  $rect->{ c };
-
-	$rect->{ dx } =  $tp_x - $rect->{ x } - $rect->{ radius };
-	$rect->{ dy } =  $tp_y - $rect->{ y } - $rect->{ radius };
 }
 
 
@@ -228,7 +225,7 @@ sub restore_state {
 	my( $rect ) =  @_;
 
 	$rect->{ c } =  delete $rect->{ start_c };
-	delete $rect->@{qw/ dx dy start_x start_y /};
+	delete $rect->@{qw/ start_x start_y /};
 }
 
 
@@ -238,8 +235,8 @@ sub move_to {
 	my( $rect, $x, $y, $app_w, $app_h ) =  @_;
 
 
-	$rect->{ x } =  $x - $rect->{ dx } - $rect->{ radius } //0;
-	$rect->{ y } =  $y - $rect->{ dy } - $rect->{ radius } //0;
+	$rect->{ x } =  $x - $rect->{ radius } //0;
+	$rect->{ y } =  $y - $rect->{ radius } //0;
 
 	if( $rect->{ x } < $rect->{ radius } ) {
 		$rect->{ x } = $rect->{ radius };
