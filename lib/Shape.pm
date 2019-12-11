@@ -48,7 +48,7 @@ sub on_drag {
 
 
 sub on_drop {
-	my( $shape, $e, $h ) =  @_;
+	my( $shape, $h, $e ) =  @_;
 
 	$shape->moving_disable( $e, $h );
 	if( my $target =  $shape->can_drop( $e->motion_x, $e->motion_y, $h ) ) {
