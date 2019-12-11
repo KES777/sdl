@@ -310,20 +310,15 @@ sub is_over {
 	my( $shape, $x, $y ) =  @_;
 
 	if( $shape->mouse_target( $x, $y ) ) {
-		$x -=  $shape->{ x };
+ 		$x -=  $shape->{ x };
 		$y -=  $shape->{ y };
-		my $over =  $shape->propagate( is_over => $x, $y );
-		!$over   or return $over;
-
-		## !H
-		my $h =  {
-			target => $shape,  # Объект, над которым находится мышь
-			x      => $x,      # Координаты мыши отностельно левого верхнего угла объекта
-			y      => $y,
+		return $shape->propagate( is_over => $x, $y )  ||  {
+			# Объект, над которым находится мышь
+			target =>  $shape,
+			# Координаты мыши отностельно левого верхнего угла объекта
+			x =>  $x,
+			y =>  $y,
 		};
-
-		# DDP::p $h;
-		return $h;
 	}
 
 	return;
