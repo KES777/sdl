@@ -78,17 +78,18 @@ sub draw {
 
 
 ## delete all shapes or any one
-sub moving_off {
-	my( $btn_del, $app_rect, $e ) =  @_;
+sub moving_disable {
+	my( $btn_del, $e, $h ) =  @_;
 
+		my $app_rect =  $h->{ app };
 		$btn_del->start_position;
 
 	## Удаление всех объектов
 	if( $app_rect->{ btn }->is_over( $e->motion_x, $e->motion_y ) ) {
+		$app_rect->propagate( draw_black );
 		$app_rect->{ children } =  ();
 		Util::db()->resultset( 'Rect' )->delete;
-		$app_rect->draw_black;## Затираем перед удалением
-
+		# $app_rect->draw_black;## Затираем перед удалением
 		return;
 	}
 
@@ -98,7 +99,8 @@ sub moving_off {
 		my $x;
 		if( $shape->is_over( $e->motion_x, $e->motion_y ) ) {
 			$x =  $shape;
-			$shape->draw_black;## Затираем перед удалением
+			# $app_rect->draw_black;## Затираем перед удалением
+			$app_rect->propagate( draw_black );
 			$x->child_destroy;#удаление из базы по id
 		}
 
