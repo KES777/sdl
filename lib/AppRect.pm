@@ -354,7 +354,6 @@ sub _on_mouse_move {
 
 	##! OVER EVENT
 	## Send events to objects with additional info
-	# $app_rect->{ is_over } =  _is_over( $app_rect, $e->motion_x, $e->motion_y );
 	my $oo =  $app_rect->{ is_over };                             # OLD OVER
 	my $no =  _is_over( $app_rect, $e->motion_x, $e->motion_y );  # NEW OVER
 	$app_rect->make_handle( is_over => $no );
