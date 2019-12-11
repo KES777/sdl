@@ -180,7 +180,7 @@ sub save_draw_coord {
 sub is_over_in {
 	my( $shape, $x, $y ) =  @_;
 
-	if( mouse_target_square( $shape, $x, $y ) ) {
+	if( mouse_target( $shape, $x, $y ) ) {
 		return [ $x - $shape->{ x }, $y - $shape->{ y } ]
 	}
 
@@ -189,7 +189,7 @@ sub is_over_in {
 
 
 
-sub mouse_target_square {
+sub mouse_target {
 	my( $circle, $x, $y ) =  @_;
 
 	my $r =  $circle->{ radius };
