@@ -308,9 +308,9 @@ sub propagate {
 sub is_over {
 	my( $shape, $x, $y ) =  @_;
 
-	my( $bool, $xi, $yi ) =  $shape->is_over_in( $x, $y );
-	if( $bool ) {
-		if( my $over = $shape->propagate( is_over => $xi, $yi ) ) {
+	my $coord =  $shape->is_over_in( $x, $y );
+	if( $coord ) {
+		if( my $over =  $shape->propagate( is_over => @$coord ) ) {
 			return $over;
 		}
 

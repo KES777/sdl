@@ -157,7 +157,9 @@ sub is_over_in {
 		$target =  mouse_target_square( $shape, $x, $y );
 	}
 
-	return $target, $x, $y;
+	$target    or return;
+
+	return [ $x, $y ];
 }
 
 
