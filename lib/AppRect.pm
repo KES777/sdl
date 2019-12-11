@@ -318,15 +318,15 @@ sub _is_mouseup {
 		elsif( $dcl  &&  (SDL::get_ticks() -$dcl->{ time }) < 1000 ) {
 			$dcl->{ target }->on_double_click( $up, $e );
 
-			$app_rect->make_handle( is_triple_click => { %$over,
+			$app_rect->make_handle( is_triple_click => { %$up,
 				time => SDL::get_ticks(),
 			});
 		}
 		# else ( $dw   &&  (SDL::get_ticks() -$dcl->{ time }) < 1000 ) {
 		else {
-			$dcl->{ target }->on_click( $up, $e );
+			$up->{ target }->on_click( $up, $e );##???changed $dcl to $up
 
-			$app_rect->make_handle( is_double_click => { %$over,
+			$app_rect->make_handle( is_double_click => { %$up,
 				time => SDL::get_ticks(),
 			});
 		}
