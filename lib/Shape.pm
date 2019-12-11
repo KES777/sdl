@@ -106,6 +106,13 @@ sub move_by {
 
 
 
+sub get_points {
+	my( $shape ) =  @_;
+	return [ $shape->{ x }, $shape->{ y } ];
+}
+
+
+
 sub clip {
 	my( $shape, $target ) =  @_;
 
@@ -113,7 +120,7 @@ sub clip {
 		or return;
 
 	for my $point ( $shape->get_points ) {
-		$target->mouse_target( $point->@{ 'x', 'y' } )
+		$target->mouse_target( @$point )
 			or return;
 	}
 
