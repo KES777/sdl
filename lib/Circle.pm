@@ -230,29 +230,10 @@ sub restore_state {
 
 
 
-## Передвигает объект в соответствии с координатами курсора
-sub move_to {
-	my( $rect, $x, $y, $app_w, $app_h ) =  @_;
 
 
-	$rect->{ x } =  $x - $rect->{ radius } //0;
-	$rect->{ y } =  $y - $rect->{ radius } //0;
 
-	if( $rect->{ x } < $rect->{ radius } ) {
-		$rect->{ x } = $rect->{ radius };
-	}
-	if( $rect->{ y } < $rect->{ radius } ) {
-		$rect->{ y } = $rect->{ radius };
-	}
-
-	if( $app_w  &&  $rect->{ x } > $app_w - $rect->{ radius }) {
-		$rect->{ x } = $app_w - $rect->{ radius };
-	}
-	if( $app_h  &&  $rect->{ y } > $app_h - $rect->{ radius }) {
-		$rect->{ y } = $app_h - $rect->{ radius };
-	}
-}
-
+sub clip {}
 
 
 # Делает проверку, что объект $rect находится внутри квадрата x,y,w,h

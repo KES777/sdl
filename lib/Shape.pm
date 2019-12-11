@@ -106,6 +106,22 @@ sub move_by {
 
 
 
+sub clip {
+	my( $rect, $shape ) =  @_;
+
+	$shape //=  $rect->{ parent }
+		or return;
+
+	for my $point ( $rect->get_points ) {
+		$shape->mouse_target( $point->@{ 'x', 'y' } )
+			or return;
+	}
+
+	return 1;
+}
+
+
+
 ##
 sub on_move {
 	my( $shape, $e, $h ) =  @_;

@@ -329,6 +329,19 @@ sub calc_group_size {
 
 
 
+sub get_points {
+	my( $rect ) =  @_;
+
+	return
+		[ $rect->{ x }              , $rect->{ y }               ],
+		[ $rect->{ x } +$rect->{ w }, $rect->{ y }               ],
+		[ $rect->{ x }              , $rect->{ y } +$rect->{ h } ],
+		[ $rect->{ x } +$rect->{ w }, $rect->{ y } +$rect->{ h } ],
+	;
+}
+
+
+
 sub clip {
 	my( $rect, $w, $h ) =  @_;
 
