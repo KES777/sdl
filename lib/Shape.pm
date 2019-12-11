@@ -303,22 +303,23 @@ sub propagate {
 
 
 
+
 # Функция возвращает объект, над которым находится мышка.
 # Дополнительно сохранаяет информацию о координатах мыши.
 sub is_over {
 	my( $shape, $x, $y ) =  @_;
 
 	if( $shape->mouse_target( $x, $y ) ) {
-		my $over =  $shape->propagate(
-			is_over => $x - $shape->{ x }, $y - $shape->{ y }
-		)
+		$x -=  $shape->{ x };
+		$y -=  $shape->{ y };
+		my $over =  $shape->propagate( is_over => $x, $y );
 		!$over   or return $over;
 
 		## !H
 		my $h =  {
-			target => $shape,             # Объект, над которым находится мышь
-			x      => $x - $shape->{ x },  # Координаты мыши отностельно левого верхнего угла объекта
-			y      => $y - $shape->{ y },
+			target => $shape,  # Объект, над которым находится мышь
+			x      => $x,      # Координаты мыши отностельно левого верхнего угла объекта
+			y      => $y,
 		};
 
 		# DDP::p $h;
