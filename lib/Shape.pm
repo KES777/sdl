@@ -38,11 +38,9 @@ sub on_drag {
 		&&  $h->{ app } !=  $shape->{ parent }## или !$shape->{ parent_id }
 	) {
 		$shape->drag( $h );
-		$shape->moving_enable( $e );
 	}
-	else {
-		$shape->moving_enable( $e );
-	}
+
+	$shape->moving_enable( $e, $h );
 }
 
 
@@ -61,7 +59,7 @@ sub on_drop {
 
 
 
- sub moving_enable {
+sub moving_enable {
 	my( $shape, $e ) =  @_;
 
 	$shape->save_state( $e->motion_x, $e->motion_y );
