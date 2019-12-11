@@ -54,8 +54,10 @@ sub new {
 		h      => $h // $START_H,
 		c      => $c // Color->new,
 	);
+	$rect->@{ keys %rect } =  values %rect;
 
-	return bless \%rect, $rect;
+
+	return $rect;
 }
 
 
