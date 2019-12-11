@@ -1,4 +1,4 @@
-package _bar;
+package _ruler;
 
 use strict;
 use warnings;
@@ -50,10 +50,10 @@ sub new {
 
 
 	my $h =  $scroll->{ h } / $dimension  *$scroll->{ h };
-	my $arm =  _bar->new( 0, 0, $scroll->{ w }, $h );
-	$arm->{ c } =  Color->new( 50, 250, 50 );
-
-	$scroll->children( $arm );
+	my $ruler =  _ruler->new( 0, 0, $scroll->{ w }, $h,
+		Color->new( 50, 250, 50 )
+	);
+	$scroll->children( $ruler );
 
 
 	return $scroll;
