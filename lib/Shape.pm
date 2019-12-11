@@ -40,6 +40,8 @@ sub on_drag {
 		$shape->drag( $h );
 	}
 
+	$h->{ event_start_x } =  $e->motion_x;
+	$h->{ event_start_y } =  $e->motion_y;
 	$shape->moving_enable( $e, $h );
 }
 
@@ -88,10 +90,14 @@ sub on_press {
 sub on_move {
 	my( $shape, $e, $h ) =  @_;
 
-	# my $p =  $shape->{ parent };
-	my $p =  $h->{ app };
+	my $dx =  $e->motion_x -$h->{ event_start_x };
+	my $dy =  $e->motion_y -$h->{ event_start_y };
 
-	$shape->move_to( $e->motion_x -$h->{ x },  $e->motion_y -$h->{ y },
+
+	my $p =  $shape->{ parent };
+	$shape->move_to(
+		$h->{ target }{ start_x } +$dx,
+		$h->{ target }{ start_y } +$dy,
 		$p->{ w }, $p->{ h }
 	);
 }
