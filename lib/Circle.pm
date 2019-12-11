@@ -124,11 +124,7 @@ sub draw {
 	]);
 
 
-	if( $circle->{ children } ) {
-		for my $s ( $circle->{ children }->@* ) {
-			$s->draw( $screen, $x -$r, $y -$r );
-		}
-	}
+	$circle->SUPER::draw;
 }
 
 
