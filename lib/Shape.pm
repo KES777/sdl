@@ -40,8 +40,8 @@ sub on_drag {
 		$shape->drag( $h );
 	}
 
-	$h->{ event_start_x } =  $e->motion_x;
-	$h->{ event_start_y } =  $e->motion_y;
+	$h->{ event_start_x } =  $h->{ event_old_x } =  $e->motion_x;
+	$h->{ event_start_y } =  $h->{ event_old_y } =  $e->motion_y;
 	$shape->moving_enable( $e, $h );
 }
 
@@ -133,15 +133,12 @@ sub clip {
 sub on_move {
 	my( $shape, $e, $h ) =  @_;
 
-	my $dx =  $e->motion_x -$h->{ event_start_x };
-	my $dy =  $e->motion_y -$h->{ event_start_y };
+	my $dx =  $e->motion_x -$h->{ event_old_x };
+	my $dy =  $e->motion_y -$h->{ event_old_y };
+	$h->{ event_old_x } =  $e->motion_x;
+	$h->{ event_old_y } =  $e->motion_y;
 
-
-	$shape->move_to(
-		$h->{ target }{ start_x } +$dx,
-		$h->{ target }{ start_y } +$dy,
-	);
-	$shape->clip;
+	$shape->move_by( $dx, $dy );
 }
 
 
