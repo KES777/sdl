@@ -334,13 +334,12 @@ sub draw {
 sub propagate {
 	my( $shape, $event ) =  ( shift, shift );
 
-	if( $shape->{ children } ) {
-		for my $s ( $shape->{ children }->@* ) {
-			$s   or next;
-			# $s->$event( @_ );## это не работает
-			if( my $target =  $s->$event( @_ ) ) {
-				return $target;
-			}
+	my $children =  $shape->{ children }   or return;
+
+	for my $s ( @$children ) {
+		$s   or next;
+		if( my $target =  $s->$event( @_ ) ) {
+			return $target;
 		}
 	}
 }
