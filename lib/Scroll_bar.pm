@@ -70,4 +70,12 @@ sub limit_min {
 }
 
 
+
+sub limit_max {
+	my( $value, $max ) =  @_;
+
+	return $value <= $max? $value : $max;
+}
+
+
 1;
