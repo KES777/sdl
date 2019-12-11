@@ -308,7 +308,8 @@ sub propagate {
 sub is_over {
 	my( $shape, $x, $y ) =  @_;
 
-	if( my $coord =  $shape->is_over_in( $x, $y ) ) {
+	if( $shape->mouse_target( $x, $y ) ) {
+		my $coord =  [ $x - $shape->{ x }, $y - $shape->{ y } ];
 		if( my $over =  $shape->propagate( is_over => @$coord ) ) {
 			return $over;
 		}

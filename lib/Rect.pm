@@ -144,18 +144,6 @@ sub save_draw_coord {
 
 
 
-sub is_over_in {
-	my( $shape, $x, $y ) =  @_;
-
-	if( mouse_target( $shape, $x, $y ) ) {
-		return [ $x - $shape->{ x }, $y - $shape->{ y } ]
-	}
-
-	return;
-}
-
-
-
 sub mouse_target {
 	my( $object, $x, $y ) =  @_;
 

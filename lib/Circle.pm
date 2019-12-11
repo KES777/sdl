@@ -175,20 +175,6 @@ sub save_draw_coord {
 
 
 
-# Функция возвращает объект, над которым находится мышка.
-# Дополнительно сохранаяет информацию о координатах мыши.
-sub is_over_in {
-	my( $shape, $x, $y ) =  @_;
-
-	if( mouse_target( $shape, $x, $y ) ) {
-		return [ $x - $shape->{ x }, $y - $shape->{ y } ]
-	}
-
-	return;
-}
-
-
-
 sub mouse_target {
 	my( $circle, $x, $y ) =  @_;
 
