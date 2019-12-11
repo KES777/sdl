@@ -50,6 +50,10 @@ sub new {
 
 
 	my $view  =  $scroll->{ h } / $dimension;
+	# Do not create scroll if this is not required
+	$view <= 1   or return $scroll;
+
+
 	my $ruler =  _ruler->new( 0, 0,
 		$scroll->{ w },
 		limit_min( $scroll->{ h } *$view, 10 ),
