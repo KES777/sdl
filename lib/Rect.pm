@@ -146,15 +146,26 @@ sub is_over_in {
 	my( $shape, $x, $y ) =  @_;
 
 	if( !$shape->{ parent_id } ) {
-		my $target =   Util::mouse_target_square( $shape, $x, $y );
+		my $target =   mouse_target_square( $shape, $x, $y );
 			return $target, $x, $y;
 	}
 	else {
 		$x = $x - $shape->{ parent }{ x } + $shape->{ parent }{ radius };
 		$y = $y - $shape->{ parent }{ y } + $shape->{ parent }{ radius };
-		my $target =  Util::mouse_target_square( $shape, $x, $y );
+		my $target =  mouse_target_square( $shape, $x, $y );
 			return $target, $x, $y;
 	}
+}
+
+
+
+sub mouse_target_square {
+	my( $object, $x, $y ) =  @_;
+
+	return $x >= $object->{ x }
+		&& $x <= $object->{ x } + $object->{ w }
+		&& $y >= $object->{ y }
+		&& $y <= $object->{ y } + $object->{ h }
 }
 
 
@@ -378,10 +389,14 @@ sub child_destroy {
 
 ## Проверяет находится ли курсор над полем для изменения размеров объекта
 sub is_over_res_field {
-	my( $shape, $x, $y ) =  @_;
+	my( $rect, $x, $y ) =  @_;
 
-	$shape->Util::resize_field_rect( $x, $y );
+	return $x > $rect->{ x } + $rect->{ w } - 15
+		&& $x < $rect->{ x } + $rect->{ w }
+		&& $y > $rect->{ y } + $rect->{ h } - 10
+		&& $y < $rect->{ y } + $rect->{ h }
 }
+
 
 
 ## Изменяет цвет объекта при изменении его размеров(запоминает исходный цвет)

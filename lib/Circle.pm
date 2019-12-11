@@ -215,11 +215,16 @@ sub mouse_target_square {
 
 
 
+## Проверяет находится ли курсор над полем для изменения размеров объекта
 sub is_over_res_field {
-	my( $shape, $x, $y ) =  @_;
+	my( $rect, $x, $y ) =  @_;
 
-	$shape->Util::resize_field_circle( $x, $y );
+	return $x > $rect->{ x } + $rect->{ radius } - 15
+		&& $x < $rect->{ x } + $rect->{ radius }
+		&& $y > $rect->{ y } - 5
+		&& $y < $rect->{ y } + 5
 }
+
 
 
 ## Сохранение состояние объекта

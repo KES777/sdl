@@ -64,36 +64,4 @@ sub pause_handler {
 
 
 
-sub mouse_target_square {
-	my( $object, $x, $y ) =  @_;
-
-	return $x >= $object->{ x }
-		&& $x <= $object->{ x } + $object->{ w }
-		&& $y >= $object->{ y }
-		&& $y <= $object->{ y } + $object->{ h }
-}
-
-
-
-sub resize_field_rect {
-	my( $rect, $x, $y ) =  @_;
-
-	return $x > $rect->{ x } + $rect->{ w } - 15
-		&& $x < $rect->{ x } + $rect->{ w }
-		&& $y > $rect->{ y } + $rect->{ h } - 10
-		&& $y < $rect->{ y } + $rect->{ h }
-}
-
-
-
-sub resize_field_circle {
-	my( $rect, $x, $y ) =  @_;
-
-	return $x > $rect->{ x } + $rect->{ radius } - 15
-		&& $x < $rect->{ x } + $rect->{ radius }
-		&& $y > $rect->{ y } - 5
-		&& $y < $rect->{ y } + 5
-}
-
-
 1;
