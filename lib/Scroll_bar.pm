@@ -49,8 +49,8 @@ sub new {
 	$scroll =  $scroll->SUPER::new( @_ );
 
 
-	my $h =  $scroll->{ h } / $dimension  *$scroll->{ h };
-	my $ruler =  _ruler->new( 0, 0, $scroll->{ w }, $h,
+	my $view  =  $scroll->{ h } / $dimension;
+	my $ruler =  _ruler->new( 0, 0, $scroll->{ w }, $scroll->{ h } *$view,
 		Color->new( 50, 250, 50 )
 	);
 	$scroll->children( $ruler );
