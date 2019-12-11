@@ -147,19 +147,11 @@ sub save_draw_coord {
 sub is_over_in {
 	my( $shape, $x, $y ) =  @_;
 
-	my $target;
-	if( !$shape->{ parent_id } ) {
-		$target =   mouse_target_square( $shape, $x, $y );
-	}
-	else {
-		$x = $x - $shape->{ parent }{ x } + $shape->{ parent }{ radius };
-		$y = $y - $shape->{ parent }{ y } + $shape->{ parent }{ radius };
-		$target =  mouse_target_square( $shape, $x, $y );
+	if( mouse_target_square( $shape, $x, $y ) ) {
+		return [ $x - $shape->{ x }, $y - $shape->{ y } ]
 	}
 
-	$target    or return;
-
-	return [ $x, $y ];
+	return;
 }
 
 
