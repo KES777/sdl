@@ -72,7 +72,7 @@ sub draw {
 
 	# Calc row position
 	my $scroll_pos =  $rect->{ scroll }{ pos };
-	my $display_from =  $dsRect->count * $scroll_pos / 100;
+	my $display_from =  $dsRect->count * $scroll_pos;
 
 	# Draw data
 	my $dy =  0;
