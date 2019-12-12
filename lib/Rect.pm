@@ -100,7 +100,7 @@ sub draw {
 		$rect->{ w },
 		$rect->{ h },
 	],[
-		255,255,255,255
+		255,0,0,255
 	]);
 	#circuit
 	$screen->draw_rect([
