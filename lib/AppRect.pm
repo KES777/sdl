@@ -262,8 +262,6 @@ sub _is_mouseup {
 	$e->type == SDL_MOUSEBUTTONUP
 		or return;
 
-	delete $app_rect->{ event_state }{ SDLK_d };
-
 
 	## Выключение свойства "изменение размеров объекта"
 	if( my $h =  delete $app_rect->{ on_resize } ) {
@@ -274,18 +272,7 @@ sub _is_mouseup {
 	## Выключение свойства "движение объекта"
 	##! MOVE STOP
 	if( my $h =  delete $app_rect->{ is_moveable } ) {
-		$h->{ target }->on_drop( $h, $e );
-
-		# my $shape =  $h->{ target };
-		# # $shape->delete_target( $e, $app_rect );
-		# $shape->moving_off( $app_rect, $e );###передать нужно только $shape
-		# $shape->store;### нужно ли переносить в Shape.pm в  sub moving_off?
-
-
-		# ## Drop object
-		# if( my $group_rect =  $shape->can_drop( $h, $e->motion_x, $e->motion_y ) ) {###замена $app_rect на $h
-		# 	$group_rect->{ target }->drop( $shape, $app_rect, $e->motion_x, $e->motion_y );
-		# }
+		$h->{ target }->on_drop( $e, $h );
 	}
 
 	## Создание группы из поля selection
@@ -298,7 +285,7 @@ sub _is_mouseup {
 	}
 
 
-	##! RELEASE
+	## ! RELEASE
 	if( my $h =  $app_rect->{ is_over } ) {
 		$h->{ target }->on_release( $h, $e );
 	}
@@ -313,7 +300,7 @@ sub _is_mouseup {
 
 	if( $up  &&  $dw  &&  $up->{ target } == $dw->{ target } ) {
 		if   ( $tcl  &&  (SDL::get_ticks() -$tcl->{ time }) < 1000 ) {
-			$tcl->{ target }->on_triple_click( $up, $e );
+			# $tcl->{ target }->on_triple_click( $up, $e );
 
 			# $app_rect->make_handle( is_quad_click => { %$up,
 			# 	time => SDL::get_ticks(),
@@ -453,8 +440,6 @@ sub _is_over {
 
 sub refresh_over {
 	my( $app_rect, $x, $y ) =  @_;
-
-	# $app_rect->{ is_over } =  _is_over( $app_rect, $x, $y );
 	$app_rect->make_handle( is_over => _is_over( @_ ) );
 }
 
