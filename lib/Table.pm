@@ -74,6 +74,8 @@ sub draw {
 	my $scroll_pos =  $rect->{ scroll }{ pos };
 	my $display_from =  $dsRect->count * $scroll_pos;
 
+	print "Table: $display_from\n";
+
 	# Draw data
 	my $dy =  0;
 	my $row_n =  0;
