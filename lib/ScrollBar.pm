@@ -28,7 +28,7 @@ sub on_move {
 
 
 
-package Scroll_bar;
+package ScrollBar;
 
 use strict;
 use warnings;
@@ -47,7 +47,6 @@ sub new {
 	my( $scroll, $dimension ) =  ( shift, shift );
 
 	$scroll =  $scroll->SUPER::new( @_ );
-
 
 	my $view  =  $scroll->{ h } / $dimension;
 	# Nothing to scroll: 100% data is displayed

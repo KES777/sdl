@@ -5,7 +5,7 @@ use warnings;
 
 use SDLx::Text;
 
-use Scroll_bar;
+use ScrollBar;
 use AppRect;
 use Color;
 use base 'Rect';
@@ -27,7 +27,7 @@ sub new {
 	my $sx =  $obj->{ w } - $sw;
 	my $sy =  0;
 
-	$obj->{ scroll } =  Scroll_bar->new( 500, $sx, $sy, $sw, $sh );
+	$obj->{ scroll } =  ScrollBar->new( 500, $sx, $sy, $sw, $sh );
 	$obj->children( $obj->{ scroll } );
 
 	return $obj;
