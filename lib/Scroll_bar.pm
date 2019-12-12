@@ -62,6 +62,8 @@ sub new {
 	);
 	$scroll->children( $ruler );
 
+	$scroll->{ pos } =  0;
+
 
 	return $scroll;
 }
