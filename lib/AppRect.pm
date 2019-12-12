@@ -43,7 +43,11 @@ sub callback3 {
 sub new {
 	my( $rect, $app_w, $app_h ) =  @_;
 
-	my $app_rect =  $rect->SUPER::new( 0, 0, $app_w, $app_h );
+	my $app_rect =  $rect->SUPER::new();
+
+	$app_rect->{ w } =  $app_w;
+	$app_rect->{ h } =  $app_h;
+
 
 	$APP =  $app_rect->{ app } =  SDLx::App->new(
 		width      =>  $app_w,
