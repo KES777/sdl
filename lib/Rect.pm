@@ -411,37 +411,62 @@ sub resize_to {
 	}
 }
 
+
+
+## Меняет цвет объекта, над которым курсор
 sub on_mouse_over {
 	my( $rect ) =  @_;
 
-	# $rect->save_state;
-	$rect->{ c }{ g } =  150;
+	$rect->{ c }{ r } =  200;
+
+	# if( over_resize ) {
+	#    $rect->on_resize
+	#}
 }
 
+# sub on_resize {
+# 	resize_enable( ... )
+# }
+
+
+# sub on_move {
+# 	if( { is_resize } ) {
+# 		resize_rectangle( ... )
+#   }
+# }
+
+
+## Возвращает цвет объекту, над которым был курсор
 sub on_mouse_out {
 	my( $rect ) =  @_;
 
-	$rect->{ c }{ g } =  220;
-	# $rect->restore_state;
+	$rect->{ c }{ r } =  23;
 }
 
 
-sub on_keydown {
-	my( $rect, $h, $e ) =  @_;
 
-	$h->{ app }{ event_state }{ SDLK_d() }
-		or return;
+sub on_press {
+	my( $shape, $h, $e ) =  @_;
 
-
-	if( $rect->{ my_d } ) {
-		delete $rect->{ my_d };
-	}
-	else {
-		$rect->{ my_d } =  1;
-	}
-
-	printf "MY D: %s\n", $rect->{ my_d };
 }
+
+
+# sub on_keydown {
+# 	my( $rect, $h, $e ) =  @_;
+
+# 	$h->{ app }{ event_state }{ SDLK_d() }
+# 		or return;
+
+
+# 	if( $rect->{ my_d } ) {
+# 		delete $rect->{ my_d };
+# 	}
+# 	else {
+# 		$rect->{ my_d } =  1;
+# 	}
+
+# 	printf "MY D: %s\n", $rect->{ my_d };
+# }
 
 
 
