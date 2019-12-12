@@ -94,7 +94,7 @@ sub on_triple_click{ }
 sub on_hint{
 	my( $btn, $h, $e ) =  @_;
 
-	$h->{ app }->children( Table->new( 100, 100, 850, 430 ) );
+	push $h->{ app }->{ children }->@*, Table->new( 100, 100, 850, 355 );
 
 	$h->{ app }->refresh_over( $e->motion_x, $e->motion_y );
 }
