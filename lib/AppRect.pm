@@ -414,9 +414,10 @@ sub _on_mouse_move {
 
 	## Активация свойства "передвижение", отрисовка этого объекта поверх других
 	if( my $h =  $app_rect->{ is_moveable } ) {
-		$app_rect->{ first } =  $h->{ target };
+		$app_rect->{ first } =  $h->{ owner };
 	}
 }
+
 
 
 ## Возвращает объект, над которым курсор
