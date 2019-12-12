@@ -17,7 +17,7 @@ use SDLx::Text;
 
 
 my $app_w = 1200; #размер экрана;
-my $app_h = 700; #размер экрана;
+my $app_h = 1000; #размер экрана;
 
 
 my $app_rect =  AppRect->new( $app_w, $app_h );
