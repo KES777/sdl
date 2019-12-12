@@ -228,21 +228,18 @@ sub _is_mousedown {
 	}
 
 
+
 	## Создание поля selection
 	# if( (!$app_rect->{ is_over } || "CTRL_KEY"  )  &&  !$app_rect->{ is_selection } ) {
 	if( !$app_rect->{ is_over }  &&  !$app_rect->{ is_selection } ) {
-		# $app_rect->{ is_selection } =  Selection->new(
-		# 	$e->motion_x, $e->motion_y, 0, 0,
-		# 	Color->new( 0, 0, 0 )
-		# );
-		my $h =  {
+		$app_rect->make_handle( is_selection => {
 			target =>  $app_rect->{ is_over } || $app_rect,
 			draw   =>  Selection->new( $e->motion_x, $e->motion_y, 0, 0,
 						Color->new( 0, 0, 0 ) )
-		};
-		DDP::p $h;
-		$app_rect->{ is_selection } =  $h;
+		} );
+		# DDP::p $h;
 	}
+
 
 
 	##! PRESS
