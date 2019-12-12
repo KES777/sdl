@@ -51,7 +51,9 @@ sub on_drop {
 	my( $shape, $e, $h ) =  @_;
 
 	$shape->moving_disable( $e, $h );
-	if( my $target =  $shape->can_drop( $e->motion_x, $e->motion_y, $h ) ) {
+	if( ( my $target =  $shape->can_drop( $e->motion_x, $e->motion_y, $h ) )
+		&&  $h->{ app }{ event_state }{ SDLK_d() }
+	) {
 		$shape->drop( $target->{ target }, $h, $e->motion_x, $e->motion_y );
 	}
 	else {
