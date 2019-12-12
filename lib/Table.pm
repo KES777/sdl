@@ -101,28 +101,4 @@ sub draw {
 
 
 
-sub move_to {
-	my( $rect, $x, $y, $app_w, $app_h ) =  @_;
-
-	$rect->{ scroll }{ y } =  $y;
-	my $rh =  $rect->{ scroll }{ h };
-
-	if( $rect->{ scroll }{ y } < $rect->{ y } ) {
-		$rect->{ scroll }{ y } = $rect->{ y };
-	}
-
-	if( $rect->{ scroll }{ y } > $rect->{ h } - $rh ) {
-		$rect->{ scroll }{ y } = $rect->{ h } - $rh;
-	}
-
-	if( $y > $rect->{ h } - $rh )  {
-		$y =  $rect->{ h } - $rh;
-	}
-
-	$rect->draw_black;
-	$rect->{ scroll }{ pos } =  ( $y - $rect->{ y } ) * 100 / ( $rect->{ h } - $rh );
-}
-
-
-
 1;
