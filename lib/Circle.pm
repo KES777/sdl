@@ -304,13 +304,11 @@ sub calc_group_size {
 	}
 
 	my $res;
-
 	$res =  $h < $w + 20 ? $w + 20 : $h;
 	$group->{ radius } =  $res / 2;
-	if( $group->{ radius } *2 < 50 ) {
+	if( $group->{ radius } < 25 ) {
 		$group->{ radius } =  25;
 	}
-
 }
 
 
