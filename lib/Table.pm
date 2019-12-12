@@ -96,7 +96,7 @@ sub draw {
 		$row_displayed++;
 	}
 
-	$rect->{ scroll }->draw;
+	$rect->propagate( 'draw', undef, $rect->{ x }, $rect->{ y }  );
 }
 
 
