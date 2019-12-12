@@ -160,37 +160,6 @@ sub is_inside {
 
 
 
-## Сохранение (обновление) объекта в базу
-sub store {
-	my( $rect ) =  @_;
-
-	if( $rect->{ id } ) {
-		my $row =  Util::db()->resultset( 'Rect' )->search({
-			id => $rect->{ id },
-		})->first;
-		$row->update({
-			$rect->%{qw/ x y w h parent_id/},
-			$rect->{ c }->geth,
-		});
-	}
-	elsif( $rect->{ parent } ) {
-		my $row =  Util::db()->resultset( 'Rect' )->create({
-			$rect->%{qw/ x y w h /},
-			$rect->{ c }->geth,
-		});
-
-		$rect->{ id } =  $row->id;
-	}
-
-	for my $r ( $rect->{ children }->@* ) {
-		$r->store;
-	}
-
-	return $rect;
-}
-
-
-
 ## Запись в базу parent_id для объекта
 sub parent_id {
 	my( $rect, $id ) =  @_;
