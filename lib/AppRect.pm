@@ -17,6 +17,8 @@ use Btn_del;
 use Btn;
 use Circle;
 use Btn_Circle;
+use Table;
+use Cursor;
 
 use base 'Shape';
 
