@@ -23,11 +23,12 @@ sub new {
 
 
 	my $sw =  15;
-	my $sh =  20;
-	my $sx =  $obj->{ x } + $obj->{ w } - $sw;
-	my $sy =  $obj->{ y };
+	my $sh =  $obj->{ h };
+	my $sx =  $obj->{ w } - $sw;
+	my $sy =  0;
 
-	my $s =  $obj->{ scroll } =  Scroll_bar->new( $sx, $sy, $sw, $sh );
+	$obj->{ scroll } =  Scroll_bar->new( 500, $sx, $sy, $sw, $sh );
+	$obj->children( $obj->{ scroll } );
 
 	return $obj;
 }
