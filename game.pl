@@ -16,7 +16,7 @@ use SDL::Event;
 use SDLx::Text;
 
 
-my $app_w = 700; #размер экрана;
+my $app_w = 1200; #размер экрана;
 my $app_h = 700; #размер экрана;
 
 
