@@ -357,6 +357,7 @@ sub _on_mouse_move {
 	## Send events to objects with additional info
 	my $oo =  $app_rect->{ is_over };                             # OLD OVER
 	my $no =  _is_over( $app_rect, $e->motion_x, $e->motion_y );  # NEW OVER
+	print ref( $no->{ target } ), "\n"   if $no;
 	$app_rect->make_handle( is_over => $no );
 
 	if( $no  &&  !$oo ) {

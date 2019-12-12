@@ -375,7 +375,8 @@ sub is_over {
 	my( $shape, $x, $y ) =  @_;
 
 	if( $shape->mouse_target( $x, $y ) ) {
- 		$x -=  $shape->{ x };
+		# DB::x   if ref $shape eq 'Table';
+		$x -=  $shape->{ x };
 		$y -=  $shape->{ y };
 		return $shape->propagate( is_over => $x, $y )  ||  {
 			# Объект, над которым находится мышь
