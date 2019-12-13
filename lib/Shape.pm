@@ -58,6 +58,10 @@ sub on_drop {
 	}
 	else {
 		$shape->store;
+		## Установка минимального размера группы
+		if( $shape->{ parent_id } ) {
+			$shape->{ parent }->set_min_size;
+		}
 	}
 }
 

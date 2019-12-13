@@ -403,6 +403,27 @@ sub resize_to {
 
 
 
+sub set_min_size {
+	my( $rect ) =  @_;
+
+	my $h;
+	my $w;
+	my $step =  10;
+	for my $shape_i( $rect->{ children }->@* ) {
+		my( $hi, $wi ) =  $shape_i->get_size;
+
+		$hi =  $hi + $shape_i->{ y } + $step;
+		$h =  $hi > $h ? $hi : $h;
+		$wi =  $wi + $shape_i->{ x } + $step;
+		$w =  $wi > $w ? $wi : $w;
+	}
+
+	$rect->{ min_h } =  $h;
+	$rect->{ min_w } =  $w;
+}
+
+
+
 ## Возвращает размер объекта ( h, w )
 sub get_size {
 	my( $rect ) =  @_;
