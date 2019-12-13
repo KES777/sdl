@@ -381,42 +381,13 @@ sub resize_color {
 }
 
 
+
 ## Изменяет размер объекта в соответсвии с координатами курсора
 sub resize_to {
-	my( $rect, $x, $y ) =  @_;
+	my( $rect, $h, $w ) =  @_;
 
-	$rect->{ w } =  $x - $rect->{ x };
-	if( $x - $rect->{ x } < 50 ) {
-		$rect->{ w } =  50;
-	}
-
-	$rect->{ h } =  $y - $rect->{ y };
-	if( $y - $rect->{ y } < 30 ) {
-		$rect->{ h } =  30;
-	}
-
-
-	$rect->{ children } or return;
-
-	my $h, $w;
-	for my $square( $rect->{ children }->@* ) {
-		if( !$square->{ h }  &&  !$square->{ w } ) {
-			$square->{ h } =  $square->{ radius } * 2;
-			$square->{ w } =  $square->{ radius } * 2;
-		}
-
-		my $hi = $square->{ h } + $square->{ y } + 10;
-		$h =  $hi > $h ? $hi : $h;
-		my $wi = $square->{ w } + $square->{ x } + 10;
-		$w =  $wi > $w ? $wi : $w;
-
-		if( $square->{ radius } ) {
-			delete $square->{ h };
-			delete $square->{ w };
-		}
-	}
-	$rect->{ h } = $rect->{ h } < $h ? $h: $rect->{ h };
-	$rect->{ w } = $rect->{ w } < $w ? $w: $rect->{ w };
+	$rect->{ h } =  Util::min( Util::max( $h, $rect->{ max_h } ), $rect->{ min_h } );
+	$rect->{ w } =  Util::min( Util::max( $w, $rect->{ max_w } ), $rect->{ min_w } );
 }
 
 
