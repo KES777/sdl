@@ -277,6 +277,7 @@ sub _is_mouseup {
 
 	## Создание группы из поля selection
 	if( my $h =  delete $app_rect->{ is_selection } ) {
+		delete $app_rect->{ back };
 		if( my $group =  $app_rect->_can_group( $h, $e ) ) {
 			$group->{ target }->on_group( $h, $e, $group );
 		}
@@ -416,6 +417,11 @@ sub _on_mouse_move {
 	if( my $h =  $app_rect->{ is_moveable } ) {
 		$app_rect->{ first } =  $h->{ owner };
 	}
+
+	## Отрисовка объкта selection позади других объектов
+	if( my $h =  $app_rect->{ is_selection } ) {
+		$app_rect->{ back } =  $h->{ draw };
+	}
 }
 
 
@@ -486,6 +492,9 @@ sub draw {
 		$app_rect->{ app }->width,
 		$app_rect->{ app }->height,
 	],[ 0, 0, 0, 0 ]);
+	if( $app_rect->{ back } ) {
+		$app_rect->{ back }->draw;
+	}
 	$app_rect->SUPER::draw;
 
 	$app_rect->{ btn     }->draw;
