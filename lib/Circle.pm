@@ -392,39 +392,21 @@ sub on_press {
 
 
 
-## Изменяет размер объекта в соответсвии с координатами курсора
-sub resize_to {
-	my( $rect, $x, $y ) =  @_;
+sub calc_size_values {
+	my( $circle, $x, $y ) =  @_;
 
-	$rect->{ radius } =  $x - $rect->{ x };
-	if( $x - $rect->{ x } < 25 ) {
-		$rect->{ radius } =  25;
-	}
+	my $ry = $y - $circle->{ y };
+	my $rx = $x - $circle->{ x };
 
-	$rect->{ children } or return;
+	my $r =  $ry > $rx ? $ry : $rx;
 
-	my $h = 10;
-	for my $square( $rect->{ children }->@* ) {
-		if( !$square->{ h }  &&  !$square->{ w } ) {
-			$square->{ h } =  $square->{ radius } * 2;
-			$square->{ w } =  $square->{ radius } * 2;
-		}
-
-		$h +=  $square->{ h } + 10;
-
-		if ( $rect->{ radius } < ( $square->{ w } + 20 ) / 2 ) {
-			$rect->{ radius } =  ( $square->{ w } + 20 ) / 2;
-		}
-		if( $square->{ radius } ) {
-			delete $square->{ h };
-			delete $square->{ w };
-		}
-	}
-
-	if( $rect->{ radius } < $h / 2 ) {
-		$rect->{ radius } =  $h / 2;
-	}
+	return ( $r );
 }
+
+
+
+
+
 
 
 

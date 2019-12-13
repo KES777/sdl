@@ -382,6 +382,17 @@ sub resize_color {
 
 
 
+sub calc_size_values {
+	my( $rect, $x, $y ) =  @_;
+
+	my $h =  $y - $rect->{ y };
+	my $w =  $x - $rect->{ x };
+
+	return ( $h, $w );
+}
+
+
+
 ## Изменяет размер объекта в соответсвии с координатами курсора
 sub resize_to {
 	my( $rect, $h, $w ) =  @_;
