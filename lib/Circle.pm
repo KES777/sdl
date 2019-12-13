@@ -414,8 +414,9 @@ sub set_min_size {
 sub get_size {
 	my( $circle ) =  @_;
 
-	my $h =  $circle->{ radius };
-	my $w =  $circle->{ radius };
+	my $diam =  $circle->{ radius } * 2;
+	my $h =  $diam;
+	my $w =  $diam;
 
 	return ( $h, $w );
 }
