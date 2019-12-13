@@ -285,6 +285,9 @@ sub _is_mouseup {
 		$h->{ draw }->draw_black;## Затираем перед удалением
 	}
 
+	## Удаление свойства first (отрисовка объекта первым)
+	delete $app_rect->{ first };
+
 
 	## ! RELEASE
 	if( my $h =  $app_rect->{ is_over } ) {
