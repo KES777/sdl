@@ -438,6 +438,14 @@ sub get_size {
 
 
 
+sub position {
+	my( $rect ) =  @_;
+
+	return $rect->{ x }, $rect->{ y };
+}
+
+
+
 ## Меняет цвет объекта, над которым курсор
 sub on_mouse_over {
 	my( $rect ) =  @_;

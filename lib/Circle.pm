@@ -421,5 +421,12 @@ sub get_size {
 }
 
 
+sub position {
+	my( $circle ) =  @_;
+
+	return $circle->{ x } - $circle->{ radius }, $circle->{ y } - $circle->{ radius };
+}
+
+
 
 1;
