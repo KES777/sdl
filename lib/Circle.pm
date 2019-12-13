@@ -10,6 +10,8 @@ use AppRect;
 use Color;
 use base 'Shape';
 
+my $MAX_R =  250;
+my $MIN_R =   25;
 
 my $START_R =  25;
 
@@ -47,6 +49,8 @@ sub new {
 		y      => $y,
 		radius => $r // $START_R,
 		c      => $c // Color->new,
+		min_r  => $MIN_R,
+		max_r  => $MAX_R,
 	);
 	$rect->@{ keys %rect } =  values %rect;
 
