@@ -64,4 +64,22 @@ sub pause_handler {
 
 
 
+sub max {
+	my( $value, $max ) =  @_;
+
+	$value =  $value > $max ? $max : $value;
+	return ( $value );
+}
+
+
+
+sub min {
+	my( $value, $min ) =  @_;
+
+	$value =  $value < $min ? $min : $value;
+	return ( $value );
+}
+
+
+
 1;
