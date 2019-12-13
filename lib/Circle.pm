@@ -144,37 +144,6 @@ sub save_draw_coord {
 
 
 
-## Сохранение (обновление) объекта в базу
-# sub store {
-# 	my( $rect ) =  @_;
-
-# 	if( $rect->{ id } ) {
-# 		my $row =  Util::db()->resultset( 'Rect' )->search({
-# 			id => $rect->{ id },
-# 		})->first;
-# 		$row->update({
-# 			$rect->%{qw/ x y radius parent_id/},
-# 			$rect->{ c }->geth,
-# 		});
-# 	}
-# 	elsif( $rect->{ parent } ) {
-# 		my $row =  Util::db()->resultset( 'Rect' )->create({
-# 			$rect->%{qw/ x y radius /},
-# 			$rect->{ c }->geth,
-# 		});
-
-# 		$rect->{ id } =  $row->id;
-# 	}
-
-# 	for my $r ( $rect->{ children }->@* ) {
-# 		$r->store;
-# 	}
-
-# 	return $rect;
-# }
-
-
-
 sub mouse_target {
 	my( $circle, $x, $y ) =  @_;
 
