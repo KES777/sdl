@@ -68,9 +68,9 @@ sub on_press {
 
 
 sub draw {
-	my( $btn_c, $screen, $x, $y ) =  @_;
+	my( $btn_c, $x, $y ) =  @_;
 
-	$screen //=  AppRect::SCREEN();
+	my $screen =  AppRect::SCREEN();
 	$x //=  0;
 	$y //=  0;
 

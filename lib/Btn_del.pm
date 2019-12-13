@@ -47,12 +47,12 @@ sub on_dbl_click { }
 
 
 sub draw {
-	my( $btn_del, $screen, $x, $y ) =  @_;
+	my( $btn_del, $x, $y ) =  @_;
 
-	$btn_del->draw_black;
-	$btn_del->save_draw_coord;
+	# $btn_del->draw_black;
+	# $btn_del->save_draw_coord;
 
-	$screen //=  AppRect::SCREEN();
+	my $screen =  AppRect::SCREEN();
 	$x //=  0;
 	$y //=  0;
 

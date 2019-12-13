@@ -73,9 +73,9 @@ sub new {
 
 
 sub draw_black {
-	my( $rect, $screen, $x, $y ) = @_;
+	my( $rect, $x, $y ) = @_;
 
-	$screen //=  AppRect::SCREEN();
+	my $screen =  AppRect::SCREEN();
 	$x //=  0;
 	$y //=  0;
 
@@ -94,10 +94,9 @@ sub draw_black {
 
 
 sub draw {
-	my( $rect, $screen, $x, $y ) = @_;
+	my( $rect, $x, $y ) = @_;
 
-
-	$screen //=  AppRect::SCREEN();
+	my $screen =  AppRect::SCREEN();
 	$x //=  0;
 	$y //=  0;
 
@@ -133,7 +132,7 @@ sub draw {
 	]);
 
 
-	$rect->SUPER::draw( $screen, $x, $y );
+	$rect->SUPER::draw( $x, $y );
 }
 
 

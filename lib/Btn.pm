@@ -50,9 +50,9 @@ sub on_press {
 
 
 sub draw {
-	my( $app_rect, $screen, $x, $y ) =  @_;
+	my( $app_rect, $x, $y ) =  @_;
 
-	$screen //=  AppRect::SCREEN();
+	my $screen =  AppRect::SCREEN();
 	$x //=  0;
 	$y //=  0;
 
