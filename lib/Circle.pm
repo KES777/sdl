@@ -364,7 +364,7 @@ sub on_press {
 }
 
 
-
+## Возвращает размер объекта для resize
 sub calc_size_values {
 	my( $circle, $x, $y ) =  @_;
 

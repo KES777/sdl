@@ -381,7 +381,7 @@ sub resize_color {
 }
 
 
-
+## Возвращает размер объекта для resize
 sub calc_size_values {
 	my( $rect, $x, $y ) =  @_;
 
