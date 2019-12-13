@@ -387,6 +387,15 @@ sub resize_to {
 
 
 
+## Возвращает размер объекта ( h, w )
+sub get_size {
+	my( $circle ) =  @_;
+
+	my $h =  $circle->{ radius };
+	my $w =  $circle->{ radius };
+
+	return ( $h, $w );
+}
 
 
 

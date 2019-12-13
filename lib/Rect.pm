@@ -403,6 +403,18 @@ sub resize_to {
 
 
 
+## Возвращает размер объекта ( h, w )
+sub get_size {
+	my( $rect ) =  @_;
+
+	my $h =  $rect->{ h };
+	my $w =  $rect->{ w };
+
+	return ( $h, $w );
+}
+
+
+
 ## Меняет цвет объекта, над которым курсор
 sub on_mouse_over {
 	my( $rect ) =  @_;
