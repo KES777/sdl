@@ -288,12 +288,12 @@ sub store_group {
 }
 
 
+
 ## Изменение размеров объекта
 sub resize {
 	my( $shape, $x, $y ) =  @_;
 
-	my( @values ) =  $shape->calc_size_values( $x, $y );
-	$shape->resize_to( @values );
+	$shape->resize_to( $shape->calc_size_values( $x, $y ) );
 }
 
 
