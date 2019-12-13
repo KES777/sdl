@@ -14,9 +14,14 @@ use Shape;
 
 use base 'Shape';
 
+my $MAX_H =  500;
+my $MAX_W =  500;
 
-my $START_W =  50;
+my $MIN_H =  30;
+my $MIN_W =  50;
+
 my $START_H =  30;
+my $START_W =  50;
 
 my $y_offset_n =  0;
 my $x_offset   =  50;
@@ -53,6 +58,11 @@ sub new {
 		w      => $w // $START_W,
 		h      => $h // $START_H,
 		c      => $c // Color->new,
+
+		min_h  => $MIN_H,
+		min_w  => $MIN_W,
+		max_h  => $MAX_H,
+		max_w  => $MAX_W,
 	);
 	$rect->@{ keys %rect } =  values %rect;
 
