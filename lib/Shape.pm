@@ -288,7 +288,8 @@ sub store_group {
 sub resize {
 	my( $shape, $x, $y ) =  @_;
 
-	$shape->resize_to( $x, $y );
+	my( @values ) =  $shape->calc_size_values( $x, $y );
+	$shape->resize_to( @values );
 }
 
 
