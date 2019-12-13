@@ -408,18 +408,20 @@ sub set_min_size {
 
 	my $h;
 	my $w;
-	my $step =  10;
-	for my $shape_i( $rect->{ children }->@* ) {
+	for my $shape_i ( $rect->{ children }->@* ) {
 		my( $hi, $wi ) =  $shape_i->get_size;
+		my( $x, $y)    =  $shape_i->position;
 
-		$hi =  $hi + $shape_i->{ y } + $step;
-		$h =  $hi > $h ? $hi : $h;
-		$wi =  $wi + $shape_i->{ x } + $step;
-		$w =  $wi > $w ? $wi : $w;
+		$hi =  $y + $hi;
+		$h  =  $hi > $h ? $hi : $h;
+
+		$wi =  $x + $wi;
+		$w  =  $wi > $w ? $wi : $w;
 	}
 
-	$rect->{ min_h } =  $h;
-	$rect->{ min_w } =  $w;
+	my $padding =  10;
+	$rect->{ min_h } =  $h + $padding;
+	$rect->{ min_w } =  $w + $padding;
 }
 
 
