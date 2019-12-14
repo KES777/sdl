@@ -218,14 +218,13 @@ sub objects_grouping {## rename   object`s grouping
 
 
 
-## Возвращает координаты (dx и dy) точки handle (привязки) объекта
-sub object_handle {
-	my( $circle ) =  @_;
+sub set_group_size {
+	my( $circle, $h, $w ) =  @_;
 
-	my $dx =  $circle->{ radius };
-	my $dy =  $circle->{ radius };
+	my $diam =  $h < $w ? $w : $h;
+	$diam    =  $diam < 25 ? 25 : $diam;
 
-	return ( $dx, $dy );
+	$circle->{ min_r } =  $circle->{ radius } =  $diam / 2;
 }
 
 

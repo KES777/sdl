@@ -202,23 +202,15 @@ sub resize_group {
 sub calc_group_size {
 	my( $group, $children ) =  @_;
 
-	my $w =   0;
-	my $h =  10;
+sub set_group_size {
+	my( $circle, $h, $w ) =  @_;
 
-	for my $s ( @$children ) {
-		if( $s->{ radius } ) {
-			my $r =  $s->{ radius };
-			$s->move_to( 10 + $r * 2, $h + $r * 2 );
-			if( $s->{ c }{ r } < 225 ) {
-				$s->{ c }{ r } =  $group->{ c }{ r } + 30;
-			}
+	$h =  $h < 30 ? 30 : $h;
+	$w =  $w < 50 ? 50 : $w;
 
-			$h +=  $r * 2 + 10;
-			$w  =  $r * 2 > $w ? $r * 2 : $w;
-		}
-		else {
-			$s->move_to( 10, $h );
-			$s->{ c }{ r } =  $group->{ c }{ r } + 80;
+	$circle->{ min_h } =  $circle->{ h } =  $h;
+	$circle->{ min_w } =  $circle->{ w } =  $w;
+}
 
 			$h +=  $s->{ h } +10;
 			$w  =  $s->{ w } > $w ? $s->{ w } : $w;
