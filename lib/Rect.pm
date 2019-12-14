@@ -444,6 +444,17 @@ sub position {
 }
 
 
+## Возвращает dx и dy точки привязки объекта
+sub object_handle {
+	my( $rect ) =  @_;
+
+	my $dx;
+	my $dy;
+
+	return ( $dx, $dy );
+}
+
+
 
 ## Меняет цвет объекта, над которым курсор
 sub on_mouse_over {
