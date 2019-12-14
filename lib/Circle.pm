@@ -243,52 +243,38 @@ sub parent_id {
 
 
 
+ sub calc_group_size {
+ 	my( $group, $children ) =  @_;
+
+ 	$group->objects_grouping( $children );
+ 	$group->set_min_size;
+ }
+
+
+
 ## Пересчитывает размер группы в соответствии с её содержимым
-sub calc_group_size {
+sub objects_grouping {## rename   object`s grouping
 	my( $group, $children ) =  @_;
 
 	my $padding =  10;
+	my $h =  $padding;
 	for my $shape_i ( @$children ) {
 		my( $hi, $wi ) =  $shape_i->get_size;
 		my( $dx, $dy ) =  $shape_i->object_handle;
-		$shape_i->move_to( $padding + $dx, $padding + $dy )
 
+		$shape_i->move_to( $padding + $dx, $padding + $dy + $h );
 
+		if( $s->{ c }{ b } < 225 ) {
+			$s->{ c }{ b } =  $group->{ c }{ b } + 30;
+		}
 
-	# my $w =   0;
-	# my $h =  10;
-
-	# for my $s ( @$children ) {
-	# 	if( $s->{ radius } ) {
-	# 		my $r =  $s->{ radius };
-	# 		$s->move_to( 10 + $r * 2, $h + $r * 2 );
-	# 		if( $s->{ c }{ b } < 225 ) {
-	# 			$s->{ c }{ b } =  $group->{ c }{ b } + 30;
-	# 		}
-
-	# 		$h +=  $r * 2 + 10;
-	# 		$w  =  $r * 2 > $w ? $r * 2 : $w;
-	# 	}
-	# 	else {
-	# 		$s->move_to( 10, $h );
-	# 		$s->{ c }{ r } =  $group->{ c }{ r } + 80;
-
-	# 		$h +=  $s->{ h } +10;
-	# 		$w  =  $s->{ w } > $w ? $s->{ w } : $w;
-	# 	}
-	# }
-
-	# my $res;
-	# $res =  $h < $w + 20 ? $w + 20 : $h;
-	# $group->{ radius } =  $res / 2;
-	# if( $group->{ radius } < 25 ) {
-	# 	$group->{ radius } =  25;
-	# }
+		$h +=  $hi + $padding;
+	}
 }
 
 
 
-## Возвращает dx и dy точки привязки объекта
+## Возвращает координаты (dx и dy) точки handle (привязки) объекта
 sub object_handle {
 	my( $circle ) =  @_;
 
@@ -435,7 +421,7 @@ sub get_size {
 	return ( $h, $w );
 }
 
-
+## Возвращает координаты (расстояние от parent до точки handle объекта)
 sub position {
 	my( $circle ) =  @_;
 

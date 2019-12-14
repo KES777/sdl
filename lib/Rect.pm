@@ -436,7 +436,7 @@ sub get_size {
 }
 
 
-
+## Возвращает координаты (расстояние от parent до точки handle объекта)
 sub position {
 	my( $rect ) =  @_;
 
@@ -444,7 +444,7 @@ sub position {
 }
 
 
-## Возвращает dx и dy точки привязки объекта
+## Возвращает координаты (dx и dy) точки handle (привязки) объекта
 sub object_handle {
 	my( $rect ) =  @_;
 
