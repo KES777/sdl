@@ -47,7 +47,10 @@ sub on_dbl_click { }
 
 
 
+sub get_sb_coords {
 
+	return ( 0, 0, 0, 0 );
+}
 
 
 

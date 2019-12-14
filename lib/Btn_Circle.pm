@@ -66,7 +66,10 @@ sub on_press {
 }
 
 
+sub get_sb_coords {
 
+	return ( 0, 0, 0, 0 );
+}
 
 
 
