@@ -187,34 +187,7 @@ sub parent_id {
 
 
 
- sub calc_group_size {
- 	my( $group, $children ) =  @_;
 
- 	$group->objects_grouping( $children );
- 	$group->set_min_size;
- }
-
-
-
-## Пересчитывает размер группы в соответствии с её содержимым
-sub objects_grouping {## rename   object`s grouping
-	my( $group, $children ) =  @_;
-
-	my $padding =  10;
-	my $h =  $padding;
-	for my $shape_i ( @$children ) {
-		my( $hi, $wi ) =  $shape_i->get_size;
-		my( $dx, $dy ) =  $shape_i->object_handle;
-
-		$shape_i->move_to( $padding + $dx, $padding + $dy + $h );
-
-		if( $s->{ c }{ b } < 225 ) {
-			$s->{ c }{ b } =  $group->{ c }{ b } + 30;
-		}
-
-		$h +=  $hi + $padding;
-	}
-}
 
 
 
