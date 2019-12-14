@@ -233,7 +233,7 @@ sub resize_group {
 	my( $parent ) =  @_;
 
 	my @children =  $parent->{ children }->@*;
-	$parent->calc_group_size( \@children );
+	$parent->organize_group( \@children );
 
 	if( $parent->{ parent }{ id } ) {
 		$parent->{ parent }->resize_group;
@@ -305,6 +305,7 @@ sub on_press {
 	my( $shape, $h, $e ) =  @_;
 
 }
+
 
 
 ## Возвращает размер объекта для resize
