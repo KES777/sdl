@@ -46,37 +46,8 @@ sub on_click { }
 sub on_dbl_click { }
 
 
-sub draw {
-	my( $btn_del, $x, $y ) =  @_;
 
-	# $btn_del->draw_black;
-	# $btn_del->save_draw_coord;
 
-	my $screen =  AppRect::SCREEN();
-	$x //=  0;
-	$y //=  0;
-
-	$x += $btn_del->{ x };
-	$y += $btn_del->{ y };
-
-	$screen->draw_rect([
-		$x,
-		$y,
-		$btn_del->{ w },
-		$btn_del->{ h },
-	],[
-		255,255,255,255
-	]);
-	#circuit
-	$screen->draw_rect([
-		$x +1,
-		$y +1,
-		$btn_del->{ w }-2,
-		$btn_del->{ h }-2,
-	],[
-		$btn_del->{ c }->get()
-	]);
-}
 
 
 

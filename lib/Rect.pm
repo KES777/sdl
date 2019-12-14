@@ -72,68 +72,25 @@ sub new {
 
 
 
-sub draw_black {
-	my( $rect, $x, $y ) = @_;
+# sub draw_black {
+# 	my( $rect, $x, $y ) = @_;
 
-	my $screen =  AppRect::SCREEN();
-	$x //=  0;
-	$y //=  0;
+# 	my $screen =  AppRect::SCREEN();
+# 	$x //=  0;
+# 	$y //=  0;
 
-	$x += $rect->{ ox } // $rect->{ x };
-	$y += $rect->{ oy } // $rect->{ y };
-
-
-	$screen->draw_rect([
-		$x,
-		$y,
-		$rect->{ ow } // $rect->{ w },
-		$rect->{ oh } // $rect->{ h },
-	],[ 0, 0, 0, 0 ]);
-}
+# 	$x += $rect->{ ox } // $rect->{ x };
+# 	$y += $rect->{ oy } // $rect->{ y };
 
 
+# 	$screen->draw_rect([
+# 		$x,
+# 		$y,
+# 		$rect->{ ow } // $rect->{ w },
+# 		$rect->{ oh } // $rect->{ h },
+# 	],[ 0, 0, 0, 0 ]);
+# }
 
-sub draw {
-	my( $rect, $x, $y ) = @_;
-
-	my $screen =  AppRect::SCREEN();
-	$x //=  0;
-	$y //=  0;
-
-	$x += $rect->{ x };
-	$y += $rect->{ y };
-
-	$screen->draw_rect([
-		$x,
-		$y,
-		$rect->{ w },
-		$rect->{ h },
-	],[
-		255,0,0,255
-	]);
-	#circuit
-	$screen->draw_rect([
-		$x +1,
-		$y +1,
-		$rect->{ w }-2,
-		$rect->{ h }-2,
-	],[
-		$rect->{ c }->get()
-	]);
-
-	#size_button
-	$screen->draw_rect([
-		$x + $rect->{ w } -15,
-		$y + $rect->{ h } -10,
-		15,
-		10,
-	],[
-		33, 200, 150, 255
-	]);
-
-
-	$rect->SUPER::draw( $x, $y );
-}
 
 
 ## Сохраняет состояние объекта для draw_black перед его следующей отрисовкой

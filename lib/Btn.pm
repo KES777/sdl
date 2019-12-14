@@ -49,37 +49,6 @@ sub on_press {
 
 
 
-sub draw {
-	my( $app_rect, $x, $y ) =  @_;
-
-	my $screen =  AppRect::SCREEN();
-	$x //=  0;
-	$y //=  0;
-
-	$x += $app_rect->{ x };
-	$y += $app_rect->{ y };
-
-	$screen->draw_rect([
-		$x,
-		$y,
-		$app_rect->{ w },
-		$app_rect->{ h },
-	],[
-		255,255,255,255
-	]);
-	#circuit
-	$screen->draw_rect([
-		$x +1,
-		$y +1,
-		$app_rect->{ w }-2,
-		$app_rect->{ h }-2,
-	],[
-		$app_rect->{ c }->get()
-	]);
-}
-
-
-
 sub on_over { }
 sub is_moveable { }
 

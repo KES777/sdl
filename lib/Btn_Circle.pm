@@ -67,36 +67,6 @@ sub on_press {
 
 
 
-sub draw {
-	my( $btn_c, $x, $y ) =  @_;
-
-	my $screen =  AppRect::SCREEN();
-	$x //=  0;
-	$y //=  0;
-
-	$x += $btn_c->{ x };
-	$y += $btn_c->{ y };
-
-	my $r    =  $btn_c->{ radius };
-	my $diam =  $r * 2;
-	$screen->draw_rect([
-		$x - $r,
-		$y - $r,
-		$diam,
-		$diam,
-	],[
-		255,0,0,255
-	]);
-	#circuit
-	$screen->draw_rect([
-		$x - $r +2,
-		$y - $r +2,
-		$diam-4,
-		$diam-4,
-	],[
-		$btn_c->{ c }->get()
-	]);
-}
 
 
 

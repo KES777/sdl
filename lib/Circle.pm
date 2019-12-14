@@ -82,49 +82,26 @@ sub draw_black {
 
 
 
-sub draw {
-	my( $circle, $x, $y ) = @_;
-
-	my $screen =  AppRect::SCREEN();
-	$x //=  0;
-	$y //=  0;
-
-	$x += $circle->{ x };
-	$y += $circle->{ y };
-
-	my $r    =  $circle->{ radius };
-	my $diam =  $r * 2;
-	$screen->draw_rect([
-		$x -$r,
-		$y -$r,
-		$diam,
-		$diam,
-	],[
-		255,0,0,255
-	]);
-	#circuit
-	$screen->draw_rect([
-		$x -$r +2,
-		$y -$r +2,
-		$diam-4,
-		$diam-4,
-	],[
-		$circle->{ c }->get()
-	]);
-
-	#size_button
-	$screen->draw_rect([
-		$x + $r -15,
-		$y -5,
-		15,
-		10,
-	],[
-		33, 200, 150, 255
-	]);
+# 	my $r    =  $circle->{ oradius } // $circle->{ radius };
+# 	my $diam =  $r * 2;
+# 	$screen->draw_rect([
+# 		$x -$r,
+# 		$y -$r,
+# 		$diam,
+# 		$diam,
+# 	],[ 0, 0, 0, 0 ]);
+# }
 
 
-	$circle->SUPER::draw;
-}
+
+# sub save_draw_coord {
+# 	my( $rect ) =  @_;
+
+# 	$rect->SUPER::save_draw_coord;
+
+# 	$rect->{ or } =  $rect->{ radius };
+
+# }
 
 
 
