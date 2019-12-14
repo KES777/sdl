@@ -429,5 +429,17 @@ sub position {
 }
 
 
+sub get_sb_coords {
+	my( $circle, $x, $y ) =  @_;
+
+	return (
+		$x + $circle->{ radius } * 2 - 15,
+		$y + $circle->{ radius } - 5,
+		15, 10,
+	);
+}
+
+
+
 
 1;

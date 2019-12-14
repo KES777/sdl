@@ -456,6 +456,18 @@ sub object_handle {
 
 
 
+sub get_sb_coords {
+	my( $rect, $x, $y ) =  @_;
+
+	return (
+		$x + $rect->{ w } - 15,
+		$y + $rect->{ h } - 10,
+		15,10,
+	);
+}
+
+
+
 ## Меняет цвет объекта, над которым курсор
 sub on_mouse_over {
 	my( $rect ) =  @_;
