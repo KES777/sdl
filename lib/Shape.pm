@@ -456,7 +456,27 @@ sub children {
 
 
 
+## Пересчитывает размер группы в соответствии с её содержимым
+sub organize_group {
+	my( $group, $children ) =  @_;
 
+	my $padding =  10;
+	my $h       =  $padding;
+	my $w;
+	my( $gx, $gy ) =  $group->object_handle;
+
+	for my $shape_i ( @$children ) {
+		my( $hi, $wi ) =  $shape_i->get_size;
+		my( $dx, $dy ) =  $shape_i->shape_handle;
+
+		$shape_i->set_shape_to( $padding, $dx, $dy, $gx, $gy, $h );
+
+		$h +=  $hi + $padding;
+		$w =  $wi + $padding * 2 < $w ? $w : $wi + $padding * 2;
+	}
+
+	$group->set_group_size( $h, $w );
+}
 
 
 
