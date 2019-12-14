@@ -198,9 +198,6 @@ sub resize_group {
 }
 
 
-## Пересчитывает размер группы в соответствии с её содержимым
-sub calc_group_size {
-	my( $group, $children ) =  @_;
 
 sub set_group_size {
 	my( $circle, $h, $w ) =  @_;
@@ -212,20 +209,12 @@ sub set_group_size {
 	$circle->{ min_w } =  $circle->{ w } =  $w;
 }
 
-			$h +=  $s->{ h } +10;
-			$w  =  $s->{ w } > $w ? $s->{ w } : $w;
-		}
-	}
 
-	$group->{ w } =  $w + 20;
-	if( $group->{ w } < 50 ) {
-		$group->{ w } =  50;
-	}
 
-	$group->{ h } =  $h;
-	if( $group->{ h } < 30 ) {
-		$group->{ h } =  30;
-	}
+sub shape_handle {
+	my( $circle ) =  @_;
+
+	return ( 0, 0 );
 }
 
 
@@ -349,6 +338,7 @@ sub set_min_size {
 	my $padding =  10;
 	$rect->{ min_h } =  $h + $padding;
 	$rect->{ min_w } =  $w + $padding;
+
 }
 
 
