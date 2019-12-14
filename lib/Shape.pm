@@ -456,4 +456,59 @@ sub children {
 
 
 
+
+
+
+
+sub draw {
+	my( $rect, $x, $y ) = @_;
+
+	my $screen =  AppRect::SCREEN();
+	$x //=  0;
+	$y //=  0;
+
+	$x += $rect->{ x };
+	$y += $rect->{ y };
+
+	my( $h, $w )   =  $rect->get_size;
+	my( $dx, $dy ) =  $rect->object_handle;
+	$screen->draw_rect([
+		$x + $dx,
+		$y + $dy,
+		$w,
+		$h,
+	],[
+		255,0,0,255
+	]);
+	#circuit
+	$screen->draw_rect([
+		$x + $dx +1,
+		$y + $dy +1,
+		$w-2,
+		$h-2,
+	],[
+		$rect->{ c }->get()
+	]);
+
+	#size_button
+	my( $sb_x, $sb_y, $sb_w, $sb_h ) =  $rect->get_sb_coords( $x, $y );
+	$screen->draw_rect([
+		$sb_x + $dx,
+		$sb_y + $dy,
+		$sb_w,
+		$sb_h,
+	],[
+		33, 200, 150, 255
+	]);
+
+
+	$rect->propagate( draw => $x, $y );
+}
+
+
+
+
+
+
+
 1;
