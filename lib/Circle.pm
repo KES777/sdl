@@ -187,7 +187,23 @@ sub parent_id {
 
 
 
+## Возвращает координаты (dx и dy) точки handle (привязки) объекта
+sub object_handle {
+	my( $circle ) =  @_;
 
+	my $dx =  - $circle->{ radius };
+	my $dy =  - $circle->{ radius };
+
+	return ( $dx, $dy );
+}
+
+
+
+sub shape_handle {
+	my( $circle ) =  @_;
+
+	return ( $circle->{ radius }, $circle->{ radius } );
+}
 
 
 
