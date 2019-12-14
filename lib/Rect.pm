@@ -199,6 +199,14 @@ sub resize_group {
 
 
 
+sub set_shape_to {
+	my( $rect, $padding, $dx, $dy, $gx, $gy, $h ) =  @_;
+
+	$rect->move_to( $padding + $dx + $gx, $h + $dy + $gy );
+}
+
+
+
 sub set_group_size {
 	my( $circle, $h, $w ) =  @_;
 

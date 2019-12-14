@@ -211,9 +211,17 @@ sub set_group_size {
 	my( $circle, $h, $w ) =  @_;
 
 	my $diam =  $h < $w ? $w : $h;
-	$diam    =  $diam < 25 ? 25 : $diam;
+	$diam    =  $diam < 50 ? 50 : $diam;
 
 	$circle->{ min_r } =  $circle->{ radius } =  $diam / 2;
+}
+
+
+
+sub set_shape_to {
+	my( $circle, $padding, $dx, $dy, $gx, $gy, $h ) =  @_;
+
+	$circle->move_to( $dx + $gx, $h + $dy + $gy );
 }
 
 
