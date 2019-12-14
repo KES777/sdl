@@ -20,18 +20,18 @@ my $x_offset   =  50;
 my $y_offset   =  50;
 sub new {
 	if( ref $_[1] eq 'Schema::Result::Rect' ) {
-		my( $rect, $db_rect ) =  @_;
+		my( $circle, $db_circle ) =  @_;
 
-		$rect =  $rect->new(
-			$db_rect->x, $db_rect->y, $db_rect->radius,
-			Color->new( $db_rect->r, $db_rect->g, $db_rect->b, $db_rect->a ),
+		$circle =  $circle->new(
+			$db_circle->x, $db_circle->y, $db_circle->radius,
+			Color->new( $db_circle->r, $db_circle->g, $db_circle->b, $db_circle->a ),
 		);
-		$rect->{ id } =  $db_rect->id;
-		return $rect;
+		$circle->{ id } =  $db_circle->id;
+		return $circle;
 	}
 
 
-	my( $rect, $x, $y, $r, $c ) =  @_;
+	my( $circle, $x, $y, $r, $c ) =  @_;
 
 	$x //=  ($x_offset += 30);
 	$y //=  $y_offset_n * 5  + ($y_offset +=  10);
@@ -42,19 +42,20 @@ sub new {
 		$y_offset_n++;
 	}
 
-	$rect =  $rect->SUPER::new();
+	$circle =  $circle->SUPER::new();
 
-	my %rect = (
+	my %circle = (
 		x      => $x,
 		y      => $y,
 		radius => $r // $START_R,
 		c      => $c // Color->new,
+
 		min_r  => $MIN_R,
 		max_r  => $MAX_R,
 	);
-	$rect->@{ keys %rect } =  values %rect;
+	$circle->@{ keys %circle } =  values %circle;
 
-	return $rect;
+	return $circle;
 }
 
 
