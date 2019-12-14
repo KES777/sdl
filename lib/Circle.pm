@@ -60,40 +60,6 @@ sub new {
 
 
 
-sub draw_black {
-	my( $circle, $x, $y ) = @_;
-
-	my $screen =  AppRect::SCREEN();
-	$x //=  0;
-	$y //=  0;
-
-	$x +=  $circle->{ ox } // $circle->{ x };
-	$y +=  $circle->{ oy } // $circle->{ y };
-
-	my $r    =  $circle->{ oradius } // $circle->{ radius };
-	my $diam =  $r * 2;
-	$screen->draw_rect([
-		$x -$r,
-		$y -$r,
-		$diam,
-		$diam,
-	],[ 0, 0, 0, 0 ]);
-}
-
-
-
-# 	my $r    =  $circle->{ oradius } // $circle->{ radius };
-# 	my $diam =  $r * 2;
-# 	$screen->draw_rect([
-# 		$x -$r,
-# 		$y -$r,
-# 		$diam,
-# 		$diam,
-# 	],[ 0, 0, 0, 0 ]);
-# }
-
-
-
 # sub save_draw_coord {
 # 	my( $rect ) =  @_;
 

@@ -72,27 +72,6 @@ sub new {
 
 
 
-# sub draw_black {
-# 	my( $rect, $x, $y ) = @_;
-
-# 	my $screen =  AppRect::SCREEN();
-# 	$x //=  0;
-# 	$y //=  0;
-
-# 	$x += $rect->{ ox } // $rect->{ x };
-# 	$y += $rect->{ oy } // $rect->{ y };
-
-
-# 	$screen->draw_rect([
-# 		$x,
-# 		$y,
-# 		$rect->{ ow } // $rect->{ w },
-# 		$rect->{ oh } // $rect->{ h },
-# 	],[ 0, 0, 0, 0 ]);
-# }
-
-
-
 ## Сохраняет состояние объекта для draw_black перед его следующей отрисовкой
 sub save_draw_coord {
 	my( $rect ) =  @_;
