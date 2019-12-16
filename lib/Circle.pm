@@ -202,10 +202,10 @@ sub parent_id {
 sub object_handle {
 	my( $circle ) =  @_;
 
-	my $dx =  - $circle->{ radius };
-	my $dy =  - $circle->{ radius };
+	$circle->{ x } =  $circle->{ x } - $circle->{ radius };
+	$circle->{ y } =  $circle->{ y } - $circle->{ radius };
 
-	return ( $dx, $dy );
+	return $circle;
 }
 
 
