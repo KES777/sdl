@@ -45,8 +45,8 @@ sub new {
 	$circle =  $circle->SUPER::new();
 
 	my %circle = (
-		x      => $x,
-		y      => $y,
+		x      => $x - $r,
+		y      => $y - $r,
 		radius => $r // $START_R,
 		c      => $c // Color->new,
 
