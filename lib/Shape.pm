@@ -456,6 +456,28 @@ sub children {
 
 
 
+sub calc_min_size {
+	my( $circle ) =  @_;
+
+	my $h;
+	my $w;
+	my $padding =  10;
+	for my $shape_i( $circle->{ children }->@* ) {
+		my( $hi, $wi ) =  $shape_i->get_size;
+		my( $x, $y)    =  ( $shape_i->{ x }, $shape_i->{ y } );
+
+		$hi =  $y + $hi + $padding;
+		$h  =  $hi > $h ? $hi : $h;
+
+		$wi =  $x + $wi + $padding;
+		$w  =  $wi > $w ? $wi : $w;
+	}
+
+	return ( $h, $w );
+}
+
+
+
 ## Пересчитывает размер группы в соответствии с её содержимым
 sub organize_group {
 	my( $group, $children ) =  @_;
