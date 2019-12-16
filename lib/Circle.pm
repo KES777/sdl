@@ -220,14 +220,6 @@ sub set_group_size {
 
 
 
-sub set_shape_to {
-	my( $circle, $padding, $dx, $dy, $gx, $gy, $h ) =  @_;
-
-	$circle->move_to( $dx + $gx, $h + $dy + $gy );
-}
-
-
-
 sub resize_group {
 	my( $parent ) =  @_;
 

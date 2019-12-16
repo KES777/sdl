@@ -199,14 +199,6 @@ sub resize_group {
 
 
 
-sub set_shape_to {
-	my( $rect, $padding, $dx, $dy, $gx, $gy, $h ) =  @_;
-
-	$rect->move_to( $padding + $dx + $gx, $h + $dy + $gy );
-}
-
-
-
 sub set_group_size {
 	my( $circle, $h, $w ) =  @_;
 
@@ -313,16 +305,6 @@ sub calc_size_values {
 	my $w =  $x - $rect->{ x };
 
 	return ( $h, $w );
-}
-
-
-
-## Изменяет размер объекта в соответсвии с координатами курсора
-sub resize_to {
-	my( $rect, $h, $w ) =  @_;
-
-	$rect->{ h } =  Util::min( Util::max( $h, $rect->{ max_h } ), $rect->{ min_h } );
-	$rect->{ w } =  Util::min( Util::max( $w, $rect->{ max_w } ), $rect->{ min_w } );
 }
 
 
