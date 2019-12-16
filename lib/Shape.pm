@@ -158,7 +158,7 @@ sub on_group {
 	weaken $rect->{ parent };
 
 	$rect->store;
-	$rect->calc_group_size( $group_info->{ grouped } );
+	$rect->organize_group( $group_info->{ grouped } );
 
 	$rect->{ children } =  $group_info->{ grouped };
 	for my $child( $rect->{ children }->@* ) {
@@ -463,14 +463,10 @@ sub organize_group {
 	my $padding =  10;
 	my $h       =  $padding;
 	my $w;
-	my( $gx, $gy ) =  $group->object_handle;
-
 	for my $shape_i ( @$children ) {
 		my( $hi, $wi ) =  $shape_i->get_size;
-		my( $dx, $dy ) =  $shape_i->shape_handle;
 
-		$shape_i->set_shape_to( $padding, $dx, $dy, $gx, $gy, $h );
-
+		$shape_i->move_to( $padding, $h );
 		$h +=  $hi + $padding;
 		$w =  $wi + $padding * 2 < $w ? $w : $wi + $padding * 2;
 	}
