@@ -82,19 +82,29 @@ sub save_draw_coord {
 
 
 
+# sub move_to {
+# 	my( $circle, $x, $y ) =  @_;
+
+# 	$circle->{ x } =  $x - radius
+# 	$circle->{ y } =  $y - radius
+# }
+
+
+
 sub mouse_target {
 	my( $circle, $x, $y ) =  @_;
 
 	my $r =  $circle->{ radius };
+	my $diam = $r * 2;
 
-	$x >= $circle->{ x } -$r
-	&&  $x <= $circle->{ x } + $r
-	&&  $y >= $circle->{ y } - $r
-	&&  $y <= $circle->{ y } + $r
+	$x >= $circle->{ x }
+	&&  $x <= $circle->{ x } + $diam
+	&&  $y >= $circle->{ y }
+	&&  $y <= $circle->{ y } + $diam
 		or return;
 
-	my $a =  abs( $x - $circle->{ x } );
-	my $b =  abs( $y - $circle->{ y } );
+	my $a =  abs( $x - $circle->{ x } - $r );
+	my $b =  abs( $y - $circle->{ y } - $r );
 	my $c =  sqrt( $a ** 2 + $b ** 2 );
 
 	return $c <= $r;
@@ -104,12 +114,13 @@ sub mouse_target {
 
 ## Проверяет находится ли курсор над полем для изменения размеров объекта
 sub is_over_res_field {
-	my( $rect, $x, $y ) =  @_;
+	my( $circle, $x, $y ) =  @_;
 
-	return $x > $rect->{ x } + $rect->{ radius } - 15
-		&& $x < $rect->{ x } + $rect->{ radius }
-		&& $y > $rect->{ y } - 5
-		&& $y < $rect->{ y } + 5
+	my $diam =  $circle->{ radius } * 2;
+	return $x > $circle->{ x } + $diam - 15
+		&& $x < $circle->{ x } + $diam
+		&& $y > $circle->{ y } + $circle->{ radius } - 5
+		&& $y < $circle->{ y } + $circle->{ radius } + 5
 }
 
 
