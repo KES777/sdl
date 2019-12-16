@@ -328,7 +328,7 @@ sub resize_to {
 
 
 sub set_min_size {
-	my( $rect ) =  @_;
+	my( $rect, $h, $w ) =  @_;
 
 	$rect->{ min_h } =  $h;
 	$rect->{ min_w } =  $w;
