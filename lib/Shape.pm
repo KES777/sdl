@@ -182,7 +182,7 @@ sub drag {
 	my $children =  $group->{ children };
 	$shape->detach( $children );## Удаляем вытянутый объект из числа детей его родителя
 
-	$group->calc_group_size( $children );
+	$group->organize_group( $children );
 
 	if( $group->{ parent }{ id } ) {
 		$group->{ parent }->resize_group;
@@ -241,7 +241,7 @@ sub drop {
 	$app_rect->{ children }->@* =  grep{ $_ != $drop } $app_rect->{ children }->@*;
 
 	my @children =   $group->{ children }->@*;
-	$group->calc_group_size( \@children );
+	$group->organize_group( \@children );
 
 	if( $group->{ parent }{ id } ) {
 		$group->{ parent }->resize_group;
