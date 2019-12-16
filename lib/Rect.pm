@@ -360,6 +360,7 @@ sub object_handle {
 
 
 
+## Size_batton coords
 sub get_sb_coords {
 	my( $rect, $x, $y ) =  @_;
 

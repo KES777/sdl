@@ -360,7 +360,7 @@ sub get_size {
 
 
 
-
+## Size_batton coords
 sub get_sb_coords {
 	my( $circle, $x, $y ) =  @_;
 
