@@ -499,16 +499,16 @@ sub organize_group {
 
 
 sub draw {
-	my( $rect, $x, $y ) = @_;
+	my( $shape, $x, $y ) = @_;
 
 	my $screen =  AppRect::SCREEN();
 	$x //=  0;
 	$y //=  0;
 
-	$x += $rect->{ x };
-	$y += $rect->{ y };
+	$x += $shape->{ x };
+	$y += $shape->{ y };
 
-	my( $h, $w )   =  $rect->get_size;
+	my( $h, $w )   =  $shape->get_size;
 	$screen->draw_rect([
 		$x,
 		$y,
@@ -524,11 +524,11 @@ sub draw {
 		$w-2,
 		$h-2,
 	],[
-		$rect->{ c }->get()
+		$shape->{ c }->get()
 	]);
 
 	#size_button
-	my( $sb_x, $sb_y, $sb_w, $sb_h ) =  $rect->get_sb_coords( $x, $y );
+	my( $sb_x, $sb_y, $sb_w, $sb_h ) =  $shape->get_sb_coords( $x, $y );
 	$screen->draw_rect([
 		$sb_x,
 		$sb_y,
@@ -539,12 +539,8 @@ sub draw {
 	]);
 
 
-	$rect->propagate( draw => $x, $y );
+	$shape->propagate( draw => $x, $y );
 }
-
-
-
-
 
 
 
