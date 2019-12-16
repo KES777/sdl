@@ -491,10 +491,9 @@ sub draw {
 	$y += $rect->{ y };
 
 	my( $h, $w )   =  $rect->get_size;
-	my( $dx, $dy ) =  $rect->object_handle;
 	$screen->draw_rect([
-		$x + $dx,
-		$y + $dy,
+		$x,
+		$y,
 		$w,
 		$h,
 	],[
@@ -502,8 +501,8 @@ sub draw {
 	]);
 	#circuit
 	$screen->draw_rect([
-		$x + $dx +1,
-		$y + $dy +1,
+		$x +1,
+		$y +1,
 		$w-2,
 		$h-2,
 	],[
@@ -513,8 +512,8 @@ sub draw {
 	#size_button
 	my( $sb_x, $sb_y, $sb_w, $sb_h ) =  $rect->get_sb_coords( $x, $y );
 	$screen->draw_rect([
-		$sb_x + $dx,
-		$sb_y + $dy,
+		$sb_x,
+		$sb_y,
 		$sb_w,
 		$sb_h,
 	],[
