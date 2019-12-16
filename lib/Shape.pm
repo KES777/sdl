@@ -60,7 +60,7 @@ sub on_drop {
 		$shape->store;
 		## Установка минимального размера группы
 		if( $shape->{ parent_id } ) {
-			$shape->{ parent }->set_min_size;
+			$shape->{ parent }->set_min_size( $shape->{ parent }->calc_min_size );
 		}
 	}
 }

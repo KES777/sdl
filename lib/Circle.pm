@@ -340,24 +340,9 @@ sub resize_to {
 
 
 sub set_min_size {
-	my( $circle ) =  @_;
+	my( $circle, $h, $w ) =  @_;
 
-	my $h;
-	my $w;
-	my $step =  10;
-	for my $shape_i( $circle->{ children }->@* ) {
-		my( $hi, $wi ) =  $shape_i->get_size;
-		my( $x, $y)    =  $shape_i->position;
-
-		$hi =  $y + $hi;
-		$h  =  $hi > $h ? $hi : $h;
-
-		$wi =  $x + $wi;
-		$w  =  $wi > $w ? $wi : $w;
-	}
-
-	my $padding =  10;
-	$circle->{ min_r } =  $h > $w ? $h / 2 + $padding : $w / 2 + $padding;
+	$circle->{ min_r } =  $h > $w ? $h / 2  : $w / 2;
 }
 
 

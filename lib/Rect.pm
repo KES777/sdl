@@ -330,23 +330,8 @@ sub resize_to {
 sub set_min_size {
 	my( $rect ) =  @_;
 
-	my $h;
-	my $w;
-	for my $shape_i ( $rect->{ children }->@* ) {
-		my( $hi, $wi ) =  $shape_i->get_size;
-		my( $x, $y)    =  $shape_i->position;
-
-		$hi =  $y + $hi;
-		$h  =  $hi > $h ? $hi : $h;
-
-		$wi =  $x + $wi;
-		$w  =  $wi > $w ? $wi : $w;
-	}
-
-	my $padding =  10;
-	$rect->{ min_h } =  $h + $padding;
-	$rect->{ min_w } =  $w + $padding;
-
+	$rect->{ min_h } =  $h;
+	$rect->{ min_w } =  $w;
 }
 
 
