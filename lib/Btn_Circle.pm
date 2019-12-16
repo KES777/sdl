@@ -56,13 +56,19 @@ sub set_color {
 sub on_press {
 	my( $btn_c, $h, $e ) =  @_;
 
-	my $rect =  Circle->new;
-	$rect->{ c } =  $btn_c->{ c };
-	$rect->{ parent } =  $btn_c->{ parent };
-	weaken $rect->{ parent };
+	my $circle =  Circle->new;
 
-	$rect->store;
-	push $btn_c->{ parent }->{ children }->@*, $rect;
+	## Set object handle
+	$circle->object_handle;
+
+	## Set  the color
+	$circle->{ c } =  $btn_c->{ c };
+
+	$circle->{ parent } =  $btn_c->{ parent };
+	weaken $circle->{ parent };
+
+	$circle->store;
+	push $btn_c->{ parent }->{ children }->@*, $circle;
 }
 
 
