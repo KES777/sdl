@@ -358,12 +358,7 @@ sub get_size {
 	return ( $h, $w );
 }
 
-## Возвращает координаты (расстояние от parent до точки handle объекта)
-sub position {
-	my( $circle ) =  @_;
 
-	return $circle->{ x } - $circle->{ radius }, $circle->{ y } - $circle->{ radius };
-}
 
 
 sub get_sb_coords {
