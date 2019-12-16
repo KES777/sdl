@@ -233,7 +233,7 @@ sub drop {
 
 	my $app_rect =  $h->{ app };
 	$drop->parent_id( $group->{ id } );## Присвоили id группы
-	$drop->draw_black;## Затираем перед тем, как удалим из $app_rect->{ children }
+	# $drop->draw_black;## Затираем перед тем, как удалим из $app_rect->{ children }
 
 	push $group->{ children }->@*, $drop;## Добавили объект в группу
 	$group->load_parent_data;
@@ -352,9 +352,9 @@ sub refresh {
 }
 
 sub draw_black {}
-sub draw {
-	shift->propagate( draw => @_ );
-}
+# sub _draw {
+# 	shift->propagate( draw => @_ );
+# }
 
 
 
