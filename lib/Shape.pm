@@ -293,8 +293,37 @@ sub store_group {
 sub resize {
 	my( $shape, $x, $y ) =  @_;
 
-	$shape->resize_to( $shape->calc_size_values( $x, $y ) );
+	my $border =  1;
+	$shape->resize_to( $shape->calc_size_values( $x, $y ), $border );
 }
+
+
+
+## Изменяет размер объекта в соответсвии с координатами курсора
+sub resize_to {
+	my( $rect, $h, $w, $border ) =  @_;
+
+	if( $border ) {
+		my( $parent_h, $parent_w ) =  $rect->{ parent }  &&  $rect->{ parent }->get_size;
+		my $max_h =  $rect->{ max_h }  // $parent_h;
+		my $min_h =  $rect->{ min_h }  // $parent_h;
+
+		my $max_w =  $rect->{ max_w }  // $parent_w;
+		my $min_w =  $rect->{ min_w }  // $parent_w;
+
+		$rect->set_size(
+			Util::max( Util::min( $h, $max_h ), $min_h ),
+			Util::max( Util::min( $w, $max_w ), $min_w ),
+		);
+	}
+	else {
+		$rect->set_size( $h, $w );
+	}
+}
+
+
+
+
 
 
 

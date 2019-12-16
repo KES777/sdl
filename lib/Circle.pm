@@ -330,15 +330,6 @@ sub calc_size_values {
 
 
 
-## Изменяет размер объекта в соответсвии с координатами курсора
-sub resize_to {
-	my( $circle, $value ) =  @_;
-
-	$circle->{ radius } =  Util::min( Util::max( $value, $circle->{ max_r } ), $circle->{ min_r } );
-}
-
-
-
 sub set_min_size {
 	my( $circle, $h, $w ) =  @_;
 
