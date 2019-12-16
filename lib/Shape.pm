@@ -162,7 +162,11 @@ sub on_move {
 
 
 
+sub calc_move_values {
+	my( $shape, $dx, $dy ) =  @_;
 
+	return ( $shape->{ x } + $dx, $shape->{ y } + $dy );
+}
 
 
 
