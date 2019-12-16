@@ -82,15 +82,6 @@ sub save_draw_coord {
 
 
 
-# sub move_to {
-# 	my( $circle, $x, $y ) =  @_;
-
-# 	$circle->{ x } =  $x - radius
-# 	$circle->{ y } =  $y - radius
-# }
-
-
-
 sub mouse_target {
 	my( $circle, $x, $y ) =  @_;
 

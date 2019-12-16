@@ -93,12 +93,24 @@ sub on_press {
 
 
 
-## Передвигает объект в соответствии с координатами курсора
+## Передвигает объект в соответствии с координатами курсора!!!
 sub move_to {
-	my( $shape, $x, $y ) =  @_;
+	my( $shape, $x, $y, $border ) =  @_;
 
-	$shape->{ x } =  $x //0;
-	$shape->{ y } =  $y //0;
+	my( $h, $w ) =  $shape->get_size;
+	if( $border ) {
+		my( $ph, $pw ) =  $shape->{ parent }->get_size;
+
+		my $min_x =  0;
+		my $min_y =  0;
+
+		$shape->{ x } =  Util::max( Util::min( $x, $pw - $w ), $min_x );
+		$shape->{ y } =  Util::max( Util::min( $y, $ph - $h ), $min_y );
+	}
+	else {
+		$shape->{ x } =  $x;
+		$shape->{ y } =  $y;
+	}
 }
 
 
@@ -144,8 +156,13 @@ sub on_move {
 	$h->{ event_old_x } =  $e->motion_x;
 	$h->{ event_old_y } =  $e->motion_y;
 
-	$shape->move_by( $dx, $dy );
+	my $border  =  1;
+	$shape->move_to( $shape->calc_move_values( $dx, $dy ), $border );
 }
+
+
+
+
 
 
 
