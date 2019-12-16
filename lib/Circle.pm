@@ -351,6 +351,14 @@ sub get_size {
 
 
 
+sub set_size {
+	my( $circle, $h, $w ) =  @_;
+
+	$circle->{ radius } =  $h > $w ? $h / 2 : $w / 2;
+}
+
+
+
 ## Size_batton coords
 sub get_sb_coords {
 	my( $circle, $x, $y ) =  @_;

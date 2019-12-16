@@ -348,15 +348,24 @@ sub get_size {
 
 
 
-## Возвращает координаты (dx и dy) точки handle (привязки) объекта
-sub object_handle {
-	my( $rect ) =  @_;
+sub set_size {
+	my( $rect, $h, $w ) =  @_;
 
-	my $dx;
-	my $dy;
-
-	return ( $dx, $dy );
+	$rect->{ h } =  $h;
+	$rect->{ w } =  $w;
 }
+
+
+
+# ## Возвращает координаты (dx и dy) точки handle (привязки) объекта
+# sub object_handle {
+# 	my( $rect ) =  @_;
+
+# 	my $dx;
+# 	my $dy;
+
+# 	return ( $dx, $dy );
+# }
 
 
 

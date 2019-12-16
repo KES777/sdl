@@ -323,7 +323,15 @@ sub resize_to {
 
 
 
+## Возвращает габаритные размеры объекта (высота, ширина)
+sub get_size {
+	my( $rect ) =  @_;
 
+	my $h =  $rect->{ h };
+	my $w =  $rect->{ w };
+
+	return ( $h, $w );
+}
 
 
 
