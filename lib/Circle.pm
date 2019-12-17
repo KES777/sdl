@@ -199,11 +199,11 @@ sub object_handle {
 
 
 
-sub shape_handle {
-	my( $circle ) =  @_;
+# sub shape_handle {
+# 	my( $circle ) =  @_;
 
-	return ( $circle->{ radius }, $circle->{ radius } );
-}
+# 	return ( $circle->{ radius }, $circle->{ radius } );
+# }
 
 
 
@@ -228,7 +228,6 @@ sub resize_group {
 		$parent->{ parent }->resize_group;
 	}
 }
-
 
 
 
