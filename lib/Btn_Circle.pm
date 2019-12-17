@@ -13,7 +13,7 @@ use base 'Circle';
 
 
 ## Start position  стартовые координаты объекта
-my $START_X =  25;
+my $START_X =  0;
 my $START_Y =  85;
 
 ## Start color  стартовый цвет объекта
@@ -32,6 +32,7 @@ sub new {
 
 	return $btn_c;
 }
+
 
 
 ## Возвращает объекту стартовую позицию
@@ -72,21 +73,13 @@ sub on_press {
 }
 
 
+
 sub get_sb_coords {
 
 	return ( 0, 0, 0, 0 );
 }
 
 
-
-sub on_over { }
-sub is_moveable { }
-
-sub on_click { }
-sub on_dbl_click { }
-sub on_hint{ }
-sub on_triple_click{ }
-sub move_to{ }
 
 ## Меняет цвет объекта-кнопки (если над ней курсор)
 sub on_mouse_over {
@@ -104,6 +97,16 @@ sub on_mouse_out {
 
 	# $btn->{ c }{ b } =  190;
 }
+
+
+
+sub on_over { }
+sub on_click { }
+sub on_dbl_click { }
+sub on_triple_click{ }
+sub on_hint{ }
+sub on_move { }
+
 
 
 1;

@@ -26,6 +26,7 @@ sub new {
 }
 
 
+
 ## Возвращает объекту стартовую позицию
 sub set_start_position {
 	my( $btn_del ) =  @_;
@@ -33,6 +34,7 @@ sub set_start_position {
 	$btn_del->{ x } =  $START_X;
 	$btn_del->{ y } =  $START_Y;
 }
+
 
 
 ## Создаёт новую фигуру(при нажатии кнопки мыши)
@@ -56,17 +58,6 @@ sub get_sb_coords {
 
 
 
-sub on_over { }
-sub is_moveable { }
-
-
-
-sub on_click { }
-sub on_dbl_click { }
-sub on_triple_click{ }
-
-
-
 sub on_hint{
 	my( $btn, $h, $e ) =  @_;
 
@@ -76,8 +67,6 @@ sub on_hint{
 }
 
 
-
-sub move_to { }
 
 ## Меняет цвет объекта-кнопки (если над ней курсор)
 sub on_mouse_over {
@@ -95,6 +84,15 @@ sub on_mouse_out {
 
 	$btn->{ c }{ b } =  190;
 }
+
+
+
+sub on_over { }
+sub on_click { }
+sub on_dbl_click { }
+sub on_triple_click{ }
+sub on_move { }
+
 
 
 1;
