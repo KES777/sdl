@@ -303,12 +303,12 @@ sub on_press {
 sub calc_size_values {
 	my( $circle, $x, $y ) =  @_;
 
-	my $ry = $y - $circle->{ y } - $circle->{ radius };
-	my $rx = $x - $circle->{ x } - $circle->{ radius };
+	my $ry = $y - $circle->{ y };
+	my $rx = $x - $circle->{ x };
 
 	my $r =  $ry > $rx ? $ry : $rx;
 
-	return ( $r );
+	return ( $r, $r );
 }
 
 
