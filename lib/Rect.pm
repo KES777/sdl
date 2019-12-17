@@ -339,15 +339,20 @@ sub set_size {
 
 
 
-# ## Возвращает координаты (dx и dy) точки handle (привязки) объекта
-# sub object_handle {
-# 	my( $rect ) =  @_;
+sub get_max_size {
+	my( $rect ) =  @_;
 
-# 	my $dx;
-# 	my $dy;
+	return ( $rect->{ max_h }, $rect->{ max_w } );
+}
 
-# 	return ( $dx, $dy );
-# }
+
+
+
+sub get_min_size {
+	my( $rect ) =  @_;
+
+	return ( $rect->{ min_h }, $rect->{ min_w } );
+}
 
 
 
