@@ -139,20 +139,18 @@ sub restore_state {
 
 
 
-
-
-
 sub clip {}
 
 
 # Делает проверку, что объект $rect находится внутри квадрата x,y,w,h
 sub is_inside {
-	my( $rect, $x, $y, $w, $h ) =  @_;
+	my( $circle, $x, $y, $w, $h ) =  @_;
 
-	return  $rect->{ x } - $rect->{ radius } > $x
-		&&  $rect->{ x } + $rect->{ radius } < $x + $w
-		&&  $rect->{ y } - $rect->{ radius } > $y
-		&&  $rect->{ y } + $rect->{ radius } < $y + $h;
+	my $diam =  $circle->{ radius } * 2;
+	return  $circle->{ x } > $x
+		&&  $circle->{ x } + $diam < $x + $w
+		&&  $circle->{ y } > $y
+		&&  $circle->{ y } + $diam < $y + $h;
 }
 
 
