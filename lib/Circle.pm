@@ -342,7 +342,19 @@ sub set_size {
 
 
 
+sub get_max_size {
+	my( $circle ) =  @_;
 
+	return ( $circle->{ max_r } * 2, $circle->{ max_r } * 2 );
+}
+
+
+
+sub get_min_size {
+	my( $circle ) =  @_;
+
+	return ( $circle->{ min_r } * 2, $circle->{ min_r } * 2 );
+}
 
 
 
