@@ -99,9 +99,7 @@ sub draw {
 		$row_displayed++;
 	}
 
-	$rect->propagate( 'draw', undef, $rect->{ x }, $rect->{ y }  );
+	$rect->propagate( 'draw', $rect->{ x }, $rect->{ y }  );
 }
-
-
 
 1;
