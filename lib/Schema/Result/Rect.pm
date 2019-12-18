@@ -50,7 +50,7 @@ $X->add_columns(
 		is_nullable => 1,
 	},
 	radius => {
-		data_type   =>  'integer',
+		data_type   =>  'float',
 		is_nullable => 1,
 	},
 
