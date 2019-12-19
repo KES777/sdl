@@ -24,7 +24,7 @@ sub on_move {
 
 	my $length =  $shape->{ parent }{ w } - $shape->{ w };
 	my $pos    =  $shape->{ x };
-	$shape->{ parent }{ pos_h } =  $pos / $length;
+	$shape->{ parent }{ pos } =  $pos / $length;
 }
 
 
@@ -62,7 +62,7 @@ sub new {
 	);
 	$scroll->children( $ruler );
 
-	$scroll->{ pos_h } =  0;
+	$scroll->{ pos } =  0;
 
 
 	return $scroll;

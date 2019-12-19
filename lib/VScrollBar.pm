@@ -1,4 +1,4 @@
-package _ruler;
+package _ruler_v;
 
 use strict;
 use warnings;
@@ -24,7 +24,7 @@ sub on_move {
 
 	my $length =  $shape->{ parent }{ h } - $shape->{ h };
 	my $pos    =  $shape->{ y };
-	$shape->{ parent }{ pos_v } =  $pos / $length;
+	$shape->{ parent }{ pos } =  $pos / $length;
 }
 
 
@@ -54,7 +54,7 @@ sub new {
 	$view < 1   or return $scroll;
 
 
-	my $ruler =  _ruler->new(
+	my $ruler =  _ruler_v->new(
 		0, 0,                                      # X Y
 		$scroll->{ w },                            # Width
 		limit_min( $scroll->{ h } *$view, 10 ),    # Height

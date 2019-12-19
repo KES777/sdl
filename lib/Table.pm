@@ -81,7 +81,7 @@ sub draw {
 	my @columns =  $dsRect->result_source->columns;
 
 	# Calc columns position
-	my $hscroll_pos =  $rect->{ scroll_h }{ pos_h };
+	my $hscroll_pos =  $rect->{ scroll_h }{ pos };
 	my $size        =  $#columns + 1;
 	my $col_from    =  $size * $hscroll_pos;
 
@@ -106,7 +106,7 @@ sub draw {
 	_draw_row( $rect->{ x }, $rect->{ y }, \@_draw_col );
 
 	# Calc row position
-	my $vscroll_pos  =  $rect->{ scroll_v }{ pos_v };
+	my $vscroll_pos  =  $rect->{ scroll_v }{ pos };
 	my $display_from =  $dsRect->count * $vscroll_pos;
 
 	# Draw data
