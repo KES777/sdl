@@ -274,6 +274,7 @@ sub child_destroy {
 }
 
 
+
 ## Проверяет находится ли курсор над полем для изменения размеров объекта
 sub is_over_res_field {
 	my( $rect, $x, $y ) =  @_;
@@ -297,6 +298,7 @@ sub resize_color {
 }
 
 
+
 ## Возвращает размер объекта для resize
 sub calc_size_values {
 	my( $rect, $x, $y ) =  @_;
@@ -305,53 +307,6 @@ sub calc_size_values {
 	my $w =  $x - $rect->{ x };
 
 	return ( $h, $w );
-}
-
-
-
-sub set_min_size {
-	my( $rect, $h, $w ) =  @_;
-
-	$rect->{ min_h } =  $h;
-	$rect->{ min_w } =  $w;
-}
-
-
-
-## Возвращает размер объекта ( h, w )
-sub get_size {
-	my( $rect ) =  @_;
-
-	my $h =  $rect->{ h };
-	my $w =  $rect->{ w };
-
-	return ( $h, $w );
-}
-
-
-
-sub set_size {
-	my( $rect, $h, $w ) =  @_;
-
-	$rect->{ h } =  $h;
-	$rect->{ w } =  $w;
-}
-
-
-
-sub get_max_size {
-	my( $rect ) =  @_;
-
-	return ( $rect->{ max_h }, $rect->{ max_w } );
-}
-
-
-
-
-sub get_min_size {
-	my( $rect ) =  @_;
-
-	return ( $rect->{ min_h }, $rect->{ min_w } );
 }
 
 
@@ -374,22 +329,8 @@ sub on_mouse_over {
 	my( $rect ) =  @_;
 
 	$rect->{ c }{ r } =  200;
-
-	# if( over_resize ) {
-	#    $rect->on_resize
-	#}
 }
 
-# sub on_resize {
-# 	resize_enable( ... )
-# }
-
-
-# sub on_move {
-# 	if( { is_resize } ) {
-# 		resize_rectangle( ... )
-#   }
-# }
 
 
 ## Возвращает цвет объекту, над которым был курсор
