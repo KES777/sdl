@@ -22,14 +22,22 @@ sub new {
 
 	$obj =  $obj->SUPER::new( @_ );
 
-
+	##
 	my $sw =  15;
-	my $sh =  $obj->{ h };
+	my $sh =  $obj->{ h } - $sw;
 	my $sx =  $obj->{ w } - $sw;
 	my $sy =  0;
 
-	$obj->{ scroll } =  ScrollBar->new( 500, $sx, $sy, $sw, $sh );
+	$obj->{ scroll } =  VScrollBar->new( 500, $sx, $sy, $sw, $sh );
 	$obj->children( $obj->{ scroll } );
+
+	##
+	$sh =  15;
+	$sw =  $obj->{ w } - $sh;
+	$sx =  0;
+	$sy =  $obj->{ h } - $sh;
+	$obj->{ scroll_h } =  HScrollBar->new( 1080, $sx, $sy, $sw, $sh );##$dimension =  880;
+	$obj->children( $obj->{ scroll_h } );
 
 	return $obj;
 }
