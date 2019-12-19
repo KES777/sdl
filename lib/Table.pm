@@ -5,7 +5,8 @@ use warnings;
 
 use SDLx::Text;
 
-use ScrollBar;
+use HScrollBar;
+use VScrollBar;
 use AppRect;
 use Color;
 use base 'Rect';
