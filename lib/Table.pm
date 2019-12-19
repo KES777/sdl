@@ -102,4 +102,12 @@ sub draw {
 	$rect->propagate( 'draw', $rect->{ x }, $rect->{ y }  );
 }
 
+
+
+## Size_batton coords
+sub get_sb_coords { }
+## Object moving
+sub move_to { }
+
+
 1;
