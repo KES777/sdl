@@ -25,8 +25,6 @@ sub on_move {
 	my $length =  $shape->{ parent }{ w } - $shape->{ w };
 	my $pos    =  $shape->{ x };
 	$shape->{ parent }{ pos_h } =  $pos / $length;
-	# print $shape->{ parent }{ pos }, "\n";
-
 }
 
 
