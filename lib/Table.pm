@@ -28,15 +28,15 @@ sub new {
 	my $sx =  $obj->{ w } - $sw;
 	my $sy =  0;
 
-	$obj->{ scroll } =  VScrollBar->new( 500, $sx, $sy, $sw, $sh );
-	$obj->children( $obj->{ scroll } );
+	$obj->{ scroll_v } =  VScrollBar->new( 500, $sx, $sy, $sw, $sh );
+	$obj->children( $obj->{ scroll_v } );
 
 	##
 	$sh =  15;
 	$sw =  $obj->{ w } - $sh;
 	$sx =  0;
 	$sy =  $obj->{ h } - $sh;
-	$obj->{ scroll_h } =  HScrollBar->new( 1080, $sx, $sy, $sw, $sh );##$dimension =  880;
+	$obj->{ scroll_h } =  HScrollBar->new( 1500, $sx, $sy, $sw, $sh );##$dimension =  880;
 	$obj->children( $obj->{ scroll_h } );
 
 	return $obj;
@@ -78,27 +78,25 @@ sub draw {
 	my @columns =  $dsRect->result_source->columns;
 
 	# Draw headers
-	_draw_row( $rect->{ x }, $rect->{ y }, \@columns );
+	_draw_row( $rect->{ x }, $rect->{ y }, \@_draw_col );
 
 	# Calc row position
-	my $scroll_pos =  $rect->{ scroll }{ pos };
-	my $display_from =  $dsRect->count * $scroll_pos;
-
-	print "Table: $display_from\n";
+	my $vscroll_pos  =  $rect->{ scroll_v }{ pos_v };
+	my $display_from =  $dsRect->count * $vscroll_pos;
 
 	# Draw data
-	my $dy =  0;
-	my $row_n =  0;
+	my $dy            =  0;
+	my $row_n         =  0;
 	my $row_displayed =  1;
 	while( my $row =  $dsRect->next ) {
 		$row_n++;
 
-		$row_n >= $display_from   or next;
-		$row_displayed <= 10  or last;##$rect->{ display_count }
+		$row_n >= $display_from   or next;## drow from
+		$row_displayed <= 10  or last;	  ## drow untill
 
 		my $data;
 
-		for my $col ( @columns ) {
+		for my $col ( @_draw_col ) {
 			push @$data, $row->$col();
 		}
 
@@ -107,8 +105,6 @@ sub draw {
 
 		$row_displayed++;
 	}
-
-	$rect->propagate( 'draw', $rect->{ x }, $rect->{ y }  );
 }
 
 
