@@ -74,8 +74,33 @@ sub _draw_row {
 sub draw {
 	my( $rect ) = @_;
 
-	my $dsRect =  Util::db()->resultset( 'Rect' );
+	$rect->SUPER::draw( );
+
+	# Get table data
+	my $dsRect  =  Util::db()->resultset( 'Rect' );
 	my @columns =  $dsRect->result_source->columns;
+
+	# Calc columns position
+	my $hscroll_pos =  $rect->{ scroll_h }{ pos_h };
+	my $size        =  $#columns + 1;
+	my $col_from    =  $size * $hscroll_pos;
+
+	##
+	my $col_n         =  0;
+	my $col_displayed =  1;
+	my @_draw_col;
+
+	for my $column ( @columns ) {
+		$col_n++;
+
+		$col_n >= $col_from   or next;## drow from
+		$col_displayed <= 11  or last;## drow untill
+
+		push @_draw_col, $column;
+
+		$col_displayed++
+	}
+
 
 	# Draw headers
 	_draw_row( $rect->{ x }, $rect->{ y }, \@_draw_col );
