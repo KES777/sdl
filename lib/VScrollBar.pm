@@ -73,7 +73,7 @@ sub new {
 
 ## Size_batton coords
 sub get_sb_coords { }
-# sub move_to { }
+sub on_move { }
 
 
 sub limit_min {
