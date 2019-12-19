@@ -199,14 +199,6 @@ sub object_handle {
 
 
 
-# sub shape_handle {
-# 	my( $circle ) =  @_;
-
-# 	return ( $circle->{ radius }, $circle->{ radius } );
-# }
-
-
-
 sub set_group_size {
 	my( $circle, $h, $w ) =  @_;
 
@@ -310,14 +302,6 @@ sub calc_size_values {
 
 
 
-sub set_min_size {
-	my( $circle, $h, $w ) =  @_;
-
-	$circle->{ min_r } =  $h > $w ? $h / 2  : $w / 2;
-}
-
-
-
 ## Возвращает размер объекта ( h, w )
 sub get_size {
 	my( $circle ) =  @_;
@@ -331,6 +315,7 @@ sub get_size {
 
 
 
+## Назначает размер объекта
 sub set_size {
 	my( $circle, $h, $w ) =  @_;
 
@@ -339,18 +324,46 @@ sub set_size {
 
 
 
-sub get_max_size {
-	my( $circle ) =  @_;
+## Возвращает/присваивает max высоту объекта (max_h)
+sub max_h {
+	@_ > 1 or return shift->{ max_r } * 2;
 
-	return ( $circle->{ max_r } * 2, $circle->{ max_r } * 2 );
+	my( $circle, $max_h ) =  @_;
+	my $r =  $circle->{ max_r };
+	return $circle->{ max_r } =  $r * 2 > $max_h ? $r : $max_h / 2;
 }
 
 
 
-sub get_min_size {
-	my( $circle ) =  @_;
+## Возвращает/присваивает max ширину объекта (max_w)
+sub max_w {
+	@_ > 1 or return shift->{ max_r } * 2;
 
-	return ( $circle->{ min_r } * 2, $circle->{ min_r } * 2 );
+	my( $circle, $max_w ) =  @_;
+	my $r =  $circle->{ max_r };
+	return $circle->{ max_r } =  $r * 2 > $max_w ? $r : $max_w / 2;
+}
+
+
+
+## Возвращает/присваивает min высоту объекта (min_h)
+sub min_h {
+	@_ > 1 or return shift->{ min_r } * 2;
+
+	my( $circle, $min_h ) =  @_;
+	my $r =  $circle->{ min_r };
+	return $circle->{ min_r } =  $min_h / 2;#$r * 2 < $min_h ? $r : $min_h / 2;
+}
+
+
+
+## Возвращает/присваивает min ширину объекта (min_w)
+sub min_w {
+	@_ > 1 or return shift->{ min_r } * 2;
+
+	my( $circle, $min_w ) =  @_;
+	my $r =  $circle->{ min_r };
+	return $circle->{ min_r } =  $r * 2 < $min_w ? $min_w / 2 : $r;
 }
 
 
