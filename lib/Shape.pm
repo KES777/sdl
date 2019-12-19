@@ -60,7 +60,9 @@ sub on_drop {
 		$shape->store;
 		## Установка минимального размера группы
 		if( $shape->{ parent_id } ) {
-			$shape->{ parent }->set_min_size( $shape->{ parent }->calc_min_size );
+			my( $min_h, $min_w ) =  ( $shape->{ parent }->calc_min_size );
+			$shape->{ parent }->min_h( $min_h );
+			$shape->{ parent }->min_w( $min_w );
 		}
 	}
 }
@@ -322,36 +324,87 @@ sub resize {
 
 ## Изменяет размер объекта в соответсвии с координатами курсора
 sub resize_to {
-	my( $rect, $h, $w, $border ) =  @_;
+	my( $shape, $h, $w, $border ) =  @_;
 
 	if( $border ) {
-		my( $parent_h, $parent_w ) =  $rect->{ parent }  &&  $rect->{ parent }->get_size;
-		my $max_h =  $rect->{ max_h }  // $parent_h;
-		my $min_h =  $rect->{ min_h }  // $parent_h;
+		my $parent =  $shape->{ parent };
+		my $max_h =  $shape->max_h // $parent->max_h;
+		my $max_w =  $shape->max_w // $parent->max_w;
+		my $min_h =  $shape->min_h // $parent->min_h;
+		my $min_w =  $shape->min_w // $parent->min_w;
 
-		my $max_w =  $rect->{ max_w }  // $parent_w;
-		my $min_w =  $rect->{ min_w }  // $parent_w;
-
-		$rect->set_size(
+		$shape->set_size(
 			Util::max( Util::min( $h, $max_h ), $min_h ),
 			Util::max( Util::min( $w, $max_w ), $min_w ),
 		);
 	}
 	else {
-		$rect->set_size( $h, $w );
+
+		$shape->set_size( $h, $w );
 	}
 }
 
 
 
-## Возвращает габаритные размеры объекта (высота, ширина)
+# # Возвращает размер объекта ( h, w )
 sub get_size {
-	my( $rect ) =  @_;
+	my( $shape ) =  @_;
 
-	my $h =  $rect->{ h };
-	my $w =  $rect->{ w };
+	return ( $shape->{ h }, $shape->{ w } );
+}
 
-	return ( $h, $w );
+
+
+## Назначает размер объекта
+sub set_size {
+	my( $rect, $h, $w ) =  @_;
+
+	$rect->{ h } =  $h;
+	$rect->{ w } =  $w;
+}
+
+
+
+## Возвращает/присваивает max высоту объекта (max_h)
+sub max_h {
+	@_ > 1   or return shift->{ max_h };
+
+	my( $shape, $max_h ) =  @_;
+
+	return $shape->{ max_h } =  $max_h;
+}
+
+
+
+## Возвращает/присваивает max ширину объекта (max_w)
+sub max_w {
+	@_ > 1   or return shift->{ max_w };
+
+	my( $shape, $max_w ) =  @_;
+
+	return $shape->{ max_w } =  $max_w;
+}
+
+
+
+## Возвращает/присваивает min высоту объекта (min_h)
+sub min_h {
+	@_ > 1   or return shift->{ min_h };
+
+	my( $shape, $min_h ) =  @_;
+
+	return $shape->{ min_h } =  $min_h;
+}
+
+
+
+## Возвращает/присваивает min ширину объекта (min_w)
+sub min_w {
+	@_ > 1   or return shift->{ min_w };
+
+	my( $shape, $min_w ) =  @_;
+
+	return $shape->{ min_w } =  $min_w;
 }
 
 
@@ -360,7 +413,9 @@ sub get_size {
 sub on_click {
 	my( $shape, $h, $e ) =  @_;
 
-	# $shape->{ w } -=  30;
+	# $h->{ app }->{ width  } =
+	# $h->{ app }->{ height } =
+
 	$h->{ app }->refresh_over( $e->motion_x, $e->motion_y );
 }
 
@@ -369,7 +424,7 @@ sub on_click {
 sub on_double_click {
 	my( $shape, $h, $e ) =  @_;
 
-	$h->{ app }->draw_black;
+	# $h->{ app }->draw_black;
 	$h->{ app }->refresh_over( $e->motion_x, $e->motion_y );
 }
 
@@ -496,6 +551,7 @@ sub store {
 
 
 
+
 sub children {
 	@_ > 1   or return shift->{ children };
 
@@ -566,7 +622,7 @@ sub draw {
 	$x += $shape->{ x };
 	$y += $shape->{ y };
 
-	my( $h, $w )   =  $shape->get_size;
+	my( $h, $w ) =  $shape->get_size;
 	$screen->draw_rect([
 		$x,
 		$y,
