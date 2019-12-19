@@ -138,6 +138,6 @@ sub draw {
 sub get_sb_coords { }
 ## Object moving
 sub move_to { }
-
+sub on_mouse_over { }
 
 1;
