@@ -58,8 +58,8 @@ sub new {
 
 	my $ruler =  _ruler_h->new(
 		0, 0,                                      # X Y
-		$scroll->{ w },                            # Width
-		limit_min( $scroll->{ h } *$view, 10 ),    # Height
+		limit_min( $scroll->{ w } *$view, 10 ),    # Height
+		$scroll->{ h },                            # Height
 		Color->new( 50, 250, 50 )                  # Color
 	);
 	$scroll->children( $ruler );
