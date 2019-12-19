@@ -17,8 +17,8 @@ sub attach {
 	use constant SDL_TRUE   => 1;
 
 	# typedef int SDL_bool;
-	$ffi->type( 'int' => 'SDL_bool' );   #enum
-
+	$ffi->type( 'int' => 'SDL_bool' );       #enum
+	# $ffi->type( 'senum' => 'SDL_bool' );   #enum
 }
 
 1;

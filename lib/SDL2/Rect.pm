@@ -17,7 +17,9 @@ sub attach {
 	SDL2::Pixels::attach( $ffi );
 
 	$ffi->type( 'opaque' => 'SDL_Rect_ptr' );
-	$ffi->type( 'opaque' => 'SDL_Point_ptr' );
+	$ffi->type( 'opaque' => 'SDL_FRect_ptr' );     #struct
+	$ffi->type( 'opaque' => 'SDL_Point_ptr' );     #struct
+	$ffi->type( 'opaque' => 'SDL_FPoint_ptr' );    #struct
 
 	# extern DECLSPEC SDL_bool SDLCALL SDL_HasIntersection(const SDL_Rect * A,
 	#                                                      const SDL_Rect * B);
