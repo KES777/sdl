@@ -12,6 +12,7 @@ use SDL::Event;
 use Scalar::Util qw/ weaken blessed /;
 
 
+use Dumper;
 use Rect;
 use Btn_del;
 use Btn;
