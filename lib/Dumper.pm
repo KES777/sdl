@@ -35,9 +35,64 @@ sub new {
 
 
 sub draw {
-	my( $obj,  ) =  @_;
+	my( $obj ) =  @_;
 
-	my $hash  =  $obj->{ data };
+	my $data  =  $obj->{ data };
+
+	##
+	if( ref $data eq  'Circle' ) {
+		draw_hash( $obj, $data );
+	}
+
+	##
+	if( ref $data eq  'Rect' ) {
+		draw_hash( $obj, $data );
+	}
+
+	##
+	if( ref $data eq 'SCALAR' ) {
+		# _draw( $obj->{ x }, $obj->{ y }, [ $data->$* ] );
+		draw_scalar( $obj, $obj, $data );
+	}
+
+	##
+	if( ref $data eq 'ARRAY' ) {
+		draw_array( $obj, $data );
+	}
+
+	##
+	if( ref $data eq 'HASH' ) {
+		draw_hash( $obj, $data );
+	}
+}
+
+
+
+sub draw_scalar {
+	_draw( shift->{ x }, shift->{ y }, [ shift->$* ] );
+
+}
+
+
+
+sub draw_array {
+	my( $obj, $array ) =  @_;
+
+	my $n;
+	my $dy;
+	for my $k ( $array->@* ){
+		$n < 10   or last;
+		_draw( $obj->{ x }, $obj->{ y } + $dy, [ $k ] );
+	$dy +=  $h;
+	$n  +=   1;
+	}
+}
+
+
+
+sub draw_hash {
+	my( $obj, $hash ) =  @_;
+
 	my $n  =  0;
 	my $dy =  0;
 	for my $k ( sort keys $hash->%* ){
@@ -46,7 +101,6 @@ sub draw {
 	$dy +=  $h;
 	$n  +=   1;
 	}
-
 }
 
 
