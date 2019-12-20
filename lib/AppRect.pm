@@ -48,11 +48,12 @@ sub new {
 
 	$app_rect->{ w } =  $app_w;
 	$app_rect->{ h } =  $app_h;
+	$app_rect->{ c } =  Color::new( 0, 0, 0, 0 );
 
 
 	$APP =  $app_rect->{ app } =  SDLx::App->new(
-		width      =>  $app_w,
-		height     =>  $app_h,
+		width      =>  $app_w, ## Окно видимиости (ширина)
+		height     =>  $app_h, ## Окно видимиости (длина)
 		resizeable =>  1,
 	);
 
@@ -68,6 +69,8 @@ sub new {
 	$app_rect->{ btn_del }{ parent } =  $app_rect;
 	weaken $app_rect->{ btn_del }{ parent };
 
+
+	## Load data
 	$app_rect->{ children } =  [];
 	$app_rect->load_children;
 
