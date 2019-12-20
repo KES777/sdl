@@ -60,7 +60,7 @@ sub on_drop {
 		$shape->store;
 		## Установка минимального размера группы
 		if( $shape->{ parent_id } ) {
-			my( $min_h, $min_w ) =  ( $shape->{ parent }->calc_min_size );
+			my( $min_h, $min_w ) =  $shape->{ parent }->calc_min_size;
 			$shape->{ parent }->min_h( $min_h );
 			$shape->{ parent }->min_w( $min_w );
 		}
@@ -298,7 +298,6 @@ sub load_children {
 
 
 
-
 ## Сохраняем (обновляем) все объекты грууппы, которые менялись, в базу
 sub store_group {
 	my( $shape ) =  @_;
@@ -413,9 +412,6 @@ sub min_w {
 sub on_click {
 	my( $shape, $h, $e ) =  @_;
 
-	# $h->{ app }->{ width  } =
-	# $h->{ app }->{ height } =
-
 	$h->{ app }->refresh_over( $e->motion_x, $e->motion_y );
 }
 
@@ -424,7 +420,7 @@ sub on_click {
 sub on_double_click {
 	my( $shape, $h, $e ) =  @_;
 
-	# $h->{ app }->draw_black;
+
 	$h->{ app }->refresh_over( $e->motion_x, $e->motion_y );
 }
 
@@ -448,26 +444,23 @@ sub on_keydown { }
 sub on_keyup   { }
 
 
-sub save_draw_coord {
-	my( $shape ) =  @_;
+# sub save_draw_coord {
+# 	my( $shape ) =  @_;
 
-	$shape->{ ox } =  $shape->{ x };
-	$shape->{ oy } =  $shape->{ y };
-}
+# 	$shape->{ ox } =  $shape->{ x };
+# 	$shape->{ oy } =  $shape->{ y };
+# }
 
 
-sub refresh {
-	my( $shape ) =  @_;
+# sub refresh {
+# 	my( $shape ) =  @_;
 
-	$shape->draw_black;
-	$shape->draw;
-	$shape->save_draw_coord;
-}
+# 	$shape->draw_black;
+# 	$shape->draw;
+# 	$shape->save_draw_coord;
+# }
 
 sub draw_black {}
-# sub _draw {
-# 	shift->propagate( draw => @_ );
-# }
 
 
 

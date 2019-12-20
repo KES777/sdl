@@ -521,7 +521,8 @@ sub draw {
 	if( $app_rect->{ back } ) {
 		$app_rect->{ back }->draw;
 	}
-	$app_rect->SUPER::draw;
+	$app_rect->propagate( "draw" );
+
 
 	$app_rect->{ btn     }->draw;
 	$app_rect->{ btn_del }->draw;
