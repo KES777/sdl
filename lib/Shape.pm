@@ -488,6 +488,52 @@ sub propagate {
 
 
 
+sub on_shift {
+	my( $app_rect, $x, $y ) =  @_;
+
+	if( !$app_rect->{ old_x }
+			&&  !$app_rect->{ old_y }
+			# &&  $app_rect->{ event_state }{ SDLK_d() }
+		) {
+		$app_rect->{ old_x } =  $x;
+		$app_rect->{ old_y } =  $y;
+		return;
+	}
+	my $dx =  $app_rect->{ old_x } - $x;
+	my $dy =  $app_rect->{ old_y } - $y;
+# DB::x;
+	$app_rect->_shift( $dx, $dy );
+
+	$app_rect->{ old_x } =  $x;
+	$app_rect->{ old_y } =  $y;
+}
+
+
+
+sub app_shift {
+	my( $obj, $dx, $dy ) =  @_;
+
+
+	$obj->{ x } -=  $dx;
+	$obj->{ y } -=  $dy;
+}
+
+
+
+sub _shift {
+	my( $app_rect, $dx, $dy ) =  @_;
+
+	# $app_rect->propagate( "shift", $dx, $dy );
+	for my $x( $app_rect->{ children }->@* ) {
+		$x->app_shift( $dx, $dy );
+	}
+
+	$app_rect->{ btn     }->app_shift( $dx, $dy );
+	$app_rect->{ btn_del }->app_shift( $dx, $dy );
+	$app_rect->{ btn_c   }->app_shift( $dx, $dy );
+}
+
+
 
 # Функция возвращает объект, над которым находится мышка.
 # Дополнительно сохранаяет информацию о координатах мыши.
