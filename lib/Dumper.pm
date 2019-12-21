@@ -52,7 +52,7 @@ sub draw {
 	##
 	if( ref $data eq 'SCALAR' ) {
 		# _draw( $obj->{ x }, $obj->{ y }, [ $data->$* ] );
-		draw_scalar( $obj->{ x }, $obj->{ y }, $data );
+		$obj->draw_scalar( $obj->{ x }, $obj->{ y }, $data );
 	}
 
 	##
@@ -69,7 +69,11 @@ sub draw {
 
 
 sub draw_scalar {
-	_draw( shift, shift, [ shift->$* ] );
+	my( $obj ) =  shift;
+
+	$obj->_draw( shift, shift, [ shift->$* ] );
+
+	$obj->{ h } = $h;
 }
 
 
@@ -81,9 +85,11 @@ sub draw_array {
 	my $dy;
 	for my $k ( $array->@* ){
 		$n < 10   or last;
-		_draw( $obj->{ x }, $obj->{ y } + $dy, [ $k ] );
-	$dy +=  $h;
-	$n  +=   1;
+		$obj->_draw( $obj->{ x }, $obj->{ y } + $dy, [ $k ] );
+
+		$obj->{ h } =  $h + $dy;
+		$dy +=  $h;
+		$n  +=   1;
 	}
 }
 
@@ -96,16 +102,18 @@ sub draw_hash {
 	my $dy =  0;
 	for my $k ( sort keys $hash->%* ){
 		$n < 10   or last;
-		_draw( $obj->{ x }, $obj->{ y } + $dy, [ $k, $hash->{ $k } ] );
-	$dy +=  $h;
-	$n  +=   1;
+		$obj->_draw( $obj->{ x }, $obj->{ y } + $dy, [ $k, $hash->{ $k } ] );
+
+		$obj->{ h } =  $h + $dy;
+		$dy +=  $h;
+		$n  +=   1;
 	}
 }
 
 
 
 sub _draw {
-	my( $x, $y, $data ) =  @_;
+	my( $obj, $x, $y, $data ) =  @_;
 
 	my $screen =  AppRect::SCREEN();
 
@@ -126,11 +134,12 @@ sub _draw {
 				text    => $value ."",
 			);
 			$text->write_to( $screen );
-		}
-		$dw += $w;
-		$dx += $w;
-	}
 
+			$obj->{ w } =  $dw + $w;
+		}
+		$dw +=  $w;
+		$dx +=  $w;
+	}
 }
 
 
