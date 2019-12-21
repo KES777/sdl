@@ -27,7 +27,7 @@ sub new {
 
 	$btn_c  =  $btn_c->SUPER::new;
 
-	$btn_c->set_color;
+	$btn_c->set_color( $r, $g, $b );
 	$btn_c->set_start_position;
 
 	return $btn_c;
@@ -41,14 +41,6 @@ sub set_start_position {
 
 	$btn_c->{ x } =  $START_X;
 	$btn_c->{ y } =  $START_Y;
-}
-
-
-
-sub set_color {
-	my( $btn_c ) =  @_;
-
-	$btn_c->{ c } =   Color->new( $r, $g, $b );
 }
 
 
