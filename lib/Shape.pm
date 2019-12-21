@@ -482,48 +482,44 @@ sub propagate {
 
 
 sub on_shift {
-	my( $app_rect, $x, $y ) =  @_;
+	my( $shape, $h, $x, $y ) =  @_;
 
-	if( !$app_rect->{ old_x }
-			&&  !$app_rect->{ old_y }
-			# &&  $app_rect->{ event_state }{ SDLK_d() }
-		) {
-		$app_rect->{ old_x } =  $x;
-		$app_rect->{ old_y } =  $y;
+	if( !$shape->{ old_x }	&&	!$shape->{ old_y } ) {
+		$shape->{ old_x } =  $x;
+		$shape->{ old_y } =  $y;
 		return;
 	}
-	my $dx =  $app_rect->{ old_x } - $x;
-	my $dy =  $app_rect->{ old_y } - $y;
-# DB::x;
-	$app_rect->_shift( $dx, $dy );
+	my $dx =  $shape->{ old_x } - $x;
+	my $dy =  $shape->{ old_y } - $y;
 
-	$app_rect->{ old_x } =  $x;
-	$app_rect->{ old_y } =  $y;
+	$shape->_shift( $dx, $dy );
+
+	$shape->{ old_x } =  $x;
+	$shape->{ old_y } =  $y;
 }
 
 
 
 sub app_shift {
-	my( $obj, $dx, $dy ) =  @_;
+	my( $shape, $dx, $dy ) =  @_;
 
-
-	$obj->{ x } -=  $dx;
-	$obj->{ y } -=  $dy;
+	$shape->{ x } -=  $dx;
+	$shape->{ y } -=  $dy;
 }
 
 
 
 sub _shift {
-	my( $app_rect, $dx, $dy ) =  @_;
+	my( $shape, $dx, $dy ) =  @_;
 
-	# $app_rect->propagate( "shift", $dx, $dy );
-	for my $x( $app_rect->{ children }->@* ) {
-		$x->app_shift( $dx, $dy );
+	# $shape->propagate( app_shift => $dx, $dy );
+	for my $s( $shape->{ children }->@* ) {
+		$s->app_shift( $dx, $dy );
 	}
 
-	$app_rect->{ btn     }->app_shift( $dx, $dy );
-	$app_rect->{ btn_del }->app_shift( $dx, $dy );
-	$app_rect->{ btn_c   }->app_shift( $dx, $dy );
+	# $app_rect->{ btn     }->app_shift( $dx, $dy );
+	# $app_rect->{ btn_del }->app_shift( $dx, $dy );
+	# $app_rect->{ btn_c   }->app_shift( $dx, $dy );
 }
 
 
