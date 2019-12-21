@@ -696,4 +696,12 @@ sub draw {
 
 
 
+sub set_color {
+	my( $shape ) =  shift;
+
+	$shape->{ c } =   Color->new( @_ );
+}
+
+
+
 1;
