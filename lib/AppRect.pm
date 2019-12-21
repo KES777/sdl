@@ -357,8 +357,8 @@ sub _is_mouseup {
 	if( my $h =  delete $app_rect->{ on_shift } ) {
 		$h->{ target }->off_shift;
 
-		delete $app_rect->{ old_x };
-		delete $app_rect->{ old_y };
+		delete $h->{ target }{ old_x };
+		delete $h->{ target }{ old_y };
 	}
 }
 
