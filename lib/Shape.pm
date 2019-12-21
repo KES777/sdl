@@ -524,6 +524,18 @@ sub _shift {
 
 
 
+sub off_shift {
+	my( $shape ) =  @_;
+
+	# $shape->propagate( "store" )
+	for my $s( $shape->{ children }->@* ) {
+		$s->store;
+	}
+}
+
+
+
+
 # Функция возвращает объект, над которым находится мышка.
 # Дополнительно сохранаяет информацию о координатах мыши.
 sub is_over {
