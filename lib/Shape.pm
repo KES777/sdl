@@ -490,8 +490,8 @@ sub on_shift {
 	my( $shape, $h, $x, $y ) =  @_;
 
 	if( $shape->{ old_x }	&&	$shape->{ old_y } ) {
-		my $border;
-		$shape != $h->{ app }  or  $border =  1;
+		my $border =  1;
+		$shape != $h->{ app }  or  $border =  undef;
 
 		my $dx =  $shape->{ old_x } - $x;
 		my $dy =  $shape->{ old_y } - $y;
