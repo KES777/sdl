@@ -487,13 +487,17 @@ sub on_shift {
 	my( $shape, $h, $x, $y ) =  @_;
 
 	if( $shape->{ old_x }	&&	$shape->{ old_y } ) {
+		my $border;
+		$shape != $h->{ app }  or  $border =  1;
 
 		my $dx =  $shape->{ old_x } - $x;
 		my $dy =  $shape->{ old_y } - $y;
 
-		# $shape->propagate( shape => $dx, $dy );
 		for my $s( $shape->{ children }->@* ) {
-			$s->shift( $dx, $dy );
+			my $sx =  $s->{ x } - $dx;
+			my $sy =  $s->{ y } - $dy;
+
+			$s->move_to( $sx, $sy, $border );
 		}
 	}
 
