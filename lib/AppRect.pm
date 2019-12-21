@@ -241,7 +241,7 @@ sub _is_mousedown {
 	# if( (!$app_rect->{ is_over } || "CTRL_KEY"  )  &&  !$app_rect->{ is_selection } ) {
 	if( !$app_rect->{ is_over }
 		&&  !$app_rect->{ is_selection }
-		&&  !$app_rect->{ event_state }{ SDLK_d() }
+		&&  !$app_rect->{ event_state }{ SDLK_s() }
 	) {
 		$app_rect->make_handle( is_selection => {
 			target =>  $app_rect->{ is_over } || $app_rect,
@@ -262,11 +262,21 @@ sub _is_mousedown {
 	}
 
 	## on_shift
-	if( !$app_rect->{ is_over }  &&  $app_rect->{ event_state }{ SDLK_d() } ) {
-		$app_rect->make_handle( on_shift => {
-			x =>  $e->motion_x,
-			y =>  $e->motion_y,
-		} );
+	if( $app_rect->{ event_state }{ SDLK_s() } ) {
+		if( my $h =  $app_rect->{ is_over } ) {
+			$app_rect->make_handle( on_shift => {
+				target =>  $h->{ target },
+				x      =>  $e->motion_x,
+				y      =>  $e->motion_y,
+			} );
+		}
+		else {
+			$app_rect->make_handle( on_shift => {
+				target =>  $app_rect,
+				x      =>  $e->motion_x,
+				y      =>  $e->motion_y,
+			} );
+		}
 	}
 }
 
@@ -345,7 +355,7 @@ sub _is_mouseup {
 
 	## on_shift
 	if( my $h =  delete $app_rect->{ on_shift } ) {
-		$h->{ app }->off_shift;
+		$h->{ target }->off_shift;
 
 		delete $app_rect->{ old_x };
 		delete $app_rect->{ old_y };
@@ -395,6 +405,7 @@ sub _on_mouse_move {
 	##! MOVE START
 	if( !$app_rect->{ is_moveable }
 		&&	!$app_rect->{ on_resize }
+		&&	!$app_rect->{ event_state }{ SDLK_s() }
 		&&  ( my $h =  $app_rect->{ is_down } )
 	) {
 		$h->{ target }->on_drag( $e, $h );
@@ -452,7 +463,7 @@ sub _on_mouse_move {
 
 	## on_shift
 	if( my $h =  $app_rect->{ on_shift } ) {
-		$h->{ app }->on_shift( $h, $e->motion_x, $e->motion_y );
+		$h->{ target }->on_shift( $h, $e->motion_x, $e->motion_y );
 	}
 }
 
