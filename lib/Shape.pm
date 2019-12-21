@@ -494,7 +494,7 @@ sub on_shift {
 
 	# $shape->propagate( shape => $dx, $dy );
 	for my $s( $shape->{ children }->@* ) {
-		$s->app_shift( $dx, $dy );
+		$s->shift( $dx, $dy );
 	}
 
 	$shape->{ old_x } =  $x;
@@ -503,7 +503,7 @@ sub on_shift {
 
 
 
-sub app_shift {
+sub shift {
 	my( $shape, $dx, $dy ) =  @_;
 
 	$shape->{ x } -=  $dx;
