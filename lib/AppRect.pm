@@ -353,7 +353,7 @@ sub _is_mouseup {
 		}
 	}
 
-	## on_shift
+	## off_shift
 	if( my $h =  delete $app_rect->{ on_shift } ) {
 		$h->{ target }->off_shift;
 
@@ -445,13 +445,7 @@ sub _on_mouse_move {
 		$app_rect->{ first } =  $h->{ owner };
 	}
 
-	## Удаление ключа, отвечающего за отрисовку объекта поверх других
-	if( !$app_rect->{ is_over } ) {
-		delete $app_rect->{ first };
-	}
-
-
-	## Активация свойства "передвижение", отрисовка этого объекта поверх других
+	## Отрисовка движущегося объекта поверх других
 	if( my $h =  $app_rect->{ is_moveable } ) {
 		$app_rect->{ first } =  $h->{ owner };
 	}
