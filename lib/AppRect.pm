@@ -263,7 +263,10 @@ sub _is_mousedown {
 
 	## on_shift
 	if( !$app_rect->{ is_over }  &&  $app_rect->{ event_state }{ SDLK_d() } ) {
-		$app_rect->{ on_shift } = ( sx => $e->motion_x, sy => $e->motion_y );
+		$app_rect->make_handle( on_shift => {
+			x =>  $e->motion_x,
+			y =>  $e->motion_y,
+		} );
 	}
 }
 
@@ -445,8 +448,8 @@ sub _on_mouse_move {
 	}
 
 	## on_shift
-	if( $app_rect->{ on_shift } ) {
-		$app_rect->on_shift( $e->motion_x, $e->motion_y );
+	if( my $h =  $app_rect->{ on_shift } ) {
+		$h->{ app }->on_shift( $h, $e->motion_x, $e->motion_y );
 	}
 }
 
