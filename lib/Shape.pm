@@ -196,6 +196,7 @@ sub on_group {
 }
 
 
+
 ## Извлечение объекта из группы
 sub drag {
 	my( $shape, $h ) =  @_;
@@ -227,19 +228,21 @@ sub drag {
 }
 
 
+
 ## Координаты родителя
 sub parent_coord {
 	my( $shape, $x, $y ) =  @_;
 
 	if( $shape->{ parent } ) {
-		$x +=  $shape->{ parent }->{ x } - $shape->{ parent }->{ radius };
-		$y +=  $shape->{ parent }->{ y } - $shape->{ parent }->{ radius };
+		$x +=  $shape->{ parent }{ x };
+		$y +=  $shape->{ parent }{ y };
 
 		( $x, $y ) =  $shape->{ parent }->parent_coord( $x, $y );
 	}
 
 	return ( $x, $y );
 }
+
 
 
 ## Удаляем извлечённый объект из числа детей его родителя
