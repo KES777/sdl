@@ -52,7 +52,7 @@ sub draw {
 	##
 	if( ref $data eq 'SCALAR' ) {
 		# _draw( $obj->{ x }, $obj->{ y }, [ $data->$* ] );
-		draw_scalar( $obj, $obj, $data );
+		draw_scalar( $obj->{ x }, $obj->{ y }, $data );
 	}
 
 	##
@@ -69,8 +69,7 @@ sub draw {
 
 
 sub draw_scalar {
-	_draw( shift->{ x }, shift->{ y }, [ shift->$* ] );
-
+	_draw( shift, shift, [ shift->$* ] );
 }
 
 
