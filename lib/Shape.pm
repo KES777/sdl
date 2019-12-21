@@ -492,7 +492,10 @@ sub on_shift {
 	my $dx =  $shape->{ old_x } - $x;
 	my $dy =  $shape->{ old_y } - $y;
 
-	$shape->_shift( $dx, $dy );
+	# $shape->propagate( shape => $dx, $dy );
+	for my $s( $shape->{ children }->@* ) {
+		$s->app_shift( $dx, $dy );
+	}
 
 	$shape->{ old_x } =  $x;
 	$shape->{ old_y } =  $y;
@@ -505,21 +508,8 @@ sub app_shift {
 
 	$shape->{ x } -=  $dx;
 	$shape->{ y } -=  $dy;
-}
 
-
-
-sub _shift {
-	my( $shape, $dx, $dy ) =  @_;
-
-	# $shape->propagate( app_shift => $dx, $dy );
-	for my $s( $shape->{ children }->@* ) {
-		$s->app_shift( $dx, $dy );
-	}
-
-	# $app_rect->{ btn     }->app_shift( $dx, $dy );
-	# $app_rect->{ btn_del }->app_shift( $dx, $dy );
-	# $app_rect->{ btn_c   }->app_shift( $dx, $dy );
+	# return undef;## для того, чтобы propagate не делал return
 }
 
 
