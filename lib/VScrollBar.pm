@@ -40,7 +40,9 @@ use Color;
 
 use base 'Rect';
 
-
+my $r =  50;
+my $g =  250;
+my $b =  50;
 
 sub store { }
 
@@ -58,7 +60,7 @@ sub new {
 		0, 0,                                      # X Y
 		$scroll->{ w },                            # Width
 		limit_min( $scroll->{ h } *$view, 10 ),    # Height
-		Color->new( 50, 250, 50 )                  # Color
+		Color->new( $r, $g, $b ),                  # Color
 	);
 	$scroll->children( $ruler );
 
