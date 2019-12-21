@@ -527,10 +527,14 @@ sub _shift {
 sub off_shift {
 	my( $shape ) =  @_;
 
-	# $shape->propagate( "store" )
+	# $shape->propagate( "store" )## Функция store возвращает объект, из-за этого
+	## propagate делает return. В итоге обрабатывается лишь один элемент из массива.
 	for my $s( $shape->{ children }->@* ) {
 		$s->store;
 	}
+	my( $min_h, $min_w ) =  $shape->calc_min_size;
+	$shape->min_h( $min_h );
+	$shape->min_w( $min_w );
 }
 
 
