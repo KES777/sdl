@@ -7,7 +7,7 @@ use SDLx::Text;
 
 use HScrollBar;
 use VScrollBar;
-use AppRect;
+# use AppRect;
 use Color;
 use base 'Rect';
 
@@ -103,7 +103,7 @@ sub draw {
 
 
 	# Draw headers
-	_draw_row( $rect->{ x }, $rect->{ y }, \@_draw_col );
+	_draw_row( $rect->{ x }, $rect->{ y }, \@_draw_col ); # [ $k, $h->{ $k } ]
 
 	# Calc row position
 	my $vscroll_pos  =  $rect->{ scroll_v }{ pos };
@@ -138,6 +138,7 @@ sub draw {
 sub get_sb_coords { }
 ## Object moving
 sub move_to { }
-sub on_mouse_over { }
+
+
 
 1;

@@ -74,17 +74,9 @@ sub on_press {
 
 
 
-sub get_sb_coords {
-
-	return ( 0, 0, 0, 0 );
-}
-
-
-
 ## Меняет цвет объекта-кнопки (если над ней курсор)
 sub on_mouse_over {
 	my( $btn ) =  @_;
-
 
 	# $btn->{ c }{ b } =  250;
 }
@@ -100,12 +92,8 @@ sub on_mouse_out {
 
 
 
-sub on_over { }
-sub on_click { }
-sub on_dbl_click { }
-sub on_triple_click{ }
-sub on_hint{ }
 sub on_move { }
+sub get_sb_coords { }
 
 
 

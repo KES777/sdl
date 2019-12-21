@@ -9,10 +9,6 @@ use Rect;
 use base 'Rect';
 
 
-## Size_batton coords
-sub get_sb_coords { }
-sub store {}
-
 sub on_move {
 	my( $shape, $e, $h ) =  @_;
 
@@ -26,6 +22,10 @@ sub on_move {
 	my $pos    =  $shape->{ x };
 	$shape->{ parent }{ pos } =  $pos / $length;
 }
+
+## Size_batton coords
+sub get_sb_coords { }
+sub store {}
 
 
 
@@ -45,7 +45,6 @@ my $r =  50;
 my $g =  250;
 my $b =  50;
 
-sub store { }
 
 sub new {
 	my( $scroll, $dimension ) =  ( shift, shift );
@@ -73,11 +72,6 @@ sub new {
 
 
 
-## Size_batton coords
-sub get_sb_coords { }
-sub on_move { }
-
-
 sub limit_min {
 	my( $value, $min ) =  @_;
 
@@ -91,6 +85,14 @@ sub limit_max {
 
 	return $value <= $max? $value : $max;
 }
+
+
+
+## Size_batton coords
+sub get_sb_coords { }
+sub on_move { }
+sub store { }
+
 
 
 1;

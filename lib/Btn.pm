@@ -51,13 +51,6 @@ sub on_press {
 
 
 
-sub get_sb_coords {
-
-	return ( 0, 0, 0, 0 );
-}
-
-
-
 sub on_hint{
 	my( $btn, $h, $e ) =  @_;
 
@@ -88,10 +81,9 @@ sub on_mouse_out {
 
 
 sub on_over { }
-sub on_click { }
-sub on_dbl_click { }
-sub on_triple_click{ }
 sub on_move { }
+sub get_sb_coords { }
+
 
 
 

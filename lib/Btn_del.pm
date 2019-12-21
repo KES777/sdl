@@ -42,17 +42,6 @@ sub set_start_position {
 }
 
 
-sub on_click { }
-sub on_dbl_click { }
-
-
-
-sub get_sb_coords {
-
-	return ( 0, 0, 0, 0 );
-}
-
-
 
 ## delete all shapes or any one
 sub moving_disable {
@@ -93,28 +82,31 @@ sub start_position {
 
 	# $btn_del->restore_state;
 	$btn_del->set_start_position;
-	$btn_del->set_start_color;
+	# $btn_del->set_start_color;
 }
-
-
 
 
 
 ## Меняет цвет объекта-кнопки (если над ней курсор)
 sub on_mouse_over {
-	my( $btn_del ) =  @_;
+	# my( $btn_del ) =  @_;
 
-	$btn_del->{ c }{ b } =  250;
+	# $btn_del->{ c }{ b } =  250;
 }
 
 
 
 ## Возвращает объекту-кнопке её цвет (когда курсор с неё уходит)
 sub on_mouse_out {
-	my( $btn_del ) =  @_;
+	# my( $btn_del ) =  @_;
 
-	$btn_del->{ c }{ b } =  0;
+	# $btn_del->{ c }{ b } =  0;
 }
+
+
+
+sub get_sb_coords { }
+sub store {}
 
 
 
