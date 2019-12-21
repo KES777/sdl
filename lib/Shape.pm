@@ -408,7 +408,7 @@ sub min_w {
 
 
 
-## Включает свойство click/dbclick
+## Включает свойство click
 sub on_click {
 	my( $shape, $h, $e ) =  @_;
 
@@ -464,6 +464,7 @@ sub draw_black {}
 
 
 
+## Передаёт в назначенную($event) функцию всех детей перента с аргументами
 sub propagate {
 	my( $shape, $event ) =  ( shift, shift );
 
@@ -481,6 +482,7 @@ sub propagate {
 
 
 
+## Смещение всех объектов поверхности в соответствии с координатами мыши
 sub on_shift {
 	my( $shape, $h, $x, $y ) =  @_;
 
@@ -501,23 +503,13 @@ sub on_shift {
 
 
 
-sub shift {
-	my( $shape, $dx, $dy ) =  @_;
-
-	$shape->{ x } -=  $dx;
-	$shape->{ y } -=  $dy;
-
-	# return undef;## для того, чтобы propagate не делал return
-}
-
-
-
+## Отключение смещения объектов
 sub off_shift {
 	my( $shape ) =  @_;
 
 	# $shape->propagate( "store" )## Функция store возвращает объект, из-за этого
 	## propagate делает return. В итоге обрабатывается лишь один элемент из массива.
-	for my $s( $shape->{ children }->@* ) {
+	for my $s( $shape->{ children }->@* ) {## При таком порядке не сохраняем min/max  в базу
 		$s->store;
 	}
 	my( $min_h, $min_w ) =  $shape->calc_min_size;
@@ -590,7 +582,7 @@ sub store {
 
 
 
-
+## Назначение чилдренам их пэрэнта
 sub children {
 	@_ > 1   or return shift->{ children };
 
@@ -608,7 +600,7 @@ sub children {
 }
 
 
-
+## Рассчёт минимального размера группы в соответствии с размером её чилдренов
 sub calc_min_size {
 	my( $circle ) =  @_;
 
@@ -650,7 +642,7 @@ sub organize_group {
 }
 
 
-
+## Отрисовка всех объектов
 sub draw {
 	my( $shape, $x, $y ) = @_;
 
