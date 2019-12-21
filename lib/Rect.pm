@@ -211,14 +211,6 @@ sub set_group_size {
 
 
 
-sub shape_handle {
-	my( $circle ) =  @_;
-
-	return ( 0, 0 );
-}
-
-
-
 sub get_points {
 	my( $rect ) =  @_;
 
