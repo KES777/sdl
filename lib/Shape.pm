@@ -484,17 +484,15 @@ sub propagate {
 sub on_shift {
 	my( $shape, $h, $x, $y ) =  @_;
 
-	if( !$shape->{ old_x }	&&	!$shape->{ old_y } ) {
-		$shape->{ old_x } =  $x;
-		$shape->{ old_y } =  $y;
-		return;
-	}
-	my $dx =  $shape->{ old_x } - $x;
-	my $dy =  $shape->{ old_y } - $y;
+	if( $shape->{ old_x }	&&	$shape->{ old_y } ) {
 
-	# $shape->propagate( shape => $dx, $dy );
-	for my $s( $shape->{ children }->@* ) {
-		$s->shift( $dx, $dy );
+		my $dx =  $shape->{ old_x } - $x;
+		my $dy =  $shape->{ old_y } - $y;
+
+		# $shape->propagate( shape => $dx, $dy );
+		for my $s( $shape->{ children }->@* ) {
+			$s->shift( $dx, $dy );
+		}
 	}
 
 	$shape->{ old_x } =  $x;
