@@ -6,12 +6,14 @@ use warnings;
 use Rect;
 use base 'Rect';
 
+## Start position  стартовые координаты объекта
 my $START_X =  250;
 my $START_Y =    0;
 
-my $r       =  255;
-my $g       =    0;
-my $b       =    0;
+## Start color  стартовый цвет объекта
+my $r =  255;
+my $g =    0;
+my $b =    0;
 
 
 sub new {
@@ -19,22 +21,15 @@ sub new {
 
 	$btn_del  =  $btn_del->SUPER::new;
 
-	$btn_del->set_start_color;
-	$btn_del->set_start_position;
+	$btn_del->set_color( $r, $g, $b );
+	$btn_del->_start_position;
 
 	return $btn_del;
 }
 
 
 
-sub set_start_color {
-	my( $btn_del ) =  @_;
-
-	$btn_del->{ c } =   Color->new( $r, $g, $b );
-}
-
-
-sub set_start_position {
+sub _start_position {
 	my( $btn_del ) =  @_;
 
 	$btn_del->{ x } =  $START_X;
@@ -48,7 +43,8 @@ sub moving_disable {
 	my( $btn_del, $e, $h ) =  @_;
 
 		my $app_rect =  $h->{ app };
-		$btn_del->start_position;
+		$btn_del->_start_position;
+		$btn_del->set_color( $r, $g, $b );
 
 	## Удаление всех объектов
 	if( $app_rect->{ btn }->is_over( $e->motion_x, $e->motion_y ) ) {
@@ -72,17 +68,6 @@ sub moving_disable {
 
 		$app_rect->{ children }->@* =  grep{ $_ != $x } $app_rect->{ children }->@*;
 	}
-}
-
-
-
-## Возвращает кнопку на стартовую позицию
-sub start_position {
-	my( $btn_del ) =  @_;
-
-	# $btn_del->restore_state;
-	$btn_del->set_start_position;
-	# $btn_del->set_start_color;
 }
 
 
