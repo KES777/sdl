@@ -51,7 +51,6 @@ sub draw {
 
 	##
 	if( ref $data eq 'SCALAR' ) {
-		# _draw( $obj->{ x }, $obj->{ y }, [ $data->$* ] );
 		$obj->draw_scalar( $obj->{ x }, $obj->{ y }, $data );
 	}
 
@@ -81,15 +80,15 @@ sub draw_scalar {
 sub draw_array {
 	my( $obj, $array ) =  @_;
 
-	my $n;
+	my $n =  0;
 	my $dy;
 	for my $k ( $array->@* ){
 		$n < 10   or last;
-		$obj->_draw( $obj->{ x }, $obj->{ y } + $dy, [ $k ] );
+		$obj->_draw( $obj->{ x }, $obj->{ y } + $dy, [ $n, $k ] );
 
-		$obj->{ h } =  $h + $dy;
-		$dy +=  $h;
 		$n  +=   1;
+		$dy +=  $h;
+		$obj->{ h } =  $dy;
 	}
 }
 
@@ -104,9 +103,9 @@ sub draw_hash {
 		$n < 10   or last;
 		$obj->_draw( $obj->{ x }, $obj->{ y } + $dy, [ $k, $hash->{ $k } ] );
 
-		$obj->{ h } =  $h + $dy;
-		$dy +=  $h;
 		$n  +=   1;
+		$dy +=  $h;
+		$obj->{ h } =  $dy;
 	}
 }
 
@@ -135,10 +134,10 @@ sub _draw {
 			);
 			$text->write_to( $screen );
 
-			$obj->{ w } =  $dw + $w;
 		}
-		$dw +=  $w;
 		$dx +=  $w;
+		$dw +=  $dw + $w;
+		$obj->{ w } =  $dw;
 	}
 }
 
