@@ -101,7 +101,7 @@ sub _on_user_event {
 
 	##!
 	if( my $h =  $app_rect->{ is_hint } ) {
-		$h->{ target }->on_hint( $h, $e );
+		$h->{ target }->on_hint( $h, $h->{ x }, $h->{ y } );
 	}
 }
 
@@ -257,7 +257,6 @@ sub _is_mousedown {
 	##! PRESS
 	if( my $h =  $app_rect->{ is_over } ) {
 		$h->{ target }->on_press( $h, $e );
-
 		$app_rect->make_handle( is_down => $h );
 	}
 
@@ -434,6 +433,8 @@ sub _on_mouse_move {
 		my $timer_id =  SDL::Time::add_timer( $HINT_TIMER, 'AppRect::callback3' );
 		$app_rect->make_handle( is_hint => { %$no,
 			timer_id =>  $timer_id,
+			x        =>  $e->motion_x,
+			y        =>  $e->motion_y,
 		});
 	}
 
