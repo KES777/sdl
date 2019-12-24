@@ -3,6 +3,10 @@ package Dumper;
 use strict;
 use warnings;
 
+use Scalar::Util qw(blessed dualvar isdual readonly refaddr reftype
+                    tainted weaken isweak isvstring looks_like_number
+                    set_prototype);
+
 use SDLx::Text;
 
 use Color;
@@ -39,29 +43,20 @@ sub draw {
 
 	my $data  =  $obj->{ data };
 
+	my $type =  reftype $data;
 	##
-	if( ref $data  eq  'Circle' ) {
+	if( $type  eq  'HASH' ) {
 		draw_hash( $obj, $data );
 	}
 
 	##
-	elsif( ref $data  eq  'Rect' ) {
-		draw_hash( $obj, $data );
-	}
-
-	##
-	elsif( ref $data  eq  'SCALAR' ) {
-		$obj->draw_scalar( $obj->{ x }, $obj->{ y }, $data );
+	elsif( $type  eq  'SCALAR' ) {
+		draw_scalar( $obj, $data );
 	}
 
 	##
 	elsif( ref $data  eq  'ARRAY' ) {
 		draw_array( $obj, $data );
-	}
-
-	##
-	elsif( ref $data  eq  'HASH' ) {
-		draw_hash( $obj, $data );
 	}
 }
 
@@ -70,7 +65,7 @@ sub draw {
 sub draw_scalar {
 	my( $obj ) =  shift;
 
-	$obj->_draw( shift, shift, [ shift->$* ] );
+	$obj->_draw( $obj->{ x }, $obj->{ y }, [ shift->$* ] );
 
 	$obj->{ h } = $h;
 }
