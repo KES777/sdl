@@ -52,11 +52,11 @@ sub on_press {
 
 
 sub on_hint{
-	my( $btn, $h, $e ) =  @_;
+	my( $btn, $h, $x, $y ) =  @_;
 
 	push $h->{ app }->{ children }->@*, Table->new( 100, 100, 850, 355 );
 
-	$h->{ app }->refresh_over( $e->motion_x, $e->motion_y );
+	$h->{ app }->refresh_over( $x, $y );
 }
 
 
