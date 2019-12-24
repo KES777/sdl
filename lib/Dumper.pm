@@ -67,7 +67,8 @@ sub draw_scalar {
 
 	$obj->_draw( $obj->{ x }, $obj->{ y }, [ shift->$* ] );
 
-	$obj->{ h } = $h;
+	$obj->{ h } =  $h;
+	$obj->_draw_input;
 }
 
 
@@ -75,16 +76,17 @@ sub draw_scalar {
 sub draw_array {
 	my( $obj, $array ) =  @_;
 
-	my $n =  0;
-	my $dy;
+	my $n       =  0;
+	$obj->{ h } =  0;
 	for my $k ( $array->@* ){
 		$n < 10   or last;
-		$obj->_draw( $obj->{ x }, $obj->{ y } + $dy, [ $n, $k ] );
+		$obj->_draw( $obj->{ x }, $obj->{ y } + $obj->{ h }, [ $n, $k ] );
 
-		$n  +=   1;
-		$dy +=  $h;
-		$obj->{ h } =  $dy;
+		$n          +=   1;
+		$obj->{ h } +=  $h;
 	}
+
+	$obj->_draw_input;
 }
 
 
@@ -92,17 +94,28 @@ sub draw_array {
 sub draw_hash {
 	my( $obj, $hash ) =  @_;
 
-	my $n  =  0;
-	my $dy =  0;
+	my $n       =  0;
+	$obj->{ h } =  0;
 	for my $k ( sort keys $hash->%* ){
 		$n < 10   or last;
-		$obj->_draw( $obj->{ x }, $obj->{ y } + $dy, [ $k, $hash->{ $k } ] );
+		$obj->_draw( $obj->{ x }, $obj->{ y } + $obj->{ h }, [ $k, $hash->{ $k } ] );
 
-		$n  +=   1;
-		$dy +=  $h;
-		$obj->{ h } =  $dy;
+		$n          +=   1;
+		$obj->{ h } +=  $h;
 	}
 
+	$obj->_draw_input;
+}
+
+
+
+sub _draw_input {
+	my( $obj ) =  @_;
+
+	my( $s, $si ) =  ( '', '' );
+
+	$obj->_draw( $obj->{ x }, $obj->{ y } + $obj->{ h }, [ $s, $si ] );
+	$obj->{ h } +=  $h;
 }
 
 
