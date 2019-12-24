@@ -102,6 +102,7 @@ sub draw_hash {
 		$dy +=  $h;
 		$obj->{ h } =  $dy;
 	}
+
 }
 
 
@@ -117,8 +118,7 @@ sub _draw {
 		$screen->draw_rect( [ $x + $dx, $y, $w + $dw, $h ], [ 0, 0, 255, 0 ] );
 		$screen->draw_rect( [ $x + 2 + $dx, $y + 2, $w - 4 + $dw, $h - 4 ], [ 255, 255, 255, 255 ] );
 
-		if( defined $value ) {
-			my $length =  length $value;
+		if( defined $value  &&  (my $length =  length $value) ) {
 			my $text =  SDLx::Text->new(
 				color   => [0, 0, 0], # "white"
 				size    => 16,
