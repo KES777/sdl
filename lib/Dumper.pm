@@ -40,27 +40,27 @@ sub draw {
 	my $data  =  $obj->{ data };
 
 	##
-	if( ref $data eq  'Circle' ) {
+	if( ref $data  eq  'Circle' ) {
 		draw_hash( $obj, $data );
 	}
 
 	##
-	if( ref $data eq  'Rect' ) {
+	elsif( ref $data  eq  'Rect' ) {
 		draw_hash( $obj, $data );
 	}
 
 	##
-	if( ref $data eq 'SCALAR' ) {
+	elsif( ref $data  eq  'SCALAR' ) {
 		$obj->draw_scalar( $obj->{ x }, $obj->{ y }, $data );
 	}
 
 	##
-	if( ref $data eq 'ARRAY' ) {
+	elsif( ref $data  eq  'ARRAY' ) {
 		draw_array( $obj, $data );
 	}
 
 	##
-	if( ref $data eq 'HASH' ) {
+	elsif( ref $data  eq  'HASH' ) {
 		draw_hash( $obj, $data );
 	}
 }
