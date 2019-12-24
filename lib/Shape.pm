@@ -436,9 +436,9 @@ sub on_hint {
 	my( $shape, $h, $x, $y ) =  @_;
 
 	my @x =  ( 5, 7, 10 );
-	my $x =  10;
-	my %x =  ( x => 1 );
-	push $h->{ app }->{ children }->@*, Dumper->new( \@x, 100, 100, 0, 0 );
+	my $i =  10;
+	my %x =  ( x => 1, y => 2 );
+	push $h->{ app }->{ children }->@*, Dumper->new( $shape, 100, 100, 0, 0 );
 	$h->{ app }->refresh_over( $x, $y );
 }
 
