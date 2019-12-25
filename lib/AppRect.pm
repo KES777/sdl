@@ -37,15 +37,8 @@ sub user_event {
 	my( $handler, $code, $data ) =  @_;
 
 	my $user_event =  SDL_USEREVENT + $next_user_event_type++;
-	$APP->add_event_handler( sub{
-		#my( $e ) =  @_;
-		$_[0]->type == $user_event   or return;
 
-		&$handler;
-	});
-
-
-	## Создаёт событие USEREVENT
+	## Генерация функции для создания пользовательского события
 	no strict 'refs';
 	my $sub_name =  "AppRect::issue_event_$user_event";
 	*{ $sub_name } =  sub{
@@ -60,6 +53,16 @@ sub user_event {
 	};
 
 
+	## Регистрируем обработчик для пользовательского события
+	$APP->add_event_handler( sub{
+		#my( $e ) =  @_;
+		$_[0]->type == $user_event   or return;
+
+		&$handler;
+	});
+
+
+	## Возвращаем имя функции, которая генерирует пользовательское событие
 	return $sub_name;
 }
 
