@@ -162,6 +162,7 @@ sub _observer {
 	if( $e->type == SDL_KEYDOWN ) {
 		$app_rect->{ event_state }{ $e->key_sym } =  1;
 
+		# TODO: send key event to active element
 		if( my $h =  $app_rect->{ is_over } ) {
 			$h->{ target }->on_keydown( $h, $e );
 		}
@@ -207,7 +208,7 @@ sub _can_group {
 
 
 
-sub make_handle {
+sub handle {
 	my( $app_rect, $key, $props ) =  @_;
 
 	$props   or return delete $app_rect->{ $key };
@@ -243,7 +244,7 @@ sub _is_mousedown {
 		&&  !$app_rect->{ is_selection }
 		&&  !$app_rect->{ event_state }{ SDLK_s() }
 	) {
-		$app_rect->make_handle( is_selection => {
+		$app_rect->handle( is_selection => {
 			target =>  $app_rect->{ is_over } || $app_rect,
 			draw   =>  Selection->new( $e->motion_x, $e->motion_y, 0, 0,
 						Color->new( 0, 0, 0, 0 ) )
@@ -257,20 +258,20 @@ sub _is_mousedown {
 	##! PRESS
 	if( my $h =  $app_rect->{ is_over } ) {
 		$h->{ target }->on_press( $h, $e );
-		$app_rect->make_handle( is_down => $h );
+		$app_rect->handle( is_down => $h );
 	}
 
 	## on_shift
 	if( $app_rect->{ event_state }{ SDLK_s() } ) {
 		if( my $h =  $app_rect->{ is_over } ) {
-			$app_rect->make_handle( on_shift => {
+			$app_rect->handle( on_shift => {
 				target =>  $h->{ target },
 				x      =>  $e->motion_x,
 				y      =>  $e->motion_y,
 			} );
 		}
 		else {
-			$app_rect->make_handle( on_shift => {
+			$app_rect->handle( on_shift => {
 				target =>  $app_rect,
 				x      =>  $e->motion_x,
 				y      =>  $e->motion_y,
@@ -331,14 +332,14 @@ sub _is_mouseup {
 		if   ( $tcl  &&  (SDL::get_ticks() -$tcl->{ time }) < 1000 ) {
 			# $tcl->{ target }->on_triple_click( $up, $e );
 
-			# $app_rect->make_handle( is_quad_click => { %$up,
+			# $app_rect->handle( is_quad_click => { %$up,
 			# 	time => SDL::get_ticks(),
 			# });
 		}
 		elsif( $dcl  &&  (SDL::get_ticks() -$dcl->{ time }) < 1000 ) {
 			$dcl->{ target }->on_double_click( $up, $e );
 
-			$app_rect->make_handle( is_triple_click => { %$up,
+			$app_rect->handle( is_triple_click => { %$up,
 				time => SDL::get_ticks(),
 			});
 		}
@@ -346,7 +347,7 @@ sub _is_mouseup {
 		else {
 			$up->{ target }->on_click( $up, $e );
 
-			$app_rect->make_handle( is_double_click => { %$up,
+			$app_rect->handle( is_double_click => { %$up,
 				time => SDL::get_ticks(),
 			});
 		}
@@ -385,7 +386,7 @@ sub _on_mouse_move {
 	my $oo =  $app_rect->{ is_over };                             # OLD OVER
 	my $no =  _is_over( $app_rect, $e->motion_x, $e->motion_y );  # NEW OVER
 	print ref( $no->{ target } ), "\n"   if $no;
-	$app_rect->make_handle( is_over => $no );
+	$app_rect->handle( is_over => $no );
 
 	if( $no  &&  !$oo ) {
 		$no->{ target }->on_mouse_over( $e, $no );
@@ -408,7 +409,7 @@ sub _on_mouse_move {
 		&&  ( my $h =  $app_rect->{ is_down } )
 	) {
 		$h->{ target }->on_drag( $e, $h );
-		$app_rect->make_handle( is_moveable =>  $h );
+		$app_rect->handle( is_moveable =>  $h );
 	}
 
 
@@ -431,7 +432,7 @@ sub _on_mouse_move {
 
 	if( $no ) {
 		my $timer_id =  SDL::Time::add_timer( $HINT_TIMER, 'AppRect::issue_hint_event' );
-		$app_rect->make_handle( is_hint => { %$no,
+		$app_rect->handle( is_hint => { %$no,
 			timer_id =>  $timer_id,
 			x        =>  $e->motion_x,
 			y        =>  $e->motion_y,
@@ -485,7 +486,7 @@ sub _is_over {
 
 sub refresh_over {
 	my( $app_rect, $x, $y ) =  @_;
-	$app_rect->make_handle( is_over => _is_over( @_ ) );
+	$app_rect->handle( is_over => _is_over( @_ ) );
 }
 
 
