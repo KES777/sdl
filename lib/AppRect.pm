@@ -29,18 +29,6 @@ my $HINT_TIMER =  1000;
 my $APP;
 sub SCREEN { return $APP }
 
-## Создаёт событие USEREVENT
-sub issue_hint_event {
-	my $event =  SDL::Event->new();
-	$event->type( $HINT_EVENT );
-	$event->user_code( 10 );
-	$event->user_data1( 'hello event' );
-
-	SDL::Events::push_event( $event );
-
-	return 0;
-};
-
 
 
 # Добавляет обработчик и возвращает следующий номер для пользовательского события
@@ -56,7 +44,23 @@ sub user_event {
 		&$handler;
 	});
 
-	return $user_event;
+
+	## Создаёт событие USEREVENT
+	no strict 'refs';
+	my $sub_name =  "AppRect::issue_event_$user_event";
+	*{ $sub_name } =  sub{
+		my $event =  SDL::Event->new();
+		$event->type( $user_event );
+		$event->user_code( 10 );
+		$event->user_data1( 'hello event' );
+
+		SDL::Events::push_event( $event );
+
+		return 0;
+	};
+
+
+	return $sub_name;
 }
 
 
@@ -444,7 +448,7 @@ sub _on_mouse_move {
 	}
 
 	if( $no ) {
-		my $timer_id =  SDL::Time::add_timer( $HINT_TIMER, 'AppRect::issue_hint_event' );
+		my $timer_id =  SDL::Time::add_timer( $HINT_TIMER, $HINT_EVENT );
 		$app_rect->handle( is_hint => { %$no,
 			timer_id =>  $timer_id,
 			x        =>  $e->motion_x,
