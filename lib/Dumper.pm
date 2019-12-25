@@ -41,7 +41,7 @@ sub new {
 sub draw {
 	my( $obj ) =  @_;
 
-	my $data  =  $obj->{ data };
+	my $data =  $obj->{ data };
 
 	my $type =  reftype $data;
 	##
@@ -65,7 +65,7 @@ sub draw {
 sub draw_scalar {
 	my( $obj ) =  shift;
 
-	$obj->_draw( $obj->{ x }, $obj->{ y }, [ shift->$* ] );
+	$obj->{ w } =  $obj->dump( $obj->{ x }, $obj->{ y }, [ shift->$* ] );
 
 	$obj->{ h } =  $h;
 	$obj->_draw_input;
@@ -80,7 +80,7 @@ sub draw_array {
 	$obj->{ h } =  0;
 	for my $k ( $array->@* ){
 		$n < 10   or last;
-		$obj->_draw( $obj->{ x }, $obj->{ y } + $obj->{ h }, [ $n, $k ] );
+		$obj->{ w } =  $obj->dump( $obj->{ x }, $obj->{ y } + $obj->{ h }, [ $n, $k ] );
 
 		$n          +=   1;
 		$obj->{ h } +=  $h;
@@ -98,7 +98,7 @@ sub draw_hash {
 	$obj->{ h } =  0;
 	for my $k ( sort keys $hash->%* ){
 		$n < 10   or last;
-		$obj->_draw( $obj->{ x }, $obj->{ y } + $obj->{ h }, [ $k, $hash->{ $k } ] );
+		$obj->{ w } =  $obj->dump( $obj->{ x }, $obj->{ y } + $obj->{ h }, [ $k, $hash->{ $k } ] );
 
 		$n          +=   1;
 		$obj->{ h } +=  $h;
@@ -114,14 +114,14 @@ sub _draw_input {
 
 	my( $s, $si ) =  ( '', '' );
 
-	$obj->_draw( $obj->{ x }, $obj->{ y } + $obj->{ h }, [ $s, $si ] );
+	$obj->{ w } =  $obj->dump( $obj->{ x }, $obj->{ y } + $obj->{ h }, [ $s, $si ] );
 	$obj->{ h } +=  $h;
 }
 
 
 
-sub _draw {
-	my( $obj, $x, $y, $data ) =  @_;
+sub dump {
+	my( $x, $y, $data ) =  @_;
 
 	my $screen =  AppRect::SCREEN();
 
@@ -145,8 +145,8 @@ sub _draw {
 		}
 		$dx +=  $w;
 		$dw +=  $dw + $w;
-		$obj->{ w } =  $dw;
 	}
+	return $dw;
 }
 
 
