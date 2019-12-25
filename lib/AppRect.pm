@@ -34,7 +34,7 @@ sub SCREEN { return $APP }
 # Добавляет обработчик и возвращает следующий номер для пользовательского события
 my $next_user_event_type =  0;
 sub user_event {
-	my( $handler ) =  @_;
+	my( $handler, $code, $data ) =  @_;
 
 	my $user_event =  SDL_USEREVENT + $next_user_event_type++;
 	$APP->add_event_handler( sub{
@@ -51,8 +51,8 @@ sub user_event {
 	*{ $sub_name } =  sub{
 		my $event =  SDL::Event->new();
 		$event->type( $user_event );
-		$event->user_code( 10 );
-		$event->user_data1( 'hello event' );
+		$event->user_code( $code );
+		$event->user_data1( $data );
 
 		SDL::Events::push_event( $event );
 
