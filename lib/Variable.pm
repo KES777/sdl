@@ -7,7 +7,7 @@ use Rect;
 use SDLx::Text;
 
 use base 'Rect';
-
+use Dumper;
 
 sub new {
 	my( $self, $name, $value ) =  ( shift, shift, shift );
@@ -43,6 +43,23 @@ sub draw {
 		$y +=  $self->{y} +($self->{h} - $text->h)/2;
 		$text->write_xy( AppRect::SCREEN(), $x, $y );
 	}
+
+	Dumper::dump( $x, $y, $self->{ value } )
+		if $self->{ xx };
+}
+
+
+
+sub on_mouse_over {
+	my( $self, $h, $e ) =  @_;
+
+	$self->{ xx } =  1;
+}
+
+sub on_mouse_out {
+	my( $self, $h, $e ) =  @_;
+
+	delete $self->{ xx };
 }
 
 1;

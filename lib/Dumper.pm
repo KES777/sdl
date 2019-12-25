@@ -3,14 +3,10 @@ package Dumper;
 use strict;
 use warnings;
 
-use Scalar::Util qw(blessed dualvar isdual readonly refaddr reftype
-                    tainted weaken isweak isvstring looks_like_number
-                    set_prototype);
+use Scalar::Util qw/ reftype /;
 
 use SDLx::Text;
 
-use Color;
-use base 'Rect';
 
 
 ## Размеры ячейки таблицы
@@ -18,93 +14,67 @@ my $w =  100;
 my $h =  30;
 
 
-sub new {
-	my( $table, $data ) =  ( shift, shift );
 
-	$table =  $table->SUPER::new( @_ );
-
-	$table->{ data } =  $data;
-
-	return $table;
-}
-
-
-
-# sub dump {
-# 	my( $obj, $data ) =  @_;
-
-# 	$obj->{ data } =  $data;
-# }
-
-
-
-sub draw {
-	my( $obj ) =  @_;
-
-	my $data =  $obj->{ data };
+sub dump {
+	my( $x, $y, $data ) =  @_;
 
 	my $type =  reftype $data;
 	##
 	if( $type  eq  'HASH' ) {
-		draw_hash( $obj, $data );
+		draw_hash( $x, $y, $data );
 	}
 
 	##
 	elsif( $type  eq  'SCALAR' ) {
-		draw_scalar( $obj, $data );
+		draw_scalar( $x, $y, $data );
 	}
 
 	##
 	elsif( ref $data  eq  'ARRAY' ) {
-		draw_array( $obj, $data );
+		draw_array( $x, $y, $data );
 	}
 }
 
 
 
 sub draw_scalar {
-	my( $obj ) =  shift;
+	my( $x, $y, $data ) =  @_;
 
-	$obj->{ w } =  $obj->dump( $obj->{ x }, $obj->{ y }, [ shift->$* ] );
-
-	$obj->{ h } =  $h;
-	$obj->_draw_input;
+	_dump( $x, $y, [ $data->$* ] );
 }
 
 
 
 sub draw_array {
-	my( $obj, $array ) =  @_;
+	my( $x, $y, $array ) =  @_;
 
-	my $n       =  0;
-	$obj->{ h } =  0;
+	my $cw;
+	my $cy =  0;
+	my $n =  0;
 	for my $k ( $array->@* ){
 		$n < 10   or last;
-		$obj->{ w } =  $obj->dump( $obj->{ x }, $obj->{ y } + $obj->{ h }, [ $n, $k ] );
+		$cw =  _dump( $x, $y + $cy, [ $n, $k ] );
 
-		$n          +=   1;
-		$obj->{ h } +=  $h;
+		$n  +=   1;
+		$cy +=  $h;
 	}
-
-	$obj->_draw_input;
 }
 
 
 
 sub draw_hash {
-	my( $obj, $hash ) =  @_;
+	my( $x, $y, $hash ) =  @_;
 
-	my $n       =  0;
-	$obj->{ h } =  0;
+	my $cw;
+	my $cy =  0;
+	my $n  =  0;
 	for my $k ( sort keys $hash->%* ){
 		$n < 10   or last;
-		$obj->{ w } =  $obj->dump( $obj->{ x }, $obj->{ y } + $obj->{ h }, [ $k, $hash->{ $k } ] );
+		_dump( $x, $y + $cy, [ $k, $hash->{ $k } ] );
 
-		$n          +=   1;
-		$obj->{ h } +=  $h;
+		$n  +=   1;
+		$cy +=  $h;
 	}
-
-	$obj->_draw_input;
 }
 
 
@@ -120,13 +90,13 @@ sub _draw_input {
 
 
 
-sub dump {
+sub _dump {
 	my( $x, $y, $data ) =  @_;
 
 	my $screen =  AppRect::SCREEN();
 
-	my $dw =  0;
 	my $dx =  0;
+	my $dw =  0;
 	for my $value ( @$data ) {
 		$screen->draw_rect( [ $x + $dx, $y, $w + $dw, $h ], [ 0, 0, 255, 0 ] );
 		$screen->draw_rect( [ $x + 2 + $dx, $y + 2, $w - 4 + $dw, $h - 4 ], [ 255, 255, 255, 255 ] );
@@ -141,11 +111,12 @@ sub dump {
 				text    => $value ."",
 			);
 			$text->write_to( $screen );
-
 		}
+
 		$dx +=  $w;
 		$dw +=  $dw + $w;
 	}
+
 	return $dw;
 }
 
