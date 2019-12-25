@@ -29,13 +29,13 @@ my $APP;
 sub SCREEN { return $APP }
 
 ## Создаёт событие USEREVENT
-sub callback3 {
+sub issue_hint_event {
 	my $event =  SDL::Event->new();
 	$event->type( SDL_USEREVENT );
 	$event->user_code( 10 );
 	$event->user_data1( 'hello event' );
 
-	SDL::Events::push_event($event);
+	SDL::Events::push_event( $event );
 
 	return 0;
 };
@@ -430,7 +430,7 @@ sub _on_mouse_move {
 	}
 
 	if( $no ) {
-		my $timer_id =  SDL::Time::add_timer( $HINT_TIMER, 'AppRect::callback3' );
+		my $timer_id =  SDL::Time::add_timer( $HINT_TIMER, 'AppRect::issue_hint_event' );
 		$app_rect->make_handle( is_hint => { %$no,
 			timer_id =>  $timer_id,
 			x        =>  $e->motion_x,
