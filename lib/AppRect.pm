@@ -97,7 +97,7 @@ sub new {
 sub _on_user_event {
 	my( $e, $app, $app_rect ) =  @_;
 
-	$e->type == SDL_USEREVENT   or return;
+	$e->type == SDL_USEREVENT  &&  $e->user_code == 10   or return;
 
 	##!
 	if( my $h =  $app_rect->{ is_hint } ) {
