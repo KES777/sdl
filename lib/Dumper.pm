@@ -7,38 +7,53 @@ use Scalar::Util qw/ reftype /;
 
 use SDLx::Text;
 
+use base 'Rect';
+use Input;
 
 
 ## Размеры ячейки таблицы
-my $w =  100;
+my $w =  120;
 my $h =  30;
 
 
+sub new {
+	my( $dumper, $shape ) =  @_;
 
-sub dump {
-	my( $x, $y, $data ) =  @_;
+	my $x   =  $shape->{x} + $w;
+	my $y   =  $shape->{y} + $shape->{h} + $h;
+	my $obj =  $dumper->SUPER::new( $x, $y );
 
+	$obj->{data} =  $shape;
+	return $obj;
+}
+
+
+
+sub draw {
+	my( $obj ) =  @_;
+
+	my $x    =  $obj->{x};
+	my $y    =  $obj->{y};
+	my $data =  $obj->{data};
 	my $type =  reftype $data;
 	##
 	if( $type  eq  'HASH' ) {
-		draw_hash( $x, $y, $data );
+		( $obj->{ w }, $obj->{ h } ) =  draw_hash( $data, $x, $y );
 	}
-
-	##
-	elsif( $type  eq  'SCALAR' ) {
-		draw_scalar( $x, $y, $data );
-	}
-
 	##
 	elsif( ref $data  eq  'ARRAY' ) {
-		draw_array( $x, $y, $data );
+		draw_array( $data, $x, $y );
+	}
+	##
+	elsif( $type  eq  'SCALAR' ) {
+		draw_scalar( $data, $x, $y );
 	}
 }
 
 
 
 sub draw_scalar {
-	my( $x, $y, $data ) =  @_;
+	my( $data, $x, $y ) =  @_;
 
 	_dump( $x, $y, [ $data->$* ] );
 }
@@ -46,7 +61,7 @@ sub draw_scalar {
 
 
 sub draw_array {
-	my( $x, $y, $array ) =  @_;
+	my( $array, $x, $y ) =  @_;
 
 	my $cw;
 	my $cy =  0;
@@ -103,21 +118,23 @@ sub _dump {
 
 		if( defined $value  &&  (my $length =  length $value) ) {
 			my $text =  SDLx::Text->new(
-				color   => [0, 0, 0], # "white"
-				size    => 16,
-				x       => $x + $dx + ($w + $dw - $length * 7) / 2,
-				y       => $y + $h / 6,
-				h_align => 'left',
-				text    => $value ."",
+				color   =>  [0, 0, 0], # "white"
+				size    =>  16,
+				# x       => $x + $dx + ($w + $dw - $length * 7) / 2,
+				# y       => $y + $h / 6,
+				h_align =>  'left',
+				text    =>  $value ."",
 			);
-			$text->write_to( $screen );
-		}
+			my $x =  $x + $dx +($w + $dw - $text->w)/2;
+			my $y =  $y + ($h - $text->h)/2;
+			$text->write_xy( $screen, $x, $y );
 
+		}
 		$dx +=  $w;
-		$dw +=  $dw + $w;
+		$dw  =  $w;
 	}
 
-	return $dw;
+	return $dx;
 }
 
 

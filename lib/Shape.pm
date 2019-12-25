@@ -431,15 +431,12 @@ sub on_double_click {
 sub on_triple_click {}
 
 
-
 sub on_hint {
 	my( $shape, $h, $x, $y ) =  @_;
 
-	my @x =  ( 5, 7, 10 );
-	my $i =  10;
-	my %x =  ( x => 1, y => 2 );
-	push $h->{ app }->{ children }->@*, Dumper->new( $shape, 100, 100, 0, 0 );
-	$h->{ app }->refresh_over( $x, $y );
+	push $h->{app}{children}->@*, Dumper->new( $shape );
+	# Input->new( $x, $y + $h, ... )
+# 	$h->{ app }->refresh_over( $x, $y );
 }
 
 
