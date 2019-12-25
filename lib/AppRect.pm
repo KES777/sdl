@@ -211,6 +211,7 @@ sub _can_group {
 sub handle {
 	my( $app_rect, $key, $props ) =  @_;
 
+	@_ > 2   or return $app_rect->{ $key };
 	$props   or return delete $app_rect->{ $key };
 
 
@@ -290,19 +291,19 @@ sub _is_mouseup {
 
 
 	## Выключение свойства "изменение размеров объекта"
-	if( my $h =  delete $app_rect->{ on_resize } ) {
+	if( my $h =  $app_rect->handle( on_resize => undef ) ) {
 		$h->restore_state;## Возврат цвета объекту
 		$h->store;
 	}
 
 	## Выключение свойства "движение объекта"
 	##! MOVE STOP
-	if( my $h =  delete $app_rect->{ is_moveable } ) {
+	if( my $h =  $app_rect->handle( is_moveable => undef ) ) {
 		$h->{ target }->on_drop( $e, $h );
 	}
 
 	## Создание группы из поля selection
-	if( my $h =  delete $app_rect->{ is_selection } ) {
+	if( my $h =  $app_rect->handle( is_selection => undef ) ) {
 		delete $app_rect->{ back };
 		if( my $group =  $app_rect->_can_group( $h, $e ) ) {
 			$group->{ target }->on_group( $h, $e, $group );
@@ -323,9 +324,9 @@ sub _is_mouseup {
 
 	##! CLICK
 	my $up  =  $app_rect->{ is_over };
-	my $dw  =  delete $app_rect->{ is_down };
-	my $dcl =  delete $app_rect->{ is_double_click };
-	my $tcl =  delete $app_rect->{ is_triple_click };
+	my $dw  =  $app_rect->handle( is_down => undef );
+	my $dcl =  $app_rect->handle( is_double_click => undef );
+	my $tcl =  $app_rect->handle( is_triple_click => undef );
 
 
 	if( $up  &&  $dw  &&  $up->{ target } == $dw->{ target } ) {
@@ -354,7 +355,7 @@ sub _is_mouseup {
 	}
 
 	## off_shift
-	if( my $h =  delete $app_rect->{ on_shift } ) {
+	if( my $h =  $app_rect->handle( on_shift => undef ) ) {
 		$h->{ target }->off_shift;
 
 		delete $h->{ target }{ old_x };
@@ -426,7 +427,7 @@ sub _on_mouse_move {
 
 
 	##! HINT EVENT
-	if( my $h =  delete $app_rect->{ is_hint } ) {
+	if( my $h =  $app_rect->handle( is_hint => undef ) ) {
 		SDL::Time::remove_timer( $h->{ timer_id } );
 	}
 
