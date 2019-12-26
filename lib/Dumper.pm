@@ -17,22 +17,23 @@ my $h =  30;
 
 
 sub new {
-	my( $dumper, $data ) =  ( shift, shift );
+	my( $dumper, $data ) =  (shift, shift);
 
-	my $obj =  $dumper->SUPER::new( @_ );
-
+	my $obj =  $dumper->SUPER::new(@_);
 	$obj->{data} =  $data;
-	# DB::x   if !defined $data;
+	# $obj->{dx}   =  $dx;
+	# $obj->{dy}   =  $dy;
+
 	return $obj;
 }
 
 
 
 sub draw {
-	my( $obj ) =  @_;
+	my( $obj, $x, $y ) =  @_;
 
-	my $x    =  $obj->{x};
-	my $y    =  $obj->{y};
+	my $x    =  $obj->{x} + $x;
+	my $y    =  $obj->{y} + $y;
 	my $data =  $obj->{data};
 	my $type =  reftype $data;
 	##
@@ -128,14 +129,14 @@ sub _dump {
 		$dx +=  $dx + $w;
 		$dw  =  $w;
 	}
-	# print 'Dumper';
+	# print $x;
 	return $dx;
 }
 
-
+sub store { }
 # sub on_mouse_over { }
 # sub on_mouse_out { }
-sub move_to { }
+# sub move_to { }
 sub on_hint { }
 
 1;

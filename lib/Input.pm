@@ -11,13 +11,13 @@ use Variable;
 
 
 sub new {
-	my( $input, $shape ) =  ( shift, shift );
+	my( $input, $shape ) =  (shift, shift);
 
-	my $input_field =  $input->SUPER::new( @_ );
+	my $input_field =  $input->SUPER::new(@_);
 
 	$input_field->{ cursor_pos } =  0;
-	$input_field->{h} =  30;
-	$input_field->{w} =  360;
+	$input_field->{h}  =  30;
+	$input_field->{w}  =  360;
 
 	return $input_field;
 }
@@ -25,12 +25,15 @@ sub new {
 
 
 sub draw {
-	my( $if ) =  @_;
+	my( $if, $x, $y ) =  @_;
+
+	my $x =  $if->{x} + $x;
+	my $y =  $if->{y} + $y;
 
 	my $screen =  AppRect::SCREEN();
 
-	$screen->draw_rect( [ $if->{x}, $if->{y}, $if->{w}, $if->{h} ], [ 0, 0, 255, 0 ] );
-	$screen->draw_rect( [ $if->{x}+2, $if->{y}+2, $if->{w}-4, $if->{h}-4 ], [ 255, 255, 255, 255 ] );
+	$screen->draw_rect( [ $x, $y, $if->{w}, $if->{h} ], [ 0, 0, 255, 0 ] );
+	$screen->draw_rect( [ $x+2, $y+2, $if->{w}-4, $if->{h}-4 ], [ 255, 255, 255, 255 ] );
 	return undef;
 	# print "'Input' \n";
 }
@@ -63,10 +66,10 @@ sub on_keydown {
 
 
 
-
+sub store { }
 # sub on_mouse_over { }
 # sub on_mouse_out { }
-sub on_move { }
+# sub on_move { }
 sub get_sb_coords { }
 
 1;

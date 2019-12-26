@@ -348,7 +348,7 @@ sub resize_to {
 
 
 
-# # Возвращает размер объекта ( h, w )
+## Возвращает размер объекта ( h, w )
 sub get_size {
 	my( $shape ) =  @_;
 
@@ -434,8 +434,16 @@ sub on_triple_click {}
 sub on_hint {
 	my( $shape, $h, $x, $y ) =  @_;
 
-	push $h->{app}{children}->@*, Dumper->new( $shape );
-	# Input->new( $x, $y + $h, ... )
+	##
+	$shape->children( Dumper->new( $shape->{status}, 0, -50 ) );
+	##
+	if( $shape->{data} ) {
+		my $iy =  $shape->{h} + 30;
+		$shape->children( Input->new( $shape->{data}, 0, $iy ) );
+		##
+		my $dy =  $shape->{h} + 70;
+		$shape->children( Dumper->new( $shape->{data}, 0, $dy ) );
+	}
 # 	$h->{ app }->refresh_over( $x, $y );
 }
 
@@ -692,6 +700,7 @@ sub draw {
 
 
 	$shape->propagate( draw => $x, $y );
+
 }
 
 
