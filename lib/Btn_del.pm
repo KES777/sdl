@@ -48,7 +48,7 @@ sub moving_disable {
 
 	## Удаление всех объектов
 	if( $app_rect->{ btn }->is_over( $e->motion_x, $e->motion_y ) ) {
-		$app_rect->propagate( 'draw_black' );
+		# $app_rect->propagate( 'draw_black' );
 		$app_rect->{ children } =  ();
 		Util::db()->resultset( 'Rect' )->delete;
 		# $app_rect->draw_black;## Затираем перед удалением
@@ -58,15 +58,12 @@ sub moving_disable {
 
 	## Удаление одного объекта (группы)
 	for my $shape( $app_rect->{ children }->@* ) {
-		my $x;
 		if( $shape->is_over( $e->motion_x, $e->motion_y ) ) {
-			$x =  $shape;
 			# $app_rect->draw_black;## Затираем перед удалением
-			$app_rect->propagate( 'draw_black' );
-			$x->child_destroy;#удаление из базы по id
+			# $app_rect->propagate( 'draw_black' );
+			$shape->child_destroy;#удаление из базы по id
+			$app_rect->{ children }->@* =  grep{ $_ != $shape } $app_rect->{ children }->@*;
 		}
-
-		$app_rect->{ children }->@* =  grep{ $_ != $x } $app_rect->{ children }->@*;
 	}
 }
 
