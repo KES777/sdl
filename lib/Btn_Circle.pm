@@ -60,6 +60,11 @@ sub on_press {
 	$circle->{ parent } =  $btn_c->{ parent };
 	weaken $circle->{ parent };
 
+	my %x =  ( x => 5, y => 7 );
+	my $x =  'Circle';
+	$circle->{data}   =  \%x;
+	$circle->{status} =  \$x;
+
 	$circle->store;
 	push $btn_c->{ parent }->{ children }->@*, $circle;
 }

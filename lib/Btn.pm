@@ -44,6 +44,10 @@ sub on_press {
 	my $rect =  Rect->new;
 	$rect->{ parent } =  $btn->{ parent };
 	weaken $rect->{ parent };
+	my %x =  ( x => 10 );
+	my $x =  'Rect';
+	$rect->{data}   =  \%x;
+	$rect->{status} =  \$x;
 
 	$rect->store;
 	push $btn->{ parent }->{ children }->@*, $rect;
