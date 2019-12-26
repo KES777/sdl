@@ -17,13 +17,12 @@ my $h =  30;
 
 
 sub new {
-	my( $dumper, $shape ) =  @_;
+	my( $dumper, $data ) =  ( shift, shift );
 
-	my $x   =  $shape->{x} + $w;
-	my $y   =  $shape->{y} + $shape->{h} + $h;
-	my $obj =  $dumper->SUPER::new( $x, $y );
+	my $obj =  $dumper->SUPER::new( @_ );
 
-	$obj->{data} =  $shape;
+	$obj->{data} =  $data;
+	# DB::x   if !defined $data;
 	return $obj;
 }
 
@@ -39,15 +38,18 @@ sub draw {
 	##
 	if( $type  eq  'HASH' ) {
 		( $obj->{ w }, $obj->{ h } ) =  draw_hash( $data, $x, $y );
+		# print "'HASH' \n";
 	}
 	##
 	elsif( ref $data  eq  'ARRAY' ) {
-		draw_array( $data, $x, $y );
+		( $obj->{ w }, $obj->{ h } ) =  draw_array( $data, $x, $y );
 	}
 	##
 	elsif( $type  eq  'SCALAR' ) {
-		draw_scalar( $data, $x, $y );
+		( $obj->{ w }, $obj->{ h } ) =  draw_scalar( $data, $x, $y );
+		# print "'SCALAR' \n";
 	}
+	return undef;
 }
 
 
@@ -55,7 +57,9 @@ sub draw {
 sub draw_scalar {
 	my( $data, $x, $y ) =  @_;
 
-	_dump( $x, $y, [ $data->$* ] );
+	my $cw =  _dump( $x, $y, [ $data->$* ] );
+
+	return $cw, $h;
 }
 
 
@@ -73,34 +77,27 @@ sub draw_array {
 		$n  +=   1;
 		$cy +=  $h;
 	}
+
+	return $cw, $cy;
 }
 
 
 
 sub draw_hash {
-	my( $x, $y, $hash ) =  @_;
+	my( $hash, $x, $y ) =  @_;
 
 	my $cw;
 	my $cy =  0;
 	my $n  =  0;
 	for my $k ( sort keys $hash->%* ){
 		$n < 10   or last;
-		_dump( $x, $y + $cy, [ $k, $hash->{ $k } ] );
 
+		$cw =  _dump( $x, $y + $cy, [ $k, $hash->{ $k } ] );
 		$n  +=   1;
 		$cy +=  $h;
 	}
-}
 
-
-
-sub _draw_input {
-	my( $obj ) =  @_;
-
-	my( $s, $si ) =  ( '', '' );
-
-	$obj->{ w } =  $obj->dump( $obj->{ x }, $obj->{ y } + $obj->{ h }, [ $s, $si ] );
-	$obj->{ h } +=  $h;
+	return $cw, $cy;
 }
 
 
@@ -120,8 +117,6 @@ sub _dump {
 			my $text =  SDLx::Text->new(
 				color   =>  [0, 0, 0], # "white"
 				size    =>  16,
-				# x       => $x + $dx + ($w + $dw - $length * 7) / 2,
-				# y       => $y + $h / 6,
 				h_align =>  'left',
 				text    =>  $value ."",
 			);
@@ -130,15 +125,17 @@ sub _dump {
 			$text->write_xy( $screen, $x, $y );
 
 		}
-		$dx +=  $w;
+		$dx +=  $dx + $w;
 		$dw  =  $w;
 	}
-
+	# print 'Dumper';
 	return $dx;
 }
 
 
-
+# sub on_mouse_over { }
+# sub on_mouse_out { }
 sub move_to { }
+sub on_hint { }
 
 1;
