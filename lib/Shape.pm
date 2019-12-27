@@ -540,20 +540,18 @@ sub off_shift {
 sub is_over {
 	my( $shape, $x, $y ) =  @_;
 
-	if( $shape->mouse_target( $x, $y ) ) {
-		# DB::x   if ref $shape eq 'Table';
-		$x -=  $shape->{ x };
-		$y -=  $shape->{ y };
-		return $shape->propagate( is_over => $x, $y )  ||  {
-			# Объект, над которым находится мышь
-			target =>  $shape,
-			# Координаты мыши отностельно левого верхнего угла объекта
-			x =>  $x,
-			y =>  $y,
-		};
-	}
+	$shape->mouse_target( $x, $y )   or return;
 
-	return;
+	# DB::x   if ref $shape eq 'Table';
+	$x -=  $shape->{ x };
+	$y -=  $shape->{ y };
+	return $shape->propagate( is_over => $x, $y )  ||  {
+		# Объект, над которым находится мышь
+		target =>  $shape,
+		# Координаты мыши отностельно левого верхнего угла объекта
+		x =>  $x,
+		y =>  $y,
+	};
 }
 
 
