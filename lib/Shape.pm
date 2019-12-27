@@ -423,6 +423,8 @@ sub on_click {
 sub on_double_click {
 	my( $shape, $h, $e ) =  @_;
 
+	my $x =  $shape->{children};
+	$x->@* =  grep{ $_->{status} ne 'service' } @$x;
 
 	$h->{ app }->refresh_over( $e->motion_x, $e->motion_y );
 }
