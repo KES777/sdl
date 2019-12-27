@@ -182,9 +182,12 @@ sub _observer {
 		$app_rect->{ event_state }{ $e->key_sym } =  1;
 
 		# TODO: send key event to active element
-		if( my $h =  $app_rect->{ is_over } ) {
-			$h->{ target }->on_keydown( $h, $e );
-		}
+		# if( my $h =  $app_rect->{ is_over } ) {
+		# 	$h->{ target }->on_keydown( $h, $e );
+		# }
+
+		my $act =  $app_rect->{ active };
+		$app_rect->on_keydown( $act, $e );
 	}
 
 	if( $e->type == SDL_KEYUP ) {
@@ -304,12 +307,12 @@ sub _is_mousedown {
 
 
 
-sub _on_click {
-	my( $app_rect, $h, $e ) =  @_;
+sub _active {
+	my( $app_rect, $shape, $e ) =  @_;
 
-	$app_rect->{ active } =  $h->{ target };
+	$app_rect->{ active } =  $shape;
+	weaken $app_rect->{ active };
 }
-
 
 
 
@@ -377,11 +380,14 @@ sub _is_mouseup {
 		# else ( $dw   &&  (SDL::get_ticks() -$dcl->{ time }) < 1000 ) {
 		else {
 			$up->{ target }->on_click( $up, $e );
-			$app_rect->_on_click( $up, $e );
+			$app_rect->_active( $up->{ target }, $e );
 			$app_rect->handle( is_double_click => { %$up,
 				time => SDL::get_ticks(),
 			});
 		}
+	}
+	else {
+		$app_rect->_active( $app_rect, $e );
 	}
 
 	## off_shift
