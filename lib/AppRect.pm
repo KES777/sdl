@@ -303,6 +303,16 @@ sub _is_mousedown {
 
 
 
+
+sub _on_click {
+	my( $app_rect, $h, $e ) =  @_;
+
+	$app_rect->{ active } =  $h->{ target };
+}
+
+
+
+
 sub _is_mouseup {
 	my( $e, $app, $app_rect ) =  @_;
 
@@ -367,7 +377,7 @@ sub _is_mouseup {
 		# else ( $dw   &&  (SDL::get_ticks() -$dcl->{ time }) < 1000 ) {
 		else {
 			$up->{ target }->on_click( $up, $e );
-
+			$app_rect->_on_click( $up, $e );
 			$app_rect->handle( is_double_click => { %$up,
 				time => SDL::get_ticks(),
 			});
