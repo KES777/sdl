@@ -453,7 +453,7 @@ sub on_hint {
 
 sub on_release { }
 
-sub on_keydown { }
+# sub on_keydown { }
 sub on_keyup   { }
 
 
@@ -613,6 +613,69 @@ sub children {
 
 	return $shape->{ children };
 }
+
+
+
+
+sub on_keydown {
+	my( $app_rect, $shape, $e ) =  @_;
+
+	##
+	if( $app_rect->{ event_state }{ SDLK_DELETE() }
+		&&  $app_rect->{ active }
+		&&  $shape->{ status } ne 'service'
+	) {
+		$shape->destroy( $app_rect );
+	}
+	##
+	if( $app_rect->{ event_state }{ SDLK_DELETE() }
+		&&  ( $app_rect->{ event_state }{ SDLK_LSHIFT() } == 1 )
+	) {
+		$app_rect->destroy_all;
+	}
+}
+
+
+
+sub destroy_all {
+	my( $shape ) =  @_;
+
+	$shape->{ children } =  ();
+	Util::db()->resultset( 'Rect' )->delete;
+
+	delete $shape->{ first };
+}
+
+
+
+sub destroy {
+	my( $shape, $app_rect ) =  @_;
+
+	$shape->child_destroy;
+	$shape->{ parent }{ children }->@* =  grep{ $_ != $shape } $shape->{ parent }{ children }->@*;
+
+	delete $app_rect->{ active };
+	delete $app_rect->{ first };
+}
+
+
+
+## Удаляет объект и его children из базы
+sub child_destroy {
+	my( $shape ) = @_;
+
+	Util::db()->resultset( 'Rect' )->search({
+		id => $shape->{ id }
+	})->delete;
+
+	if( $shape->{ children }->@* ) {
+
+		for my $child ( $shape->{ children }->@* ) {
+			$child->child_destroy;
+		}
+	}
+}
+
 
 
 ## Рассчёт минимального размера группы в соответствии с размером её чилдренов
