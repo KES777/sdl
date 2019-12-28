@@ -9,34 +9,39 @@ use base 'Rect';
 use Cursor;
 use Variable;
 
+my $r =  255;
+my $g =  255;
+my $b =  255;
+my $a =  255;
+
 
 sub new {
 	my( $input, $shape ) =  (shift, shift);
 
-	my $input_field =  $input->SUPER::new(@_);
+	my $if  =  $input->SUPER::new(@_);
+	$if->{status}     =  'service';
+	$if->{cursor_pos} =  0;
+	$if->{h}          =  30;
+	$if->{w}          =  360;
+	$if->set_color( $r, $g, $b, $a );
 
-	$input_field->{ cursor_pos } =  0;
-	$input_field->{h}  =  30;
-	$input_field->{w}  =  360;
-
-	return $input_field;
+	return $if;
 }
 
 
 
-sub draw {
-	my( $if, $x, $y ) =  @_;
+# sub draw {
+# 	my( $if, $dx, $dy ) =  @_;
 
-	my $x =  $if->{x} + $x;
-	my $y =  $if->{y} + $y;
+# 	my $x =  $if->{x} + $dx;
+# 	my $y =  $if->{y} + $dy;
 
-	my $screen =  AppRect::SCREEN();
+# 	my $screen =  AppRect::SCREEN();
 
-	$screen->draw_rect( [ $x, $y, $if->{w}, $if->{h} ], [ 0, 0, 255, 0 ] );
-	$screen->draw_rect( [ $x+2, $y+2, $if->{w}-4, $if->{h}-4 ], [ 255, 255, 255, 255 ] );
-	return undef;
-	# print "'Input' \n";
-}
+# 	$screen->draw_rect( [ $x, $y, $if->{w}, $if->{h} ], [ 0, 0, 255, 0 ] );
+# 	$screen->draw_rect( [ $x+2, $y+2, $if->{w}-4, $if->{h}-4 ], [ 255, 255, 255, 255 ] );
+# 	return undef;
+# }
 
 
 
