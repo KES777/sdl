@@ -661,6 +661,8 @@ sub destroy {
 sub child_destroy {
 	my( $shape ) = @_;
 
+	!$shape->{ status } eq 'service' or return;
+
 	Util::db()->resultset( 'Rect' )->search({
 		id => $shape->{ id }
 	})->delete;
