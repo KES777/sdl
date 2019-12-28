@@ -187,7 +187,10 @@ sub _observer {
 		# }
 
 		my $act =  $app_rect->{ active };
-		$app_rect->on_keydown( $act, $e );
+		if( my $bool =  $app_rect->on_keydown( $act, $e ) ) {
+			delete $app_rect->{ active };
+			delete $app_rect->{ first };
+		}
 	}
 
 	if( $e->type == SDL_KEYUP ) {

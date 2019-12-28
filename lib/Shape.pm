@@ -626,12 +626,14 @@ sub on_keydown {
 		&&  $shape->{ status } ne 'service'
 	) {
 		$shape->destroy( $app_rect );
+		return 1;
 	}
 	##
 	if( $app_rect->{ event_state }{ SDLK_DELETE() }
 		&&  ( $app_rect->{ event_state }{ SDLK_LSHIFT() } == 1 )
 	) {
 		$app_rect->destroy_all;
+		return 1;
 	}
 }
 
@@ -642,8 +644,6 @@ sub destroy_all {
 
 	$shape->{ children } =  ();
 	Util::db()->resultset( 'Rect' )->delete;
-
-	delete $shape->{ first };
 }
 
 
@@ -653,9 +653,6 @@ sub destroy {
 
 	$shape->child_destroy;
 	$shape->{ parent }{ children }->@* =  grep{ $_ != $shape } $shape->{ parent }{ children }->@*;
-
-	delete $app_rect->{ active };
-	delete $app_rect->{ first };
 }
 
 
@@ -742,6 +739,7 @@ sub draw {
 	],[
 		$shape->{ highlight }->get_color()
 	]);
+	#shape
 	$screen->draw_rect([
 		$x +1,
 		$y +1,
