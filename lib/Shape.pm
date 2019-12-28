@@ -652,6 +652,13 @@ sub destroy {
 	my( $shape, $app_rect ) =  @_;
 
 	$shape->child_destroy;
+
+	if( $shape->{ parent_id } ) {
+		my( $min_h, $min_w ) =  $shape->{ parent }->calc_min_size;
+		$shape->{ parent }->min_h( $min_h );
+		$shape->{ parent }->min_w( $min_w );
+	}
+
 	$shape->{ parent }{ children }->@* =  grep{ $_ != $shape } $shape->{ parent }{ children }->@*;
 }
 
