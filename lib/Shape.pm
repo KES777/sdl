@@ -423,10 +423,26 @@ sub on_click {
 sub on_double_click {
 	my( $shape, $h, $e ) =  @_;
 
-	my $x =  $shape->{children};
-	$x->@* =  grep{ $_->{status} ne 'service' } @$x;
+	if( !$shape->{ service } ) {
+		$shape->{ service } =  1;
+		##
+		$shape->children( Dumper->new( \$shape->{status}, 0, -50 ) );
+		##
+		if( $shape->{data} ) {
+			my $iy =  $shape->{h} + 30;
+			$shape->children( Input->new( $shape->{data}, 0, $iy ) );
+			##
+			my $dy =  $shape->{h} + 70;
+			$shape->children( Dumper->new( $shape->{data}, 0, $dy ) );
+		}
+	}
+	else {
+		my $x =  $shape->{children};
+		$x->@* =  grep{ $_->{status} ne 'service' } @$x;
+		delete $shape->{ service };
+	}
 
-	$h->{ app }->refresh_over( $e->motion_x, $e->motion_y );
+	# $h->{ app }->refresh_over( $e->motion_x, $e->motion_y );
 }
 
 
@@ -436,16 +452,6 @@ sub on_triple_click {}
 sub on_hint {
 	my( $shape, $h, $x, $y ) =  @_;
 
-	##
-	$shape->children( Dumper->new( \$shape->{status}, 0, -50 ) );
-	##
-	if( $shape->{data} ) {
-		my $iy =  $shape->{h} + 30;
-		$shape->children( Input->new( $shape->{data}, 0, $iy ) );
-		##
-		my $dy =  $shape->{h} + 70;
-		$shape->children( Dumper->new( $shape->{data}, 0, $dy ) );
-	}
 # 	$h->{ app }->refresh_over( $x, $y );
 }
 
