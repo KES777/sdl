@@ -275,6 +275,7 @@ sub _is_mousedown {
 
 
 
+
 	##! PRESS
 	if( my $h =  $app_rect->{ is_over } ) {
 		$h->{ target }->on_press( $h, $e );
@@ -524,19 +525,6 @@ sub _is_over_res_field {
 
 	return $object;
 
-}
-
-
-
-## Определяет, есть ли в поле выделения объекты
-sub can_select {
-	my( $app_rect, $x, $y ) =  @_;
-
-	for my $child ( @$app_rect ){## В is_over проверяем толко $app_rect->{ children }
-		$child->is_over( $x, $y )   or next;
-
-			return;
-	}
 }
 
 
