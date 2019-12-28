@@ -39,7 +39,7 @@ sub new {
 	}
 
 
-	my( $rect, $x, $y, $w, $h, $c ) =  @_;
+	my( $rect, $x, $y, $w, $h, $c, $l ) =  @_;
 
 	$x //=  ($x_offset += 30);
 	$y //=  $y_offset_n * 5  + ($y_offset +=  10);
@@ -53,18 +53,19 @@ sub new {
 	$rect =  $rect->SUPER::new();
 
 	my %rect = (
-		x      => $x,
-		y      => $y,
-		w      => $w // $START_W,
-		h      => $h // $START_H,
-		c      => $c // Color->new,
+		x         => $x,
+		y         => $y,
+		w         => $w // $START_W,
+		h         => $h // $START_H,
+		c         => $c // Color->new,
+		highlight => $l // Color->new( 255, 0, 0, 255 ),
 
-		min_h  => $MIN_H,
-		min_w  => $MIN_W,
-		max_h  => $MAX_H,
-		max_w  => $MAX_W,
+		min_h     => $MIN_H,
+		min_w     => $MIN_W,
+		max_h     => $MAX_H,
+		max_w     => $MAX_W,
 
-		status => 'Rect',
+		status    => 'Rect',
 	);
 	$rect->@{ keys %rect } =  values %rect;
 

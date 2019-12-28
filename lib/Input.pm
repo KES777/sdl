@@ -19,10 +19,13 @@ sub new {
 	my( $input, $shape ) =  (shift, shift);
 
 	my $if  =  $input->SUPER::new(@_);
+
 	$if->{status}     =  'service';
 	$if->{cursor_pos} =  0;
 	$if->{h}          =  30;
 	$if->{w}          =  360;
+	$if->{highlight}  =  Color->new( 0, 0, 255, 255 );
+
 	$if->set_color( $r, $g, $b, $a );
 
 	return $if;

@@ -31,7 +31,7 @@ sub new {
 	}
 
 
-	my( $circle, $x, $y, $r, $c ) =  @_;
+	my( $circle, $x, $y, $r, $c, $l ) =  @_;
 
 	$x //=  ($x_offset += 30);
 	$y //=  $y_offset_n * 5  + ($y_offset +=  10);
@@ -45,15 +45,16 @@ sub new {
 	$circle =  $circle->SUPER::new();
 
 	my %circle = (
-		x      => $x,
-		y      => $y,
-		radius => $r // $START_R,
-		c      => $c // Color->new,
+		x         => $x,
+		y         => $y,
+		radius    => $r // $START_R,
+		c         => $c // Color->new,
+		highlight => $l // Color->new( 255, 0, 0, 255 ),
 
-		min_r  => $MIN_R,
-		max_r  => $MAX_R,
+		min_r     => $MIN_R,
+		max_r     => $MAX_R,
 
-		status => 'Circle',
+		status    => 'Circle',
 
 	);
 	$circle->@{ keys %circle } =  values %circle;
