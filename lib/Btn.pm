@@ -19,7 +19,7 @@ sub new {
 	my( $btn ) =  @_;
 
 	$btn  =  $btn->SUPER::new;
-
+	$btn->{ status } =  'service';
 	$btn->set_start_position;
 
 	return $btn;
@@ -44,10 +44,10 @@ sub on_press {
 	my $rect =  Rect->new;
 	$rect->{ parent } =  $btn->{ parent };
 	weaken $rect->{ parent };
-	my %x =  ( x => 10 );
-	my $x =  'Rect';
+	my %x =  ( h => $rect->{h} );
+
 	$rect->{data}   =  \%x;
-	$rect->{status} =  \$x;
+	# $rect->{status} =  'Rect';
 
 	$rect->store;
 	push $btn->{ parent }->{ children }->@*, $rect;

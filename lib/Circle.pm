@@ -52,6 +52,9 @@ sub new {
 
 		min_r  => $MIN_R,
 		max_r  => $MAX_R,
+
+		status => 'Circle',
+
 	);
 	$circle->@{ keys %circle } =  values %circle;
 

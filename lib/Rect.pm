@@ -63,6 +63,8 @@ sub new {
 		min_w  => $MIN_W,
 		max_h  => $MAX_H,
 		max_w  => $MAX_W,
+
+		status => 'Rect',
 	);
 	$rect->@{ keys %rect } =  values %rect;
 

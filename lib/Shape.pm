@@ -437,7 +437,7 @@ sub on_hint {
 	my( $shape, $h, $x, $y ) =  @_;
 
 	##
-	$shape->children( Dumper->new( $shape->{status}, 0, -50 ) );
+	$shape->children( Dumper->new( \$shape->{status}, 0, -50 ) );
 	##
 	if( $shape->{data} ) {
 		my $iy =  $shape->{h} + 30;

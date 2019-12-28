@@ -26,7 +26,7 @@ sub new {
 	my( $btn_c ) =  @_;
 
 	$btn_c  =  $btn_c->SUPER::new;
-
+	$btn_c->{ status } =  'service';
 	$btn_c->set_color( $r, $g, $b );
 	$btn_c->set_start_position;
 
@@ -61,9 +61,7 @@ sub on_press {
 	weaken $circle->{ parent };
 
 	my %x =  ( x => 5, y => 7 );
-	my $x =  'Circle';
 	$circle->{data}   =  \%x;
-	$circle->{status} =  \$x;
 
 	$circle->store;
 	push $btn_c->{ parent }->{ children }->@*, $circle;
