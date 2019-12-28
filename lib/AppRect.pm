@@ -290,14 +290,14 @@ sub _is_mousedown {
 		if( my $h =  $app_rect->{ is_over } ) {
 			$app_rect->handle( on_shift => {
 				target =>  $h->{ target },
-				x      =>  $e->motion_x,
+				x      =>  $e->motion_x,## стартовые координаты ("х", "у") курсора
 				y      =>  $e->motion_y,
 			} );
 		}
 		else {
 			$app_rect->handle( on_shift => {
 				target =>  $app_rect,
-				x      =>  $e->motion_x,
+				x      =>  $e->motion_x,## стартовые координаты ("х", "у") курсора
 				y      =>  $e->motion_y,
 			} );
 		}
