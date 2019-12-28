@@ -2,6 +2,7 @@ package Color;
 
 
 
+
 sub new {
 	my( $color, $r, $g, $b, $a ) =   @_;
 
@@ -17,15 +18,16 @@ sub new {
 
 
 
-sub get {
+sub get_color {
 	my( $color ) =  @_;
 
 	return map{ $_>255?255:$_ } $color->@{qw/ r g b a /};
+	return $color->@{qw/ r g b a /};
 }
 
 
 
-sub geth {
+sub geth_color {
 	my( $color ) =  @_;
 
 	return $color->%{qw/ r g b a /};

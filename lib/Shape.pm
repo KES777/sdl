@@ -576,13 +576,13 @@ sub store {
 		})->first;
 		$row->update({
 			$shape->%{qw/ x y w h radius parent_id/},
-			$shape->{ c }->geth,
+			$shape->{ c }->geth_color,
 		});
 	}
 	elsif( $shape->{ parent } ) {
 		my $row =  Util::db()->resultset( 'Rect' )->create({
 			$shape->%{qw/ x y w h radius /},
-			$shape->{ c }->geth,
+			$shape->{ c }->geth_color,
 		});
 
 		$shape->{ id } =  $row->id;
@@ -720,6 +720,7 @@ sub organize_group {
 }
 
 
+
 ## Отрисовка всех объектов
 sub draw {
 	my( $shape, $x, $y ) = @_;
@@ -732,22 +733,22 @@ sub draw {
 	$y += $shape->{ y };
 
 	my( $h, $w ) =  $shape->get_size;
+	#highlight
 	$screen->draw_rect([
 		$x,
 		$y,
 		$w,
 		$h,
 	],[
-		255,0,0,255
+		$shape->{ highlight }->get_color()
 	]);
-	#circuit
 	$screen->draw_rect([
 		$x +1,
 		$y +1,
 		$w-2,
 		$h-2,
 	],[
-		$shape->{ c }->get()
+		$shape->{ c }->get_color()
 	]);
 
 	#size_button
