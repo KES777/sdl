@@ -616,6 +616,19 @@ sub children {
 
 
 
+sub on_active {
+
+	shift->{ on_active } =  1;
+}
+
+
+
+sub off_active {
+
+	delete shift->{ on_active };
+}
+
+
 
 sub on_keydown {
 	my( $app_rect, $shape, $e ) =  @_;
