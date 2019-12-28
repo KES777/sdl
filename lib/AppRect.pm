@@ -313,8 +313,18 @@ sub _is_mousedown {
 sub _active {
 	my( $app_rect, $shape, $e ) =  @_;
 
-	$app_rect->{ active } =  $shape;
-	weaken $app_rect->{ active };
+	if( !$app_rect->{ active } ) {
+		$app_rect->{ active } =  $app_rect;
+		weaken $app_rect->{ active };
+	}
+
+
+	if( $app_rect->{ active } != $shape ) {
+		$app_rect->{ active }->off_active;
+		$app_rect->{ active } =  $shape;
+	}
+
+	$app_rect->{ active }->on_active;
 }
 
 
