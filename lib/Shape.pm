@@ -761,14 +761,19 @@ sub draw {
 	],[
 		$shape->{ highlight }->get_color()
 	]);
+
 	#shape
+	my @color =  $shape->{ c }->get_color();
+	if( $shape->{ on_active } ) {
+		@color = $shape->{ c }->get_red();
+	}
 	$screen->draw_rect([
 		$x +1,
 		$y +1,
 		$w-2,
 		$h-2,
 	],[
-		$shape->{ c }->get_color()
+		@color
 	]);
 
 	#size_button
