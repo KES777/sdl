@@ -16,6 +16,113 @@ DISTRIBUTIONS
       Algorithm::Diff::_impl 1.1903
     requirements:
       ExtUtils::MakeMaker 0
+  Alien-Build-1.94
+    pathname: P/PL/PLICEASE/Alien-Build-1.94.tar.gz
+    provides:
+      Alien::Base 1.94
+      Alien::Base::PkgConfig 1.94
+      Alien::Base::Wrapper 1.94
+      Alien::Build 1.94
+      Alien::Build::CommandSequence 1.94
+      Alien::Build::Interpolate 1.94
+      Alien::Build::Interpolate::Default 1.94
+      Alien::Build::Interpolate::Helper 1.94
+      Alien::Build::Log 1.94
+      Alien::Build::Log::Abbreviate 1.94
+      Alien::Build::Log::Default 1.94
+      Alien::Build::MM 1.94
+      Alien::Build::Meta 1.94
+      Alien::Build::Plugin 1.94
+      Alien::Build::Plugin::Build::Autoconf 1.94
+      Alien::Build::Plugin::Build::CMake 1.94
+      Alien::Build::Plugin::Build::MSYS 1.94
+      Alien::Build::Plugin::Build::Make 1.94
+      Alien::Build::Plugin::Build::SearchDep 1.94
+      Alien::Build::Plugin::Core::CleanInstall 1.94
+      Alien::Build::Plugin::Core::Download 1.94
+      Alien::Build::Plugin::Core::FFI 1.94
+      Alien::Build::Plugin::Core::Gather 1.94
+      Alien::Build::Plugin::Core::Legacy 1.94
+      Alien::Build::Plugin::Core::Override 1.94
+      Alien::Build::Plugin::Core::Setup 1.94
+      Alien::Build::Plugin::Core::Tail 1.94
+      Alien::Build::Plugin::Decode::DirListing 1.94
+      Alien::Build::Plugin::Decode::DirListingFtpcopy 1.94
+      Alien::Build::Plugin::Decode::HTML 1.94
+      Alien::Build::Plugin::Decode::Mojo 1.94
+      Alien::Build::Plugin::Download::Negotiate 1.94
+      Alien::Build::Plugin::Extract::ArchiveTar 1.94
+      Alien::Build::Plugin::Extract::ArchiveZip 1.94
+      Alien::Build::Plugin::Extract::CommandLine 1.94
+      Alien::Build::Plugin::Extract::Directory 1.94
+      Alien::Build::Plugin::Extract::Negotiate 1.94
+      Alien::Build::Plugin::Fetch::CurlCommand 1.94
+      Alien::Build::Plugin::Fetch::HTTPTiny 1.94
+      Alien::Build::Plugin::Fetch::LWP 1.94
+      Alien::Build::Plugin::Fetch::Local 1.94
+      Alien::Build::Plugin::Fetch::LocalDir 1.94
+      Alien::Build::Plugin::Fetch::NetFTP 1.94
+      Alien::Build::Plugin::Fetch::Wget 1.94
+      Alien::Build::Plugin::Gather::IsolateDynamic 1.94
+      Alien::Build::Plugin::PkgConfig::CommandLine 1.94
+      Alien::Build::Plugin::PkgConfig::LibPkgConf 1.94
+      Alien::Build::Plugin::PkgConfig::MakeStatic 1.94
+      Alien::Build::Plugin::PkgConfig::Negotiate 1.94
+      Alien::Build::Plugin::PkgConfig::PP 1.94
+      Alien::Build::Plugin::Prefer::BadVersion 1.94
+      Alien::Build::Plugin::Prefer::GoodVersion 1.94
+      Alien::Build::Plugin::Prefer::SortVersions 1.94
+      Alien::Build::Plugin::Probe::CBuilder 1.94
+      Alien::Build::Plugin::Probe::CommandLine 1.94
+      Alien::Build::Plugin::Test::Mock 1.94
+      Alien::Build::PluginMeta 1.94
+      Alien::Build::Temp 1.94
+      Alien::Build::TempDir 1.94
+      Alien::Build::Util 1.94
+      Alien::Build::Version::Basic 1.94
+      Alien::Build::rc 1.94
+      Alien::Role 1.94
+      Test::Alien 1.94
+      Test::Alien::Build 1.94
+      Test::Alien::CanCompile 1.94
+      Test::Alien::CanPlatypus 1.94
+      Test::Alien::Diag 1.94
+      Test::Alien::Run 1.94
+      Test::Alien::Synthetic 1.94
+      alienfile 1.94
+    requirements:
+      Capture::Tiny 0.17
+      ExtUtils::CBuilder 0
+      ExtUtils::MakeMaker 6.64
+      ExtUtils::ParseXS 3.30
+      FFI::CheckLib 0.11
+      File::Which 1.10
+      File::chdir 0
+      JSON::PP 0
+      List::Util 1.33
+      Module::Load 0
+      Path::Tiny 0.077
+      Test2::API 1.302096
+      Text::ParseWords 3.26
+      perl 5.008001
+  Alien-FFI-0.24
+    pathname: P/PL/PLICEASE/Alien-FFI-0.24.tar.gz
+    provides:
+      Alien::FFI 0.24
+    requirements:
+      Alien::Base 0.73
+      Alien::Build 0.73
+      Alien::Build::MM 0.73
+      Alien::Build::Plugin::Fetch::CurlCommand 1.19
+      Archive::Tar 0
+      Config 0
+      ExtUtils::MakeMaker 6.52
+      IO::Zlib 0
+      Mojo::DOM58 1.00
+      Sort::Versions 0
+      URI 0
+      URI::Escape 0
+      perl 5.006
   Alien-SDL-1.446
     pathname: F/FR/FROGGS/Alien-SDL-1.446.tar.gz
     provides:
@@ -1857,6 +1964,73 @@ DISTRIBUTIONS
       Module::CPANfile 0
       Test::More 0.88
       version 0.76
+  FFI-CheckLib-0.25
+    pathname: P/PL/PLICEASE/FFI-CheckLib-0.25.tar.gz
+    provides:
+      FFI::CheckLib 0.25
+    requirements:
+      ExtUtils::MakeMaker 0
+      Module::Load 0
+      perl 5.006
+  FFI-Platypus-1.07
+    pathname: P/PL/PLICEASE/FFI-Platypus-1.07.tar.gz
+    provides:
+      FFI::Build 1.07
+      FFI::Build::File::Base 1.07
+      FFI::Build::File::C 1.07
+      FFI::Build::File::CXX 1.07
+      FFI::Build::File::Library 1.07
+      FFI::Build::File::Object 1.07
+      FFI::Build::MM 1.07
+      FFI::Build::MM::FBX 1.07
+      FFI::Build::Platform 1.07
+      FFI::Platypus 1.07
+      FFI::Platypus::API 1.07
+      FFI::Platypus::Buffer 1.07
+      FFI::Platypus::Bundle 1.07
+      FFI::Platypus::Closure 1.07
+      FFI::Platypus::ClosureData 1.07
+      FFI::Platypus::Constant 1.07
+      FFI::Platypus::DL 1.07
+      FFI::Platypus::Declare 1.07
+      FFI::Platypus::Function 1.07
+      FFI::Platypus::Function::Function 1.07
+      FFI::Platypus::Function::Wrapper 1.07
+      FFI::Platypus::Internal 1.07
+      FFI::Platypus::Lang 1.07
+      FFI::Platypus::Lang::ASM 1.07
+      FFI::Platypus::Lang::C 1.07
+      FFI::Platypus::Lang::Win32 1.07
+      FFI::Platypus::Legacy 1.07
+      FFI::Platypus::Memory 1.07
+      FFI::Platypus::Record 1.07
+      FFI::Platypus::Record::Meta 1.07
+      FFI::Platypus::Record::TieArray 1.07
+      FFI::Platypus::ShareConfig 1.07
+      FFI::Platypus::Type 1.07
+      FFI::Platypus::Type::PointerSizeBuffer 1.07
+      FFI::Platypus::Type::StringArray 1.07
+      FFI::Platypus::Type::StringPointer 1.07
+      FFI::Platypus::TypeParser 1.07
+      FFI::Platypus::TypeParser::Version0 1.07
+      FFI::Platypus::TypeParser::Version1 1.07
+      FFI::Probe 1.07
+      FFI::Probe::Runner 1.07
+      FFI::Probe::Runner::Builder 1.07
+      FFI::Probe::Runner::Result 1.07
+      FFI::Temp 1.07
+    requirements:
+      Alien::FFI 0.20
+      Capture::Tiny 0
+      ExtUtils::CBuilder 0
+      ExtUtils::MakeMaker 7.12
+      ExtUtils::ParseXS 3.30
+      FFI::CheckLib 0.05
+      IPC::Cmd 0
+      JSON::PP 0
+      List::Util 1.45
+      constant 1.32
+      perl 5.008001
   Fennec-Lite-0.004
     pathname: E/EX/EXODIST/Fennec-Lite-0.004.tar.gz
     provides:
@@ -1947,6 +2121,21 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5.006
+  File-chdir-0.1010
+    pathname: D/DA/DAGOLDEN/File-chdir-0.1010.tar.gz
+    provides:
+      File::chdir 0.1010
+      File::chdir::ARRAY 0.1010
+      File::chdir::SCALAR 0.1010
+    requirements:
+      Carp 0
+      Cwd 3.16
+      Exporter 0
+      ExtUtils::MakeMaker 6.17
+      File::Spec::Functions 3.27
+      perl 5.006
+      strict 0
+      vars 0
   File-pushd-1.016
     pathname: D/DA/DAGOLDEN/File-pushd-1.016.tar.gz
     provides:
@@ -2525,19 +2714,6 @@ DISTRIBUTIONS
       Try::Tiny 0
       strict 0
       warnings 0
-  Module-Load-Conditional-0.68
-    pathname: B/BI/BINGOS/Module-Load-Conditional-0.68.tar.gz
-    provides:
-      Module::Load::Conditional 0.68
-    requirements:
-      ExtUtils::MakeMaker 0
-      Locale::Maketext::Simple 0
-      Module::CoreList 2.22
-      Module::Load 0.28
-      Module::Metadata 1.000005
-      Params::Check 0
-      Test::More 0
-      version 0.69
   Module-Pluggable-5.2
     pathname: S/SI/SIMONW/Module-Pluggable-5.2.tar.gz
     provides:
@@ -2575,6 +2751,18 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
+  Mojo-DOM58-2.000
+    pathname: D/DB/DBOOK/Mojo-DOM58-2.000.tar.gz
+    provides:
+      Mojo::DOM58 2.000
+      Mojo::DOM58::Entities 2.000
+    requirements:
+      Carp 0
+      Exporter 5.57
+      ExtUtils::MakeMaker 0
+      List::Util 0
+      Scalar::Util 0
+      perl 5.008001
   Moo-2.003004
     pathname: H/HA/HAARG/Moo-2.003004.tar.gz
     provides:
@@ -3607,17 +3795,6 @@ DISTRIBUTIONS
       Sub::Quote 0
       Try::Tiny 0.04
       perl 5.008001
-  Scalar-List-Utils-1.53
-    pathname: P/PE/PEVANS/Scalar-List-Utils-1.53.tar.gz
-    provides:
-      List::Util 1.53
-      List::Util::XS 1.53
-      Scalar::Util 1.53
-      Sub::Util 1.53
-    requirements:
-      ExtUtils::MakeMaker 0
-      Test::More 0
-      perl 5.006
   Scope-Guard-0.21
     pathname: C/CH/CHOCOLATE/Scope-Guard-0.21.tar.gz
     provides:
@@ -3645,6 +3822,16 @@ DISTRIBUTIONS
     requirements:
       ExtUtils::MakeMaker 0
       perl 5
+  Sort-Versions-1.62
+    pathname: N/NE/NEILB/Sort-Versions-1.62.tar.gz
+    provides:
+      Sort::Versions 1.62
+    requirements:
+      Exporter 0
+      ExtUtils::MakeMaker 0
+      perl 5.006
+      strict 0
+      warnings 0
   Specio-0.44
     pathname: D/DR/DROLSKY/Specio-0.44.tar.gz
     provides:
@@ -3926,84 +4113,6 @@ DISTRIBUTIONS
       Test::Harness 3.35
       Test::More 1.302047
       Test::Warn 0.30
-  Test-Simple-1.302168
-    pathname: E/EX/EXODIST/Test-Simple-1.302168.tar.gz
-    provides:
-      Test2 1.302168
-      Test2::API 1.302168
-      Test2::API::Breakage 1.302168
-      Test2::API::Context 1.302168
-      Test2::API::Instance 1.302168
-      Test2::API::Stack 1.302168
-      Test2::Event 1.302168
-      Test2::Event::Bail 1.302168
-      Test2::Event::Diag 1.302168
-      Test2::Event::Encoding 1.302168
-      Test2::Event::Exception 1.302168
-      Test2::Event::Fail 1.302168
-      Test2::Event::Generic 1.302168
-      Test2::Event::Note 1.302168
-      Test2::Event::Ok 1.302168
-      Test2::Event::Pass 1.302168
-      Test2::Event::Plan 1.302168
-      Test2::Event::Skip 1.302168
-      Test2::Event::Subtest 1.302168
-      Test2::Event::TAP::Version 1.302168
-      Test2::Event::V2 1.302168
-      Test2::Event::Waiting 1.302168
-      Test2::EventFacet 1.302168
-      Test2::EventFacet::About 1.302168
-      Test2::EventFacet::Amnesty 1.302168
-      Test2::EventFacet::Assert 1.302168
-      Test2::EventFacet::Control 1.302168
-      Test2::EventFacet::Error 1.302168
-      Test2::EventFacet::Hub 1.302168
-      Test2::EventFacet::Info 1.302168
-      Test2::EventFacet::Info::Table 1.302168
-      Test2::EventFacet::Meta 1.302168
-      Test2::EventFacet::Parent 1.302168
-      Test2::EventFacet::Plan 1.302168
-      Test2::EventFacet::Render 1.302168
-      Test2::EventFacet::Trace 1.302168
-      Test2::Formatter 1.302168
-      Test2::Formatter::TAP 1.302168
-      Test2::Hub 1.302168
-      Test2::Hub::Interceptor 1.302168
-      Test2::Hub::Interceptor::Terminator 1.302168
-      Test2::Hub::Subtest 1.302168
-      Test2::IPC 1.302168
-      Test2::IPC::Driver 1.302168
-      Test2::IPC::Driver::Files 1.302168
-      Test2::Tools::Tiny 1.302168
-      Test2::Util 1.302168
-      Test2::Util::ExternalMeta 1.302168
-      Test2::Util::Facets2Legacy 1.302168
-      Test2::Util::HashBase 1.302168
-      Test2::Util::Trace 1.302168
-      Test::Builder 1.302168
-      Test::Builder::Formatter 1.302168
-      Test::Builder::IO::Scalar 2.114
-      Test::Builder::Module 1.302168
-      Test::Builder::Tester 1.302168
-      Test::Builder::Tester::Color 1.302168
-      Test::Builder::Tester::Tie 1.302168
-      Test::Builder::TodoDiag 1.302168
-      Test::More 1.302168
-      Test::Simple 1.302168
-      Test::Tester 1.302168
-      Test::Tester::Capture 1.302168
-      Test::Tester::CaptureRunner 1.302168
-      Test::Tester::Delegate 1.302168
-      Test::use::ok 1.302168
-      ok 1.302168
-    requirements:
-      ExtUtils::MakeMaker 0
-      File::Spec 0
-      File::Temp 0
-      Scalar::Util 1.13
-      Storable 0
-      perl 5.006002
-      utf8 0
   Test-Warn-0.36
     pathname: B/BI/BIGJ/Test-Warn-0.36.tar.gz
     provides:
@@ -4401,13 +4510,3 @@ DISTRIBUTIONS
       indirect 0
       multidimensional 0
       perl 5.006
-  version-0.9924
-    pathname: J/JP/JPEACOCK/version-0.9924.tar.gz
-    provides:
-      version 0.9924
-      version::regex 0.9924
-      version::vpp 0.9924
-      version::vxs 0.9924
-    requirements:
-      ExtUtils::MakeMaker 0
-      perl 5.006002
