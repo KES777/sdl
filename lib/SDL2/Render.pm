@@ -18,11 +18,64 @@ sub attach {
 	my( $ffi ) =  @_;
 
 
-	$ffi->type( 'int' => 'SDL_RendererFlags' );                  #enum
+  # typedef enum
+  # {
+  #     SDL_RENDERER_SOFTWARE = 0x00000001,         /**< The renderer is a software fallback */
+  #     SDL_RENDERER_ACCELERATED = 0x00000002,      /**< The renderer uses hardware
+  #                                                      acceleration */
+  #     SDL_RENDERER_PRESENTVSYNC = 0x00000004,     /**< Present is synchronized
+  #                                                      with the refresh rate */
+  #     SDL_RENDERER_TARGETTEXTURE = 0x00000008     /**< The renderer supports
+  #                                                      rendering to texture */
+  # } SDL_RendererFlags;
+  $ffi->load_custom_type('::Enum', 'SDL_RendererFlags',
+    ['SDL_RENDERER_SOFTWARE'      => 0x00000001],
+    ['SDL_RENDERER_ACCELERATED'   => 0x00000002],
+    ['SDL_RENDERER_PRESENTVSYNC'  => 0x00000004],
+    ['SDL_RENDERER_TARGETTEXTURE' => 0x00000008],
+  );
+
+
 	$ffi->type( 'opaque' => 'SDL_RendererInfo_ptr' );            #struct
-	$ffi->type( 'int' => 'SDL_TextureAccess' );                  #enum
-	$ffi->type( 'int' => 'SDL_TextureModulate' );                #enum
-	$ffi->type( 'int' => 'SDL_RendererFlip' );                   #enum
+
+
+  # typedef enum
+  # {
+  #     SDL_TEXTUREACCESS_STATIC,    /**< Changes rarely, not lockable */
+  #     SDL_TEXTUREACCESS_STREAMING, /**< Changes frequently, lockable */
+  #     SDL_TEXTUREACCESS_TARGET     /**< Texture can be used as a render target */
+  # } SDL_TextureAccess;
+  $ffi->load_custom_type('::Enum', 'SDL_TextureAccess',
+      'SDL_TEXTUREACCESS_STATIC',    # /**< Changes rarely, not lockable */
+      'SDL_TEXTUREACCESS_STREAMING', # /**< Changes frequently, lockable */
+      'SDL_TEXTUREACCESS_TARGET',    # /**< Texture can be used as a render target */
+  );
+
+  # typedef enum
+  # {
+  #     SDL_TEXTUREMODULATE_NONE = 0x00000000,     /**< No modulation */
+  #     SDL_TEXTUREMODULATE_COLOR = 0x00000001,    /**< srcC = srcC * color */
+  #     SDL_TEXTUREMODULATE_ALPHA = 0x00000002     /**< srcA = srcA * alpha */
+  # } SDL_TextureModulate;
+  $ffi->load_custom_type('::Enum', 'SDL_TextureModulate',
+    ['SDL_TEXTUREMODULATE_NONE'  => 0x00000000],     # /**< No modulation */
+    ['SDL_TEXTUREMODULATE_COLOR' => 0x00000001],     # /**< srcC = srcC * color */
+    ['SDL_TEXTUREMODULATE_ALPHA' => 0x00000002],     # /**< srcA = srcA * alpha */
+  );
+
+  # typedef enum
+  # {
+  #     SDL_FLIP_NONE = 0x00000000,     /**< Do not flip */
+  #     SDL_FLIP_HORIZONTAL = 0x00000001,    /**< flip horizontally */
+  #     SDL_FLIP_VERTICAL = 0x00000002     /**< flip vertically */
+  # } SDL_RendererFlip;
+  $ffi->load_custom_type('::Enum', 'SDL_RendererFlip',
+    ['SDL_FLIP_NONE'       => 0x00000000],    #  /**< Do not flip */
+    ['SDL_FLIP_HORIZONTAL' => 0x00000001],    #  /**< flip horizontally */
+    ['SDL_FLIP_VERTICAL'   => 0x00000002],    #  /**< flip vertically */
+  );
+
+
 	$ffi->type( 'opaque' => 'SDL_Renderer_ptr' );                #struct
 	$ffi->type( 'opaque' => 'SDL_Texture_ptr' );                 #struct
 

@@ -266,7 +266,18 @@ sub attach {
 	# define SDL_HINT_WAVE_FACT_CHUNK   "SDL_WAVE_FACT_CHUNK"
 	use constant SDL_HINT_WAVE_FACT_CHUNK   => "SDL_WAVE_FACT_CHUNK";
 
-	$ffi->type( 'int' => 'SDL_HintPriority' );              #enum
+	# typedef enum
+	# {
+	#     SDL_HINT_DEFAULT,
+	#     SDL_HINT_NORMAL,
+	#     SDL_HINT_OVERRIDE
+	# } SDL_HintPriority;
+	$ffi->load_custom_type('::Enum', 'SDL_HintPriority',
+		'SDL_HINT_DEFAULT',
+		'SDL_HINT_NORMAL',
+		'SDL_HINT_OVERRIDE',
+	);
+
 
 	# extern DECLSPEC SDL_bool SDLCALL SDL_SetHintWithPriority(const char *name,
 	#                                                          const char *value,

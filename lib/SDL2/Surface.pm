@@ -17,7 +17,21 @@ sub attach {
 	my( $ffi ) =  @_;
 
 	$ffi->type( 'opaque' => 'SDL_Surface_ptr' );
-  $ffi->type( 'opaque' => 'SDL_YUV_CONVERSION_MODE_ptr' );
+
+  # typedef enum
+  # {
+  #     SDL_YUV_CONVERSION_JPEG,        /**< Full range JPEG */
+  #     SDL_YUV_CONVERSION_BT601,       /**< BT.601 (the default) */
+  #     SDL_YUV_CONVERSION_BT709,       /**< BT.709 */
+  #     SDL_YUV_CONVERSION_AUTOMATIC    /**< BT.601 for SD content, BT.709 for HD content */
+  # } SDL_YUV_CONVERSION_MODE;
+  $ffi->load_custom_type('::Enum', 'SDL_YUV_CONVERSION_MODE',
+    'SDL_YUV_CONVERSION_JPEG',        # /**< Full range JPEG */
+    'SDL_YUV_CONVERSION_BT601',       # /**< BT.601 (the default) */
+    'SDL_YUV_CONVERSION_BT709',       # /**< BT.709 */
+    'SDL_YUV_CONVERSION_AUTOMATIC',   # /**< BT.601 for SD content, BT.709 for HD content */
+  );
+
 
   SDL2::Stdinc::attach( $ffi );
   SDL2::Rwops::attach( $ffi );
@@ -199,15 +213,15 @@ sub attach {
 
 
   # extern DECLSPEC void SDLCALL SDL_SetYUVConversionMode(SDL_YUV_CONVERSION_MODE mode);
-  $ffi->attach( SDL_SetYUVConversionMode  => [ 'SDL_YUV_CONVERSION_MODE_ptr' ] => 'void'  );
+  $ffi->attach( SDL_SetYUVConversionMode  => [ 'SDL_YUV_CONVERSION_MODE' ] => 'void'  );
 
 
   # extern DECLSPEC SDL_YUV_CONVERSION_MODE SDLCALL SDL_GetYUVConversionMode(void);
-  $ffi->attach( SDL_GetYUVConversionMode  => [ 'void' ] => 'SDL_YUV_CONVERSION_MODE_ptr'  );
+  $ffi->attach( SDL_GetYUVConversionMode  => [ 'void' ] => 'SDL_YUV_CONVERSION_MODE'  );
 
 
   # extern DECLSPEC SDL_YUV_CONVERSION_MODE SDLCALL SDL_GetYUVConversionModeForResolution(int width, int height);
-  $ffi->attach( SDL_GetYUVConversionModeForResolution  => [ 'int', 'int' ] => 'SDL_YUV_CONVERSION_MODE_ptr'  );
+  $ffi->attach( SDL_GetYUVConversionModeForResolution  => [ 'int', 'int' ] => 'SDL_YUV_CONVERSION_MODE'  );
 
 }
 

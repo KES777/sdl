@@ -16,9 +16,24 @@ sub attach {
 	use constant SDL_FALSE  => 0;
 	use constant SDL_TRUE   => 1;
 
-	# typedef int SDL_bool;
-	$ffi->type( 'int' => 'SDL_bool' );       #enum
-	# $ffi->type( 'senum' => 'SDL_bool' );   #enum
+	# typedef enum
+	# {
+	#     SDL_FALSE = 0,
+	#     SDL_TRUE = 1
+	# } SDL_bool;
+	$ffi->load_custom_type('::Enum', 'SDL_bool',
+		['SDL_FALSE' => 0],
+		['SDL_TRUE'  => 1],
+	);
+
+	# typedef enum
+	# {
+	#     DUMMY_ENUM_VALUE
+	# } SDL_DUMMY_ENUM;
+	$ffi->load_custom_type('::Enum', 'SDL_DUMMY_ENUM',
+		'DUMMY_ENUM_VALUE',
+	);
+
 }
 
 1;

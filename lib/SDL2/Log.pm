@@ -18,8 +18,6 @@ sub attach {
 	#define SDL_MAX_LOG_MESSAGE 4096
 	use constant SDL_MAX_LOG_MESSAGE  => 4096;
 
-	$ffi->type( 'int' => 'SDL_LogPriority' );                   #enum
-
 	SDL2::Stdinc::attach( $ffi );
 
 # ??????????????????????????enum
@@ -56,8 +54,54 @@ sub attach {
 	       # };
 	     # */
 	    # SDL_LOG_CATEGORY_CUSTOM
-	# };
+# ??????????????????????/
+	# } LogEnum_wihtoutname;
+	$ffi->load_custom_type('::Enum',
+		'SDL_LOG_CATEGORY_APPLICATION',
+		'SDL_LOG_CATEGORY_ERROR',
+		'SDL_LOG_CATEGORY_ASSERT',
+		'SDL_LOG_CATEGORY_SYSTEM',
+		'SDL_LOG_CATEGORY_AUDIO',
+		'SDL_LOG_CATEGORY_VIDEO',
+		'SDL_LOG_CATEGORY_RENDER',
+		'SDL_LOG_CATEGORY_INPUT',
+		'SDL_LOG_CATEGORY_TEST',
 
+		# /* Reserved for future SDL library use */
+		'SDL_LOG_CATEGORY_RESERVED1',
+		'SDL_LOG_CATEGORY_RESERVED2',
+		'SDL_LOG_CATEGORY_RESERVED3',
+		'SDL_LOG_CATEGORY_RESERVED4',
+		'SDL_LOG_CATEGORY_RESERVED5',
+		'SDL_LOG_CATEGORY_RESERVED6',
+		'SDL_LOG_CATEGORY_RESERVED7',
+		'SDL_LOG_CATEGORY_RESERVED8',
+		'SDL_LOG_CATEGORY_RESERVED9',
+		'SDL_LOG_CATEGORY_RESERVED10',
+
+		'SDL_LOG_CATEGORY_CUSTOM',
+	);
+
+
+	# typedef enum
+	# {
+	#     SDL_LOG_PRIORITY_VERBOSE = 1,
+	#     SDL_LOG_PRIORITY_DEBUG,
+	#     SDL_LOG_PRIORITY_INFO,
+	#     SDL_LOG_PRIORITY_WARN,
+	#     SDL_LOG_PRIORITY_ERROR,
+	#     SDL_LOG_PRIORITY_CRITICAL,
+	#     SDL_NUM_LOG_PRIORITIES
+	# } SDL_LogPriority;
+	$ffi->load_custom_type('::Enum', 'SDL_LogPriority',
+		['SDL_LOG_PRIORITY_VERBOSE' => 1],
+		'SDL_LOG_PRIORITY_DEBUG',
+		'SDL_LOG_PRIORITY_INFO',
+		'SDL_LOG_PRIORITY_WARN',
+		'SDL_LOG_PRIORITY_ERROR',
+		'SDL_LOG_PRIORITY_CRITICAL',
+		'SDL_NUM_LOG_PRIORITIES',
+	);
 
 
 	# extern DECLSPEC void SDLCALL SDL_LogSetAllPriority(SDL_LogPriority priority);
