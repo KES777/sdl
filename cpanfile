@@ -10,3 +10,6 @@ requires 'DBIx::Class::InflateColumn::Serializer';
 requires 'DBIx::Class::Migration';
 requires 'Devel::NYTProf';
 requires 'FFI::Platypus';
+requires 'FFI::C';
+requires 'FFI::Platypus::Type::PtrObject';
+requires 'FFI::Platypus::Type::Enum';
