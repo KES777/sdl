@@ -32,6 +32,10 @@ sub ffi_custom_type_api_1
     my $name;
     my @aliases;
 
+    if( ref $value eq 'CODE' ) {
+      $value =  $value->();
+    }
+
     if(is_plain_arrayref $value)
     {
       my %opt;
