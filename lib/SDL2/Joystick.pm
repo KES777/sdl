@@ -24,8 +24,58 @@ sub attach {
 	# typedef Sint32 SDL_JoystickID;
 	$ffi->type( 'sint32' => 'SDL_JoystickID' );
 
-	$ffi->type( 'int' => 'SDL_JoystickType' );              #enum
-	$ffi->type( 'int' => 'SDL_JoystickPowerLevel' );        #enum
+	# typedef enum
+	# {
+	#     SDL_JOYSTICK_TYPE_UNKNOWN,
+	#     SDL_JOYSTICK_TYPE_GAMECONTROLLER,
+	#     SDL_JOYSTICK_TYPE_WHEEL,
+	#     SDL_JOYSTICK_TYPE_ARCADE_STICK,
+	#     SDL_JOYSTICK_TYPE_FLIGHT_STICK,
+	#     SDL_JOYSTICK_TYPE_DANCE_PAD,
+	#     SDL_JOYSTICK_TYPE_GUITAR,
+	#     SDL_JOYSTICK_TYPE_DRUM_KIT,
+	#     SDL_JOYSTICK_TYPE_ARCADE_PAD,
+	#     SDL_JOYSTICK_TYPE_THROTTLE
+	# } SDL_JoystickType;
+	$ffi->load_custom_type('::Enum', 'SDL_JoystickType',
+		{ ret => 'int', package => 'SDL2::Joystick' },
+		'SDL_JOYSTICK_TYPE_UNKNOWN',
+		'SDL_JOYSTICK_TYPE_GAMECONTROLLER',
+		'SDL_JOYSTICK_TYPE_WHEEL',
+		'SDL_JOYSTICK_TYPE_ARCADE_STICK',
+		'SDL_JOYSTICK_TYPE_FLIGHT_STICK',
+		'SDL_JOYSTICK_TYPE_DANCE_PAD',
+		'SDL_JOYSTICK_TYPE_GUITAR',
+		'SDL_JOYSTICK_TYPE_DRUM_KIT',
+		'SDL_JOYSTICK_TYPE_ARCADE_PAD',
+		'SDL_JOYSTICK_TYPE_THROTTLE',
+	);
+
+	# typedef enum
+	# {
+	#     SDL_JOYSTICK_POWER_UNKNOWN = -1,
+	#     SDL_JOYSTICK_POWER_EMPTY,   /* <= 5% */
+	#     SDL_JOYSTICK_POWER_LOW,     /* <= 20% */
+	#     SDL_JOYSTICK_POWER_MEDIUM,  /* <= 70% */
+	#     SDL_JOYSTICK_POWER_FULL,    /* <= 100% */
+	#     SDL_JOYSTICK_POWER_WIRED,
+	#     SDL_JOYSTICK_POWER_MAX
+	# } SDL_JoystickPowerLevel;
+	$ffi->load_custom_type('::Enum', 'SDL_JoystickPowerLevel',
+		{ ret => 'int', package => 'SDL2::Joystick' },
+		['SDL_JOYSTICK_POWER_UNKNOWN' => -1],
+		'SDL_JOYSTICK_POWER_EMPTY',
+		'SDL_JOYSTICK_POWER_LOW',
+		'SDL_JOYSTICK_POWER_MEDIUM',
+		'SDL_JOYSTICK_POWER_FULL',
+		'SDL_JOYSTICK_POWER_WIRED',
+		'SDL_JOYSTICK_POWER_MAX',
+	);
+
+
+
+
+
 
 	SDL2::Stdinc::attach( $ffi );
 	SDL2::Error::attach( $ffi );

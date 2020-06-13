@@ -273,6 +273,7 @@ sub attach {
 	#     SDL_HINT_OVERRIDE
 	# } SDL_HintPriority;
 	$ffi->load_custom_type('::Enum', 'SDL_HintPriority',
+		{ ret => 'int', package => 'SDL2::Hints' },
 		'SDL_HINT_DEFAULT',
 		'SDL_HINT_NORMAL',
 		'SDL_HINT_OVERRIDE',

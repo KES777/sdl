@@ -21,7 +21,24 @@ sub attach {
 	$ffi->type( 'sint64' => 'SDL_TouchID' );
 	$ffi->type( 'sint64' => 'SDL_FingerID' );
 
-	$ffi->type( 'int'    => 'SDL_TouchDeviceType' );     #enum
+	# typedef enum
+	# {
+	    # SDL_TOUCH_DEVICE_INVALID = -1,
+	    # SDL_TOUCH_DEVICE_DIRECT,            /* touch screen with window-relative coordinates */
+	    # SDL_TOUCH_DEVICE_INDIRECT_ABSOLUTE, /* trackpad with absolute device coordinates */
+	    # SDL_TOUCH_DEVICE_INDIRECT_RELATIVE  /* trackpad with screen cursor-relative coordinates */
+	# } SDL_TouchDeviceType;
+	$ffi->load_custom_type('::Enum', 'SDL_TouchDeviceType',
+		{ ret => 'int', package => 'SDL2::Touch' },
+		['SDL_TOUCH_DEVICE_INVALID' => -1],
+		'SDL_TOUCH_DEVICE_DIRECT',
+		'SDL_TOUCH_DEVICE_INDIRECT_ABSOLUTE',
+		'SDL_TOUCH_DEVICE_INDIRECT_RELATIVE',
+	);
+
+
+
+
 	$ffi->type( 'opaque' => 'SDL_Finger_ptr' );          #struct
 
 
@@ -46,6 +63,8 @@ sub attach {
 
 	# extern DECLSPEC SDL_TouchDeviceType SDLCALL SDL_GetTouchDeviceType(SDL_TouchID touchID);
 	$ffi->attach( SDL_GetTouchDeviceType => [ 'SDL_TouchID'  ] => 'SDL_TouchDeviceType' );
+
+	# SDL_GetTouchDeviceType( SDL2::Touch::SDL_TOUCH_DEVICE_INDIRECT_ABSOLUTE );
 
 	# extern DECLSPEC int SDLCALL SDL_GetNumTouchFingers(SDL_TouchID touchID);
 	$ffi->attach( SDL_GetNumTouchFingers => [ 'SDL_TouchID'  ] => 'int' );

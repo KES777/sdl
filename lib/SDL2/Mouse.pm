@@ -38,6 +38,7 @@ sub attach {
 	#     SDL_NUM_SYSTEM_CURSORS
 	# } SDL_SystemCursor;
 	$ffi->load_custom_type('::Enum', 'SDL_SystemCursor',
+		{ ret => 'int', package => 'SDL2::Mouse' },
 		'SDL_SYSTEM_CURSOR_ARROW',     # /**< Arrow */
 	    'SDL_SYSTEM_CURSOR_IBEAM',     # /**< I-beam */
 	    'SDL_SYSTEM_CURSOR_WAIT',      # /**< Wait */
@@ -60,6 +61,7 @@ sub attach {
 	#     SDL_MOUSEWHEEL_FLIPPED    /**< The scroll direction is flipped / natural */
 	# } SDL_MouseWheelDirection;
 	$ffi->load_custom_type('::Enum', 'SDL_MouseWheelDirection',
+		{ ret => 'int', package => 'SDL2::Mouse' },
 	    'SDL_MOUSEWHEEL_NORMAL',    # /**< The scroll direction is normal */
 		'SDL_MOUSEWHEEL_FLIPPED',   # /**< The scroll direction is flipped / natural */
 	);

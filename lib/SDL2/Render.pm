@@ -29,6 +29,7 @@ sub attach {
   #                                                      rendering to texture */
   # } SDL_RendererFlags;
   $ffi->load_custom_type('::Enum', 'SDL_RendererFlags',
+    { ret => 'int', package => 'SDL2::Render' },
     ['SDL_RENDERER_SOFTWARE'      => 0x00000001],
     ['SDL_RENDERER_ACCELERATED'   => 0x00000002],
     ['SDL_RENDERER_PRESENTVSYNC'  => 0x00000004],
@@ -46,6 +47,7 @@ sub attach {
   #     SDL_TEXTUREACCESS_TARGET     /**< Texture can be used as a render target */
   # } SDL_TextureAccess;
   $ffi->load_custom_type('::Enum', 'SDL_TextureAccess',
+    { ret => 'int', package => 'SDL2::Render' },
       'SDL_TEXTUREACCESS_STATIC',    # /**< Changes rarely, not lockable */
       'SDL_TEXTUREACCESS_STREAMING', # /**< Changes frequently, lockable */
       'SDL_TEXTUREACCESS_TARGET',    # /**< Texture can be used as a render target */
@@ -58,6 +60,7 @@ sub attach {
   #     SDL_TEXTUREMODULATE_ALPHA = 0x00000002     /**< srcA = srcA * alpha */
   # } SDL_TextureModulate;
   $ffi->load_custom_type('::Enum', 'SDL_TextureModulate',
+    { ret => 'int', package => 'SDL2::Render' },
     ['SDL_TEXTUREMODULATE_NONE'  => 0x00000000],     # /**< No modulation */
     ['SDL_TEXTUREMODULATE_COLOR' => 0x00000001],     # /**< srcC = srcC * color */
     ['SDL_TEXTUREMODULATE_ALPHA' => 0x00000002],     # /**< srcA = srcA * alpha */
@@ -70,6 +73,7 @@ sub attach {
   #     SDL_FLIP_VERTICAL = 0x00000002     /**< flip vertically */
   # } SDL_RendererFlip;
   $ffi->load_custom_type('::Enum', 'SDL_RendererFlip',
+    { ret => 'int', package => 'SDL2::Render' },
     ['SDL_FLIP_NONE'       => 0x00000000],    #  /**< Do not flip */
     ['SDL_FLIP_HORIZONTAL' => 0x00000001],    #  /**< flip horizontally */
     ['SDL_FLIP_VERTICAL'   => 0x00000002],    #  /**< flip vertically */

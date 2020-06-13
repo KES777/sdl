@@ -56,7 +56,8 @@ sub attach {
 	    # SDL_LOG_CATEGORY_CUSTOM
 # ??????????????????????/
 	# } LogEnum_wihtoutname;
-	$ffi->load_custom_type('::Enum',
+	$ffi->load_custom_type('::Enum', 'xdfxdf',
+		{ ret => 'int', package => 'SDL2::Log' },
 		'SDL_LOG_CATEGORY_APPLICATION',
 		'SDL_LOG_CATEGORY_ERROR',
 		'SDL_LOG_CATEGORY_ASSERT',
@@ -94,6 +95,7 @@ sub attach {
 	#     SDL_NUM_LOG_PRIORITIES
 	# } SDL_LogPriority;
 	$ffi->load_custom_type('::Enum', 'SDL_LogPriority',
+		{ ret => 'int', package => 'SDL2::Log' },
 		['SDL_LOG_PRIORITY_VERBOSE' => 1],
 		'SDL_LOG_PRIORITY_DEBUG',
 		'SDL_LOG_PRIORITY_INFO',

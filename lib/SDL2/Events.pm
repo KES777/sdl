@@ -152,6 +152,7 @@ sub attach {
 	#     SDL_LASTEVENT    = 0xFFFF
 	# } SDL_EventType;
 	$ffi->load_custom_type('::Enum', 'SDL_EventType',
+		{ ret => 'int', package => 'SDL2::Events' },
 	    ['SDL_FIRSTEVENT'     => 0],
 
 		# /* Application events */
@@ -344,6 +345,7 @@ sub attach {
 	#     SDL_GETEVENT
 	# } SDL_eventaction;
 	$ffi->load_custom_type('::Enum', 'SDL_eventaction',
+		{ ret => 'int', package => 'SDL2::Events' },
 		'SDL_ADDEVENT',
 		'SDL_PEEKEVENT',
 		'SDL_GETEVENT',

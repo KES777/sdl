@@ -23,10 +23,91 @@ sub attach {
 
 
 	$ffi->type( 'opaque' => 'SDL_GameController_ptr' );               #struct
-	$ffi->type( 'int' => 'SDL_GameControllerBindType' );              #enum
+
+
+	# typedef enum
+	# {
+	#     SDL_CONTROLLER_BINDTYPE_NONE = 0,
+	#     SDL_CONTROLLER_BINDTYPE_BUTTON,
+	#     SDL_CONTROLLER_BINDTYPE_AXIS,
+	#     SDL_CONTROLLER_BINDTYPE_HAT
+	# } SDL_GameControllerBindType;
+	$ffi->load_custom_type('::Enum', 'SDL_GameControllerBindType',
+		{ ret => 'int', package => 'SDL2::Gamecontroller' },
+		['SDL_CONTROLLER_BINDTYPE_NONE' => 0],
+		'SDL_CONTROLLER_BINDTYPE_BUTTON',
+		'SDL_CONTROLLER_BINDTYPE_AXIS',
+		'SDL_CONTROLLER_BINDTYPE_HAT',
+	);
+
+
 	$ffi->type( 'opaque' => 'SDL_GameControllerButtonBind_ptr' );     #struct
-	$ffi->type( 'int' => 'SDL_GameControllerAxis' );                  #enum
-	$ffi->type( 'int' => 'SDL_GameControllerButton' );                #enum
+
+
+	# typedef enum
+	# {
+	#     SDL_CONTROLLER_AXIS_INVALID = -1,
+	#     SDL_CONTROLLER_AXIS_LEFTX,
+	#     SDL_CONTROLLER_AXIS_LEFTY,
+	#     SDL_CONTROLLER_AXIS_RIGHTX,
+	#     SDL_CONTROLLER_AXIS_RIGHTY,
+	#     SDL_CONTROLLER_AXIS_TRIGGERLEFT,
+	#     SDL_CONTROLLER_AXIS_TRIGGERRIGHT,
+	#     SDL_CONTROLLER_AXIS_MAX
+	# } SDL_GameControllerAxis;
+	$ffi->load_custom_type('::Enum', 'SDL_GameControllerAxis',
+		{ ret => 'int', package => 'SDL2::Gamecontroller' },
+		['SDL_CONTROLLER_AXIS_INVALID' => -1],
+		'SDL_CONTROLLER_AXIS_LEFTX',
+		'SDL_CONTROLLER_AXIS_LEFTY',
+		'SDL_CONTROLLER_AXIS_RIGHTX',
+		'SDL_CONTROLLER_AXIS_RIGHTY',
+		'SDL_CONTROLLER_AXIS_TRIGGERLEFT',
+		'SDL_CONTROLLER_AXIS_TRIGGERRIGHT',
+		'SDL_CONTROLLER_AXIS_MAX',
+	);
+
+	# typedef enum
+	# {
+	#     SDL_CONTROLLER_BUTTON_INVALID = -1,
+	#     SDL_CONTROLLER_BUTTON_A,
+	#     SDL_CONTROLLER_BUTTON_B,
+	#     SDL_CONTROLLER_BUTTON_X,
+	#     SDL_CONTROLLER_BUTTON_Y,
+	#     SDL_CONTROLLER_BUTTON_BACK,
+	#     SDL_CONTROLLER_BUTTON_GUIDE,
+	#     SDL_CONTROLLER_BUTTON_START,
+	#     SDL_CONTROLLER_BUTTON_LEFTSTICK,
+	#     SDL_CONTROLLER_BUTTON_RIGHTSTICK,
+	#     SDL_CONTROLLER_BUTTON_LEFTSHOULDER,
+	#     SDL_CONTROLLER_BUTTON_RIGHTSHOULDER,
+	#     SDL_CONTROLLER_BUTTON_DPAD_UP,
+	#     SDL_CONTROLLER_BUTTON_DPAD_DOWN,
+	#     SDL_CONTROLLER_BUTTON_DPAD_LEFT,
+	#     SDL_CONTROLLER_BUTTON_DPAD_RIGHT,
+	#     SDL_CONTROLLER_BUTTON_MAX
+	# } SDL_GameControllerButton;
+	$ffi->load_custom_type('::Enum', 'SDL_GameControllerButton',
+		{ ret => 'int', package => 'SDL2::Gamecontroller' },
+		['SDL_CONTROLLER_BUTTON_INVALID' => -1],
+		'SDL_CONTROLLER_BUTTON_A',
+		'SDL_CONTROLLER_BUTTON_B',
+		'SDL_CONTROLLER_BUTTON_X',
+		'SDL_CONTROLLER_BUTTON_Y',
+		'SDL_CONTROLLER_BUTTON_BACK',
+		'SDL_CONTROLLER_BUTTON_GUIDE',
+		'SDL_CONTROLLER_BUTTON_START',
+		'SDL_CONTROLLER_BUTTON_LEFTSTICK',
+		'SDL_CONTROLLER_BUTTON_RIGHTSTICK',
+		'SDL_CONTROLLER_BUTTON_LEFTSHOULDER',
+		'SDL_CONTROLLER_BUTTON_RIGHTSHOULDER',
+		'SDL_CONTROLLER_BUTTON_DPAD_UP',
+		'SDL_CONTROLLER_BUTTON_DPAD_DOWN',
+		'SDL_CONTROLLER_BUTTON_DPAD_LEFT',
+		'SDL_CONTROLLER_BUTTON_DPAD_RIGHT',
+		'SDL_CONTROLLER_BUTTON_MAX',
+	);
+
 
 	SDL2::Stdinc::attach( $ffi );
 	SDL2::Rwops::attach( $ffi );

@@ -163,7 +163,19 @@ sub attach {
 	$ffi->attach( SDL_OpenAudioDevice => [ 'string', 'int', 'SDL_AudioSpec_ptr', 'SDL_AudioSpec_ptr', 'int' ] => 'SDL_AudioDeviceID' );
 
 
-	$ffi->type( 'int' => 'SDL_AudioStatus' );      #enum
+	# typedef enum
+	# {
+	#     SDL_AUDIO_STOPPED = 0,
+	#     SDL_AUDIO_PLAYING,
+	#     SDL_AUDIO_PAUSED
+	# } SDL_AudioStatus;
+	$ffi->load_custom_type('::Enum', 'SDL_AudioStatus',
+		{ ret => 'int', package => 'SDL2::Audio' },
+		['SDL_AUDIO_STOPPED' => 0],
+		'SDL_AUDIO_PLAYING',
+		'SDL_AUDIO_PAUSED',
+	);
+
 
 	# extern DECLSPEC SDL_AudioStatus SDLCALL SDL_GetAudioStatus(void);
 	$ffi->attach( SDL_GetAudioStatus => [ 'void' ] => 'SDL_AudioStatus' );

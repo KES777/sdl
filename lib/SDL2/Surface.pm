@@ -26,6 +26,7 @@ sub attach {
   #     SDL_YUV_CONVERSION_AUTOMATIC    /**< BT.601 for SD content, BT.709 for HD content */
   # } SDL_YUV_CONVERSION_MODE;
   $ffi->load_custom_type('::Enum', 'SDL_YUV_CONVERSION_MODE',
+    { ret => 'int', package => 'SDL2::Surface' },
     'SDL_YUV_CONVERSION_JPEG',        # /**< Full range JPEG */
     'SDL_YUV_CONVERSION_BT601',       # /**< BT.601 (the default) */
     'SDL_YUV_CONVERSION_BT709',       # /**< BT.709 */

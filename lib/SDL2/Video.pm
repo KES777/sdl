@@ -53,6 +53,7 @@ sub attach {
 	#     SDL_WINDOW_VULKAN        = 0x10000000       /**< window usable for Vulkan surface */
 	# } SDL_WindowFlags;
 	$ffi->load_custom_type('::Enum', 'SDL_WindowFlags',
+		{ ret => 'int', package => 'SDL2::Video' },
 	    ['SDL_WINDOW_FULLSCREEN'         => 0x00000001], # /**< fullscreen window */
 	    ['SDL_WINDOW_OPENGL'             => 0x00000002], # /**< window usable with OpenGL context */
 	    ['SDL_WINDOW_SHOWN'              => 0x00000004], # /**< window is visible */
@@ -106,6 +107,7 @@ sub attach {
 	#     SDL_WINDOWEVENT_HIT_TEST        /**< Window had a hit test that wasn't SDL_HITTEST_NORMAL. */
 	# } SDL_WindowEventID;
 	$ffi->load_custom_type('::Enum', 'SDL_WindowEventID',
+		{ ret => 'int', package => 'SDL2::Video' },
 		'SDL_WINDOWEVENT_NONE',         # /**< Never used */
 		'SDL_WINDOWEVENT_SHOWN',        # /**< Window has been shown */
 		'SDL_WINDOWEVENT_HIDDEN',       # /**< Window has been hidden */
@@ -137,6 +139,7 @@ sub attach {
 	#     SDL_DISPLAYEVENT_ORIENTATION    /**< Display orientation has changed to data1 */
 	# } SDL_DisplayEventID;
 	$ffi->load_custom_type('::Enum', 'SDL_DisplayEventID',
+		{ ret => 'int', package => 'SDL2::Video' },
 	    'SDL_DISPLAYEVENT_NONE',          # /**< Never used */
 	    'SDL_DISPLAYEVENT_ORIENTATION',   # /**< Display orientation has changed to data1 */
 	);
@@ -151,6 +154,7 @@ sub attach {
 	#     SDL_ORIENTATION_PORTRAIT_FLIPPED    /**< The display is in portrait mode, upside down */
 	# } SDL_DisplayOrientation;
 	$ffi->load_custom_type('::Enum', 'SDL_DisplayOrientation',
+		{ ret => 'int', package => 'SDL2::Video' },
 		'SDL_ORIENTATION_UNKNOWN',            # /**< The display orientation can't be determined */
 		'SDL_ORIENTATION_LANDSCAPE',          # /**< The display is in landscape mode, with the right side up, relative to portrait mode */
 		'SDL_ORIENTATION_LANDSCAPE_FLIPPED',  # /**< The display is in landscape mode, with the left side up, relative to portrait mode */
@@ -194,6 +198,7 @@ sub attach {
 	#     SDL_GL_CONTEXT_NO_ERROR
 	# } SDL_GLattr;
 	$ffi->load_custom_type('::Enum', 'SDL_GLattr',
+		{ ret => 'int', package => 'SDL2::Video' },
 		'SDL_GL_RED_SIZE',
 		'SDL_GL_GREEN_SIZE',
 		'SDL_GL_BLUE_SIZE',
@@ -231,6 +236,7 @@ sub attach {
 	#     SDL_GL_CONTEXT_PROFILE_ES             = 0x0004 /**< GLX_CONTEXT_ES2_PROFILE_BIT_EXT */
 	# } SDL_GLprofile;
 	$ffi->load_custom_type('::Enum', 'SDL_GLprofile',
+		{ ret => 'int', package => 'SDL2::Video' },
 		['SDL_GL_CONTEXT_PROFILE_CORE'           => 0x0001],
 		['SDL_GL_CONTEXT_PROFILE_COMPATIBILITY'  => 0x0002],
 		['SDL_GL_CONTEXT_PROFILE_ES'             => 0x0004], #  /**< GLX_CONTEXT_ES2_PROFILE_BIT_EXT */
@@ -245,6 +251,7 @@ sub attach {
 	#     SDL_GL_CONTEXT_RESET_ISOLATION_FLAG    = 0x0008
 	# } SDL_GLcontextFlag;
 	$ffi->load_custom_type('::Enum', 'SDL_GLcontextFlag',
+		{ ret => 'int', package => 'SDL2::Video' },
 		['SDL_GL_CONTEXT_DEBUG_FLAG'              => 0x0001],
 		['SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG' => 0x0002],
 		['SDL_GL_CONTEXT_ROBUST_ACCESS_FLAG'      => 0x0004],
@@ -258,6 +265,7 @@ sub attach {
 	#     SDL_GL_CONTEXT_RELEASE_BEHAVIOR_FLUSH  = 0x0001
 	# } SDL_GLcontextReleaseFlag;
 	$ffi->load_custom_type('::Enum', 'SDL_GLcontextReleaseFlag',
+		{ ret => 'int', package => 'SDL2::Video' },
 		['SDL_GL_CONTEXT_RELEASE_BEHAVIOR_NONE'   => 0x0000],
 		['SDL_GL_CONTEXT_RELEASE_BEHAVIOR_FLUSH'  => 0x0001],
 	);
@@ -269,6 +277,7 @@ sub attach {
 	#     SDL_GL_CONTEXT_RESET_LOSE_CONTEXT    = 0x0001
 	# } SDL_GLContextResetNotification;
 	$ffi->load_custom_type('::Enum', 'SDL_GLContextResetNotification',
+		{ ret => 'int', package => 'SDL2::Video' },
 		['SDL_GL_CONTEXT_RESET_NO_NOTIFICATION'   => 0x0000],
 		['SDL_GL_CONTEXT_RESET_LOSE_CONTEXT'      => 0x0001],
 	);
@@ -579,6 +588,7 @@ sub attach {
 	#     SDL_HITTEST_RESIZE_LEFT
 	# } SDL_HitTestResult;
 	$ffi->load_custom_type('::Enum', 'SDL_HitTestResult',
+		{ ret => 'int', package => 'SDL2::Video' },
 		'SDL_HITTEST_NORMAL',            # /**< Region is normal. No special properties. */
 		'SDL_HITTEST_DRAGGABLE',         # /**< Region can drag entire window. */
 		'SDL_HITTEST_RESIZE_TOPLEFT',
