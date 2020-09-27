@@ -113,15 +113,12 @@ DISTRIBUTIONS
       Alien::Base 0.73
       Alien::Build 0.73
       Alien::Build::MM 0.73
+      Alien::Build::Plugin::Fetch::CurlCommand 1.19
       Archive::Tar 0
       Config 0
       ExtUtils::MakeMaker 6.52
-      HTTP::Tiny 0.044
-      IO::Socket::SSL 1.56
       IO::Zlib 0
-      Mojo::DOM 0
-      Mojolicious 7.00
-      Net::SSLeay 1.49
+      Mojo::DOM58 1.00
       Sort::Versions 0
       URI 0
       URI::Escape 0
@@ -2095,6 +2092,7 @@ DISTRIBUTIONS
       FFI::Probe::Runner::Result 1.29
       FFI::Temp 1.29
     requirements:
+      Alien::FFI 0.20
       Capture::Tiny 0
       ExtUtils::CBuilder 0
       ExtUtils::MakeMaker 7.12
@@ -2331,22 +2329,6 @@ DISTRIBUTIONS
       ExtUtils::MakeMaker 0
       Scalar::Util 0
       perl 5.008001
-  IO-Socket-SSL-2.066
-    pathname: S/SU/SULLR/IO-Socket-SSL-2.066.tar.gz
-    provides:
-      IO::Socket::SSL 2.066
-      IO::Socket::SSL::Intercept 2.056
-      IO::Socket::SSL::OCSP_Cache 2.066
-      IO::Socket::SSL::OCSP_Resolver 2.066
-      IO::Socket::SSL::PublicSuffix undef
-      IO::Socket::SSL::SSL_Context 2.066
-      IO::Socket::SSL::SSL_HANDLE 2.066
-      IO::Socket::SSL::Session_Cache 2.066
-      IO::Socket::SSL::Utils 2.014
-    requirements:
-      ExtUtils::MakeMaker 0
-      Net::SSLeay 1.46
-      Scalar::Util 0
   IPC-Run3-0.048
     pathname: R/RJ/RJBS/IPC-Run3-0.048.tar.gz
     provides:
@@ -2873,125 +2855,18 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  Mojolicious-8.26
-    pathname: S/SR/SRI/Mojolicious-8.26.tar.gz
+  Mojo-DOM58-2.000
+    pathname: D/DB/DBOOK/Mojo-DOM58-2.000.tar.gz
     provides:
-      Mojo undef
-      Mojo::Asset undef
-      Mojo::Asset::File undef
-      Mojo::Asset::Memory undef
-      Mojo::Base undef
-      Mojo::ByteStream undef
-      Mojo::Cache undef
-      Mojo::Collection undef
-      Mojo::Content undef
-      Mojo::Content::MultiPart undef
-      Mojo::Content::Single undef
-      Mojo::Cookie undef
-      Mojo::Cookie::Request undef
-      Mojo::Cookie::Response undef
-      Mojo::DOM undef
-      Mojo::DOM::CSS undef
-      Mojo::DOM::HTML undef
-      Mojo::Date undef
-      Mojo::DynamicMethods undef
-      Mojo::EventEmitter undef
-      Mojo::Exception undef
-      Mojo::File undef
-      Mojo::Headers undef
-      Mojo::HelloWorld undef
-      Mojo::Home undef
-      Mojo::IOLoop undef
-      Mojo::IOLoop::Client undef
-      Mojo::IOLoop::Delay undef
-      Mojo::IOLoop::Server undef
-      Mojo::IOLoop::Stream undef
-      Mojo::IOLoop::Subprocess undef
-      Mojo::IOLoop::TLS undef
-      Mojo::JSON undef
-      Mojo::JSON::Pointer undef
-      Mojo::Loader undef
-      Mojo::Log undef
-      Mojo::Message undef
-      Mojo::Message::Request undef
-      Mojo::Message::Response undef
-      Mojo::Parameters undef
-      Mojo::Path undef
-      Mojo::Promise undef
-      Mojo::Reactor undef
-      Mojo::Reactor::EV undef
-      Mojo::Reactor::Poll undef
-      Mojo::Server undef
-      Mojo::Server::CGI undef
-      Mojo::Server::Daemon undef
-      Mojo::Server::Hypnotoad undef
-      Mojo::Server::Morbo undef
-      Mojo::Server::Morbo::Backend undef
-      Mojo::Server::Morbo::Backend::Poll undef
-      Mojo::Server::PSGI undef
-      Mojo::Server::Prefork undef
-      Mojo::Template undef
-      Mojo::Transaction undef
-      Mojo::Transaction::HTTP undef
-      Mojo::Transaction::WebSocket undef
-      Mojo::URL undef
-      Mojo::Upload undef
-      Mojo::UserAgent undef
-      Mojo::UserAgent::CookieJar undef
-      Mojo::UserAgent::Proxy undef
-      Mojo::UserAgent::Server undef
-      Mojo::UserAgent::Transactor undef
-      Mojo::Util undef
-      Mojo::WebSocket undef
-      Mojolicious 8.26
-      Mojolicious::Command undef
-      Mojolicious::Command::Author::cpanify undef
-      Mojolicious::Command::Author::generate undef
-      Mojolicious::Command::Author::generate::app undef
-      Mojolicious::Command::Author::generate::lite_app undef
-      Mojolicious::Command::Author::generate::makefile undef
-      Mojolicious::Command::Author::generate::plugin undef
-      Mojolicious::Command::Author::inflate undef
-      Mojolicious::Command::cgi undef
-      Mojolicious::Command::daemon undef
-      Mojolicious::Command::eval undef
-      Mojolicious::Command::get undef
-      Mojolicious::Command::prefork undef
-      Mojolicious::Command::psgi undef
-      Mojolicious::Command::routes undef
-      Mojolicious::Command::version undef
-      Mojolicious::Commands undef
-      Mojolicious::Controller undef
-      Mojolicious::Lite undef
-      Mojolicious::Plugin undef
-      Mojolicious::Plugin::Config undef
-      Mojolicious::Plugin::DefaultHelpers undef
-      Mojolicious::Plugin::EPLRenderer undef
-      Mojolicious::Plugin::EPRenderer undef
-      Mojolicious::Plugin::HeaderCondition undef
-      Mojolicious::Plugin::JSONConfig undef
-      Mojolicious::Plugin::Mount undef
-      Mojolicious::Plugin::TagHelpers undef
-      Mojolicious::Plugins undef
-      Mojolicious::Renderer undef
-      Mojolicious::Routes undef
-      Mojolicious::Routes::Match undef
-      Mojolicious::Routes::Pattern undef
-      Mojolicious::Routes::Route undef
-      Mojolicious::Sessions undef
-      Mojolicious::Static undef
-      Mojolicious::Types undef
-      Mojolicious::Validator undef
-      Mojolicious::Validator::Validation undef
-      Test::Mojo undef
-      ojo undef
+      Mojo::DOM58 2.000
+      Mojo::DOM58::Entities 2.000
     requirements:
+      Carp 0
+      Exporter 5.57
       ExtUtils::MakeMaker 0
-      IO::Socket::IP 0.37
-      JSON::PP 2.27103
-      List::Util 1.41
-      Time::Local 1.2
-      perl 5.010001
+      List::Util 0
+      Scalar::Util 0
+      perl 5.008001
   Moo-2.003004
     pathname: H/HA/HAARG/Moo-2.003004.tar.gz
     provides:
@@ -3471,15 +3346,6 @@ DISTRIBUTIONS
       perl 5.008001
       strict 0
       warnings 0
-  Net-SSLeay-1.88
-    pathname: C/CH/CHRISN/Net-SSLeay-1.88.tar.gz
-    provides:
-      Net::SSLeay 1.88
-      Net::SSLeay::Handle 1.88
-    requirements:
-      ExtUtils::MakeMaker 0
-      MIME::Base64 0
-      perl 5.008001
   Package-DeprecationManager-0.17
     pathname: D/DR/DROLSKY/Package-DeprecationManager-0.17.tar.gz
     provides:
