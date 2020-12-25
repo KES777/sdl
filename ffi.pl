@@ -11,12 +11,24 @@ use SDL2::SDL;
 my $ffi = FFI::Platypus->new( api => 1 );
 $ffi->find_lib( lib => 'SDL2' );
 
+sub str { $ffi->cast( 'opaque', 'string', shift ) }
+
 
 SDL2::SDL::attach( $ffi );
 if( SDL2::SDL::SDL_Init( 0x00000020 ) < 0 ) {
     die "nable to initialize SDL";
 }
 
+print SDL2::Render::SDL_GetNumRenderDrivers(), "\n";
+my $info =  SDL2::RendererInfo->new;
+SDL2::Render::SDL_GetRenderDriverInfo( 0, $info );
+
+print str( $info->name ), "\n";
+print $info->flags, "\n";
+print $info->num_texture_formats, "\n";
+print join ' ', $info->texture_formats->@*, "\n";
+print $info->max_texture_width, "\n";
+print $info->max_texture_height, "\n";
 
 
 my $window =  SDL2::Video::SDL_CreateWindow( 'Hello', 100, 100, 800, 600, 0x00000004 ); #создаёт окно

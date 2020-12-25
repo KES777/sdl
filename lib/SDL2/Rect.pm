@@ -18,7 +18,7 @@ sub attach {
 	SDL2::Stdinc::attach( $ffi );
 	SDL2::Pixels::attach( $ffi );
 
-	my $def = FFI::C::StructDef->new(
+	FFI::C::StructDef->new(
 		$ffi,
 		nullable =>  1,
 		name     =>  'SDL_Rect',
@@ -34,7 +34,6 @@ sub attach {
 
 	$ffi->type( 'opaque' => 'SDL_Point_ptr'  );
 	$ffi->type( 'opaque' => 'SDL_FPoint_ptr' );
-	# $ffi->type( 'opaque' => 'SDL_Rect_ptr'   );
 	$ffi->type( SDL_Rect => 'SDL_Rect_ptr'   );
 	$ffi->type( 'opaque' => 'SDL_FRect_ptr'  );
 

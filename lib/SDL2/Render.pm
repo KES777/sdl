@@ -10,6 +10,9 @@ use SDL2::Stdinc;
 use SDL2::Rect;
 use SDL2::Video;
 
+use FFI::C::StructDef;
+
+
 my $processed;
 sub attach {
 	!$processed   or return;
@@ -36,8 +39,31 @@ sub attach {
     ['SDL_RENDERER_TARGETTEXTURE' => 0x00000008],
   );
 
+  # typedef struct SDL_RendererInfo
+  # {
+  #     const char *name;           /**< The name of the renderer */
+  #     Uint32 flags;               /**< Supported ::SDL_RendererFlags */
+  #     Uint32 num_texture_formats; /**< The number of available texture formats */
+  #     Uint32 texture_formats[16]; /**< The available texture formats */
+  #     int max_texture_width;      /**< The maximum texture width */
+  #     int max_texture_height;     /**< The maximum texture height */
+  # } SDL_RendererInfo;
+  FFI::C::StructDef->new(
+    $ffi,
+    nullable =>  1,
+    name     =>  'SDL_RendererInfo',
+    class    =>  'SDL2::RendererInfo',
+    members  =>  [
+      name                =>  'opaque',
+      flags               =>  'uint32',
+      num_texture_formats =>  'uint32',
+      texture_formats     =>  'uint32[16]',
+      max_texture_width   =>  'int',
+      max_texture_height  =>  'int',
+    ],
+  );
 
-	$ffi->type( 'opaque' => 'SDL_RendererInfo_ptr' );            #struct
+  $ffi->type( 'SDL_RendererInfo' => 'SDL_RendererInfo_ptr' );
 
 
   # typedef enum
