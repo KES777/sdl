@@ -22,8 +22,9 @@ if( SDL2::SDL::SDL_Init( 0x00000020 ) < 0 ) {
 my $window =  SDL2::Video::SDL_CreateWindow( 'Hello', 100, 100, 800, 600, 0x00000004 ); #создаёт окно
 my $screenSurface =  SDL2::Video::SDL_GetWindowSurface( $window );
 
+my $rect =  SDL2::Rect->new({ x => 10, y => 10, h => 50, w => 50 });
+SDL2::Surface::SDL_FillRect( $screenSurface, $rect, 0x00FF0000 ); #заливает поверхность окна
 
-SDL2::Surface::SDL_FillRect( $screenSurface, undef, 0x00FF0000 ); #заливает поверхность окна
 
 SDL2::Video::SDL_UpdateWindowSurface( $window );
 
