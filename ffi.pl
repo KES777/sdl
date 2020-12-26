@@ -16,7 +16,7 @@ sub str { $ffi->cast( 'opaque', 'string', shift ) }
 
 SDL2::SDL::attach( $ffi );
 if( SDL2::SDL::SDL_Init( 0x00000020 ) < 0 ) {
-    die "nable to initialize SDL";
+    die "Unable to initialize SDL";
 }
 
 print SDL2::Render::SDL_GetNumRenderDrivers(), "\n";
@@ -31,20 +31,36 @@ print $info->max_texture_width, "\n";
 print $info->max_texture_height, "\n";
 
 
-my $window =  SDL2::Video::SDL_CreateWindow( 'Hello', 100, 100, 800, 600, 0x00000004 ); #создаёт окно
-my $screenSurface =  SDL2::Video::SDL_GetWindowSurface( $window );
+my $window  =  SDL2::Video::SDL_CreateWindow( 'Hello', 100, 100, 800, 600, 0x00000004 ); #создаёт окно
+my $surface =  SDL2::Video::SDL_GetWindowSurface( $window );
 
-my $rect =  SDL2::Rect->new({ x => 10, y => 10, h => 50, w => 50 });
-SDL2::Surface::SDL_FillRect( $screenSurface, $rect, 0x00FF0000 ); #заливает поверхность окна
+# my $render =  SDL2::Render::SDL_CreateRenderer( $window, -1, 0 );
+# die SDL2::Error::SDL_GetError();
+my $render =  SDL2::Render::SDL_GetRenderer( $window );
+SDL2::Render::SDL_SetRenderDrawColor( $render, 0, 0, 255, 0 );
+# SDL2::Render::SDL_RenderClear( $render );
+# SDL2::Render::SDL_RenderPresent( $render );
+# SDL2::Timer::SDL_Delay( 2000 );
+
+use Benchmark ':all';
+
+my $rect1 =  SDL2::Rect->new({ x => 10,  y => 10,  h => 50,  w => 50 });
+my $rect2 =  SDL2::Rect->new({ x => 10,  y => 10,  h => 50,  w => 50 });
+	timethese( 100000, {
+		'Soft' => sub {
+			SDL2::Surface::SDL_FillRect( $surface, $rect1, 0x00FF0000 );
+		},
+		'Hard' => sub {
+			SDL2::Render::SDL_RenderFillRect( $render, $rect1 );
+		},
+	});
 
 
-SDL2::Video::SDL_UpdateWindowSurface( $window );
 
-$ffi->attach( SDL_Delay => [ 'uint32' ] => 'void' );
+SDL2::Render::SDL_RenderPresent( $render );
+# SDL2::Video::SDL_UpdateWindowSurface( $window );
 
-SDL_Delay( 2000 ); #ждёт заданное количество миллисекунд
-
-# sleep 5;
+SDL2::Timer::SDL_Delay( 2000 );
 
 __END__
 
