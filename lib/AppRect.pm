@@ -67,6 +67,7 @@ sub user_event {
 }
 
 
+# Создание окна приложения с какими-то формами
 sub new {
 	my( $rect, $app_w, $app_h ) =  @_;
 
@@ -103,6 +104,7 @@ sub new {
 	# $APP->add_event_handler( sub{ _on_down( @_, $app_rect ) } );
 	# $APP->add_event_handler( sub{ _on_move( @_, $app_rect ) } );
 
+	# Добавление в приложение функции, которая отвечает за рисование
 	$APP->add_show_handler ( sub{ $app_rect->draw } );
 
 	$HINT_EVENT =  user_event( sub{
@@ -114,6 +116,7 @@ sub new {
 		}
 	});
 
+	# Добавление обработчиков событий в приложение
 	$APP->add_event_handler( sub{ _on_mouse_move( @_, $app_rect ) } );
 	$APP->add_event_handler( sub{ _is_mousedown ( @_, $app_rect ) } );
 	$APP->add_event_handler( sub{ _is_mouseup   ( @_, $app_rect ) } );
