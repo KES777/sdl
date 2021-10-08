@@ -105,6 +105,11 @@ dbsql:
 		psql -h	${DB_HOST} -p ${DB_PORT} -U ${DB_USER} ${DB_NAME}
 
 
+dbrestore: export PGPASSWORD =  ${DB_PASS}
+dbrestore:
+	zcat ${APP_ROOT}/db/${DB_NAME}.sql.gz | \
+		psql -h ${DB_HOST} -p ${DB_PORT} -U ${DB_USER} ${DB_NAME}
+
 debug:
 	${DEBUG_CMD} ${APP}
 
