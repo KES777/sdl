@@ -27,6 +27,14 @@ sub get_color {
 
 
 
+sub get_red {
+	my( $color ) =  @_;
+
+	return 255, 0, 0, 0;
+}
+
+
+
 sub geth_color {
 	my( $color ) =  @_;
 
